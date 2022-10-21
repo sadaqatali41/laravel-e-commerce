@@ -20,7 +20,6 @@
 
     <!-- Bootstrap CSS-->
     <link href="{{ asset('admin/vendor/bootstrap-4.1/bootstrap.min.css') }}" rel="stylesheet" media="all">
-
     <!-- Vendor CSS-->
     <link href="{{ asset('admin/vendor/animsition/animsition.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet" media="all">
@@ -29,9 +28,10 @@
     <link href="{{ asset('admin/vendor/slick/slick.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin/vendor/select2/select2.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('admin/vendor/perfect-scrollbar/perfect-scrollbar.css') }}" rel="stylesheet" media="all">
-
     <!-- Main CSS-->
     <link href="{{ asset('admin/css/theme.css') }}" rel="stylesheet" media="all">
+    {{-- Datatable CSS --}}
+    <link rel="stylesheet" href="{{ asset('admin/DataTables/datatables.min.css') }}">
 
 </head>
 
@@ -55,6 +55,7 @@
             <div class="main-content">
                 <div class="section__content">
                     <div class="container-fluid">
+                        <x-alert />
                         @yield('content')
                     </div>
                 </div>
@@ -62,7 +63,6 @@
             <!-- END MAIN CONTENT-->
             <!-- END PAGE CONTAINER-->
         </div>
-
     </div>
 
     <!-- Jquery JS-->
@@ -81,10 +81,18 @@
     <script src="{{ asset('admin/vendor/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('admin/vendor/chartjs/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('admin/vendor/select2/select2.min.js') }}"></script>
-
     <!-- Main JS-->
     <script src="{{ asset('admin/js/main.js') }}"></script>
-
+    {{-- DataTables JS --}}
+    <script src="{{ asset('admin/DataTables/datatables.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            setTimeout(function(){
+                $('.close').trigger('click');
+            }, 4000);
+        });
+    </script>
+    @stack('script')
 </body>
 
 </html>
