@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CouponController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,7 +22,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::resources([
-            'category' => CategoryController::class
+            'category' => CategoryController::class,
+            'coupon' => CouponController::class
         ]);
     });
 });
