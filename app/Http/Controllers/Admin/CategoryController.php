@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
@@ -80,7 +81,7 @@ class CategoryController extends Controller
         ];
 
         $imageHashName = $request->file('image')->hashName();
-        $request->file('image')->storeAs('category', $imageHashName, 'public');
+        $filePath = $request->file('image')->storeAs('category', $imageHashName, 'public');
         $formFields['image'] = $imageHashName;
 
         Category::create($formFields);
@@ -105,9 +106,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.category.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -117,9 +120,38 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|unique:categories,name,' . $category->id,
+            'slug' => 'required|unique:categories,slug,' . $category->id,
+            'status' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        $formFields = [
+            'name' => $request->name,
+            'slug' => Str::slug($request->slug),
+            'status' => $request->status,
+            'updated_by' => Auth::guard('admin')->user()->id,
+        ];
+
+        if($request->hasFile('image')) {
+            $imageHashName = $request->file('image')->hashName();
+            $filePath = $request->file('image')->storeAs('category', $imageHashName, 'public');
+            $formFields['image'] = $imageHashName;
+
+            #delete old file
+            if(!empty($category->image) && $filePath) {
+                if(Storage::disk('public')->exists('category/'. $category->image)) {
+                    Storage::disk('public')->delete('category/' . $category->image);
+                }
+            }
+        }
+
+        $category->update($formFields);
+
+        return redirect()->back()->with('success', 'Category is updated successfully.');
     }
 
     /**
