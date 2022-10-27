@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\SizeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,7 +25,9 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::resources([
             'category' => CategoryController::class,
-            'coupon' => CouponController::class
+            'coupon' => CouponController::class,
+            'size' => SizeController::class,
+            'color' => ColorController::class
         ]);
     });
 });

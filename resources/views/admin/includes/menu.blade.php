@@ -10,3 +10,11 @@
     <a href="{{ route('admin.coupon.index') }}">
         <i class="fa fa-gift"></i>Coupons</a>
 </li>
+<li class="@if(request()->routeIs('admin.size.*')) active @endif">
+    <a href="{{ route('admin.size.index') }}">
+        <i class="fa fa-balance-scale"></i>Sizes</a>
+</li>
+<li class="@if(request()->routeIs('admin.color.*')) active @endif">
+    <a href="{{ route('admin.color.index') }}">
+        <i class="fa fa-paint-brush"></i>Colors</a>
+</li>
