@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="overview-wrap">
-                <h2 class="title-1">updte category</h2>
+                <h2 class="title-1">update category</h2>
                 <a href="{{ route('admin.category.index') }}" class="au-btn au-btn-icon au-btn--blue">
                     <i class="zmdi zmdi-eye"></i>View</a>
             </div>
