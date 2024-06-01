@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ColorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if($request->ajax()) {
@@ -35,25 +30,20 @@ class ColorController extends Controller
                                 ->rawColumns(['manage'])
                                 ->make(true);
         }
-        return view('admin.color.index');
+        return view('admin.color.colors', [
+            'exp' => 'index',
+            'title' => 'Manage Color'
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('admin.color.create');
+        return view('admin.color.colors', [
+            'exp' => 'create',
+            'title' => 'Create Color'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $formFields = $this->validate($request, [
@@ -69,37 +59,20 @@ class ColorController extends Controller
         return redirect()->back()->with('success', 'Color is created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin\Color  $color
-     * @return \Illuminate\Http\Response
-     */
     public function show(Color $color)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin\Color  $color
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Color $color)
     {
-        return view('admin.color.edit', [
-            'color' => $color
+        return view('admin.color.colors', [
+            'color' => $color,
+            'exp' => 'edit',
+            'title' => 'Update Color'
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin\Color  $color
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Color $color)
     {
         $formFields = $this->validate($request, [
@@ -114,12 +87,6 @@ class ColorController extends Controller
         return redirect()->back()->with('success', 'Color is updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin\Color  $color
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Color $color)
     {
         //
