@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SizeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if($request->ajax()) {
@@ -35,25 +30,20 @@ class SizeController extends Controller
                                 ->rawColumns(['manage'])
                                 ->make(true);
         }
-        return view('admin.size.index');
+        return view('admin.size.sizes', [
+            'exp' => 'index',
+            'title' => 'Manage Size'
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('admin.size.create');
+        return view('admin.size.sizes', [
+            'exp' => 'create',
+            'title' => 'Create Size'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $formFields = $this->validate($request, [
@@ -69,37 +59,20 @@ class SizeController extends Controller
         return redirect()->back()->with('success', 'Size is created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin\Size  $size
-     * @return \Illuminate\Http\Response
-     */
     public function show(Size $size)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin\Size  $size
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Size $size)
     {
         return view('admin.size.edit', [
-            'size' => $size
+            'size' => $size,
+            'exp' => 'edit',
+            'title' => 'Update Size'
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin\Size  $size
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Size $size)
     {
         $formFields = $this->validate($request, [
@@ -114,12 +87,6 @@ class SizeController extends Controller
         return redirect()->back()->with('success', 'Size is updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin\Size  $size
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Size $size)
     {
         //
