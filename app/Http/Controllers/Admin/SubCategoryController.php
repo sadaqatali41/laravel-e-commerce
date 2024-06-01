@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class SubCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if($request->ajax()) {
@@ -47,31 +42,20 @@ class SubCategoryController extends Controller
                                 ->rawColumns(['manage'])
                                 ->make(true);
         }
-        return view('admin.subcategory.subcategory', [
+        return view('admin.subcategory.subcategories', [
             'exp'=> 'index',
             'title' => 'Manage Sub Category'
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('admin.subcategory.subcategory', [
+        return view('admin.subcategory.subcategories', [
             'exp' => 'create',
             'title' => 'Create Sub Category'
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -102,40 +86,21 @@ class SubCategoryController extends Controller
         return redirect()->back()->with('success', 'Sub Category is created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin\SubCategory  $subCategory
-     * @return \Illuminate\Http\Response
-     */
     public function show(SubCategory $subCategory)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin\SubCategory  $subCategory
-     * @return \Illuminate\Http\Response
-     */
     public function edit(SubCategory $subcategory)
     {
         $subcategory->load('category');
-        return view('admin.subcategory.subcategory', [
+        return view('admin.subcategory.subcategories', [
             'subcategory' => $subcategory,
             'exp' => 'edit',
             'title' => 'Update Sub Category'
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin\SubCategory  $subCategory
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, SubCategory $subcategory)
     {
         $this->validate($request, [
@@ -174,12 +139,6 @@ class SubCategoryController extends Controller
         return redirect()->back()->with('success', 'SUb Category is updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin\SubCategory  $subCategory
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(SubCategory $subCategory)
     {
         //

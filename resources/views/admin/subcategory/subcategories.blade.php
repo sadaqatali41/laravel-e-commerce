@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="overview-wrap">
-                        <h2 class="title-1">create sub category</h2>
+                        <h2 class="title-1">{{ $title }}</h2>
                         <a href="{{ route('admin.subcategory.index') }}" class="au-btn au-btn-icon au-btn--blue">
                             <i class="zmdi zmdi-eye"></i>View</a>
                     </div>
@@ -90,7 +90,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="overview-wrap">
-                        <h2 class="title-1">update sub category</h2>
+                        <h2 class="title-1">{{ $title }}</h2>
                         <a href="{{ route('admin.subcategory.index') }}" class="au-btn au-btn-icon au-btn--blue">
                             <i class="zmdi zmdi-eye"></i>View</a>
                     </div>
@@ -166,7 +166,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="overview-wrap">
-                        <h2 class="title-1">manage sub category</h2>
+                        <h2 class="title-1">{{ $title }}</h2>
                         <a href="{{ route('admin.subcategory.create') }}" class="au-btn au-btn-icon au-btn--blue">
                             <i class="zmdi zmdi-plus"></i>add</a>
                     </div>
