@@ -12,11 +12,6 @@ use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if($request->ajax()) {
@@ -44,25 +39,20 @@ class CategoryController extends Controller
                                 ->rawColumns(['manage'])
                                 ->make(true);
         }
-        return view('admin.category.index');
+        return view('admin.category.categories', [
+            'exp' => 'index',
+            'title' => 'Manage Category'
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.category.categories', [
+            'exp' => 'create',
+            'title' => 'Create Category'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -89,37 +79,20 @@ class CategoryController extends Controller
         return redirect()->back()->with('success', 'Category is created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Category $category)
     {
-        return view('admin.category.edit', [
-            'category' => $category
+        return view('admin.category.categories', [
+            'category' => $category,
+            'exp' => 'edit',
+            'title' => 'Update Category'
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Category $category)
     {
         $this->validate($request, [
@@ -154,12 +127,6 @@ class CategoryController extends Controller
         return redirect()->back()->with('success', 'Category is updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
