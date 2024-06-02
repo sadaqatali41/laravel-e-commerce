@@ -22,3 +22,7 @@
     <a href="{{ route('admin.color.index') }}">
         <i class="fa fa-paint-brush"></i>Colors</a>
 </li>
+<li class="@if(request()->routeIs('admin.product.*')) active @endif">
+    <a href="{{ route('admin.product.index') }}">
+        <i class="fa fa-book"></i>Products</a>
+</li>

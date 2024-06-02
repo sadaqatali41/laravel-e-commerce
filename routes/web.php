@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Select2Controller;
@@ -31,7 +32,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'subcategory' => SubCategoryController::class,
             'coupon' => CouponController::class,
             'size' => SizeController::class,
-            'color' => ColorController::class
+            'color' => ColorController::class,
+            'product' => ProductController::class
         ]);
     });
 });

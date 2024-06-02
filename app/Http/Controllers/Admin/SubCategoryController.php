@@ -136,7 +136,7 @@ class SubCategoryController extends Controller
 
         $subcategory->update($formFields);
 
-        return redirect()->back()->with('success', 'SUb Category is updated successfully.');
+        return redirect()->back()->with('success', 'Sub Category is updated successfully.');
     }
 
     public function destroy(SubCategory $subCategory)
