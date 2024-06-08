@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('size_id')->constrained()->cascadeOnDelete();
             $table->foreignId('color_id')->constrained()->cascadeOnDelete();
             $table->string('image');
+            $table->string('status')->default('A')->comment('A=Active, I=Inactive');
             $table->timestamps();
         });
     }
