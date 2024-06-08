@@ -120,11 +120,17 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="image" class=" form-control-label">Image</label>
+                                            <label for="image" class=" form-control-label">Main Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="images" class=" form-control-label">Images</label>
+                                            <input type="file" id="images" name="images[]" class="form-control-file" multiple>                                            
                                         </div>
                                     </div>
                                 </div>                                
@@ -336,7 +342,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="image" class=" form-control-label">Image</label>
+                                            <label for="image" class=" form-control-label">Main Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')
                                                 <span class="help-block status--denied">{{ $message }}</span>
@@ -345,6 +351,19 @@
                                         @if (isset($product->image))
                                             <img src="{{ asset('storage/product/'. $product->image) }}" alt="Product Image" style="width: 150px;" class="img-fluid mb-1">
                                         @endif
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="images" class=" form-control-label">Images</label>
+                                            <input type="file" id="images" name="images[]" class="form-control-file" multiple>                                            
+                                        </div>
+                                        <div class="row">
+                                            @foreach ($product->images as $p_image)
+                                                <div class="col-sm-2">
+                                                    <img src="{{ asset('storage/product/'. $p_image->image) }}" alt="Product Image" style="width: 150px;" class="img-fluid mb-1">   
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -367,8 +386,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if(count($product->productAttribute) > 0)
-                                                        @foreach ($product->productAttribute as $index => $value)
+                                                    @if(count($product->attributes) > 0)
+                                                        @foreach ($product->attributes as $index => $value)
                                                         <tr>
                                                             <td>
                                                                 <button type="button" class="btn btn-danger btn-sm removeAttribute" data-id="{{ $value->id }}"><i class="fa fa-minus"></i></button>

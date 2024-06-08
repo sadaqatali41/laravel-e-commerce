@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\ProductAttribute;
+use App\Models\Admin\ProductImage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
@@ -113,6 +114,7 @@ class ProductController extends Controller
         $product = Product::create($formFields);
         $product_id = $product->id;
 
+        #product attributes
         $skuArr = $request->sku_no;
 
         foreach($skuArr as $key => $value) {
@@ -132,6 +134,19 @@ class ProductController extends Controller
             ProductAttribute::create($productAttr);
         }
 
+        #product child images
+        if($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach($images as $singleImage) {
+                $imageHashName = $singleImage->hashName();
+                $filePath = $singleImage->storeAs('product', $imageHashName, 'public');
+                $productImage['product_id'] = $product_id;
+                $productImage['image'] = $imageHashName;
+
+                ProductImage::create($productImage);
+            }
+        }
+
         return redirect()->back()->with('success', 'Product is created successfully.');
     }
 
@@ -142,7 +157,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load(['category', 'productAttribute']);
+        $product->load(['category', 'attributes', 'images']);
         return view('admin.product.products', [
             'product' => $product,
             'exp' => 'edit',
@@ -233,6 +248,19 @@ class ProductController extends Controller
                 ProductAttribute::create($productAttr);
             } else {
                 ProductAttribute::where(['id' => $attr_id])->update($productAttr);
+            }
+        }
+
+        #product child images
+        if($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach($images as $singleImage) {
+                $imageHashName = $singleImage->hashName();
+                $filePath = $singleImage->storeAs('product', $imageHashName, 'public');
+                $productImage['product_id'] = $product->id;
+                $productImage['image'] = $imageHashName;
+
+                ProductImage::create($productImage);
             }
         }
 
