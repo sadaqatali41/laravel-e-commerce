@@ -29,4 +29,48 @@ class Select2Controller extends Controller
 
         return $results;
     }
+    public function size(Request $request)
+    {
+        $term = trim($request->term);
+        $sizes = DB::table('sizes')
+            ->select('id', 'size as text')
+            ->where('size', 'LIKE',  '%' . $term . '%')
+            ->where('status', 'A')
+            ->orderBy('size', 'asc')->simplePaginate(10);
+
+        $morePages = true;
+        if (empty($sizes->nextPageUrl())) {
+            $morePages = false;
+        }
+        $results = array(
+            "results" => $sizes->items(),
+            "pagination" => array(
+                "more" => $morePages
+            )
+        );
+
+        return $results;
+    }
+    public function color(Request $request)
+    {
+        $term = trim($request->term);
+        $colors = DB::table('colors')
+            ->select('id', 'color as text')
+            ->where('color', 'LIKE',  '%' . $term . '%')
+            ->where('status', 'A')
+            ->orderBy('color', 'asc')->simplePaginate(10);
+
+        $morePages = true;
+        if (empty($colors->nextPageUrl())) {
+            $morePages = false;
+        }
+        $results = array(
+            "results" => $colors->items(),
+            "pagination" => array(
+                "more" => $morePages
+            )
+        );
+
+        return $results;
+    }
 }

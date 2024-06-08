@@ -24,5 +24,5 @@
 </li>
 <li class="@if(request()->routeIs('admin.product.*')) active @endif">
     <a href="{{ route('admin.product.index') }}">
-        <i class="fa fa-book"></i>Products</a>
+        <i class="fa fa-product-hunt"></i>Products</a>
 </li>

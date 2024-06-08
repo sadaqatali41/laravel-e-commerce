@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Admin\ProductAttribute;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
@@ -68,7 +69,13 @@ class ProductController extends Controller
             'description' => 'required',
             'short_desc' => 'required',
             'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'sku_no.*' => 'required',
+            'mrp.*' => 'required',
+            'price.*' => 'required',
+            'qty.*' => 'required',
+            'image_attr' => 'required',
+            'image_attr.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'category_id.required' => 'Category name is required.',
             'prod_name.required' => 'Product Name is required.',
@@ -76,7 +83,13 @@ class ProductController extends Controller
             'brand_id.integer' => 'Brand Name must be an integer.',
             'model_id.required' => 'Model Name is required.',
             'model_id.integer' => 'Model Name must be an integer.',
-            'short_desc.required' => 'Short Description is required.'
+            'short_desc.required' => 'Short Description is required.',
+            'sku_no.*.required' => 'SKU No is required.',
+            'mrp.*.required' => 'MRP is required.',
+            'price.*.required' => 'Price is required.',
+            'qty.*.required' => 'Quantity is required.',
+            'image_attr.required' => 'Image is required.',
+            'image_attr.*.image' => 'File must be an Image.'
         ]);
 
         $formFields = [
@@ -97,7 +110,27 @@ class ProductController extends Controller
         $filePath = $request->file('image')->storeAs('product', $imageHashName, 'public');
         $formFields['image'] = $imageHashName;
 
-        Product::create($formFields);
+        $product = Product::create($formFields);
+        $product_id = $product->id;
+
+        $skuArr = $request->sku_no;
+
+        foreach($skuArr as $key => $value) {
+            $productAttr['product_id'] = $product_id;
+            $productAttr['sku_no'] = $request->sku_no[$key];
+            $productAttr['mrp'] = $request->mrp[$key];
+            $productAttr['price'] = $request->price[$key];
+            $productAttr['qty'] = $request->qty[$key];
+            $productAttr['size_id'] = $request->size_id[$key];
+            $productAttr['color_id'] = $request->color_id[$key];
+
+            if($request->hasFile('image_attr.' . $key)) {
+                $imageHashName = $request->file('image_attr.' . $key)->hashName();
+                $filePath = $request->file('image_attr.' . $key)->storeAs('product/product_attr', $imageHashName, 'public');
+                $productAttr['image'] = $imageHashName;
+            }
+            ProductAttribute::create($productAttr);
+        }
 
         return redirect()->back()->with('success', 'Product is created successfully.');
     }
@@ -109,7 +142,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load('category');
+        $product->load(['category', 'productAttribute']);
         return view('admin.product.products', [
             'product' => $product,
             'exp' => 'edit',
@@ -129,7 +162,12 @@ class ProductController extends Controller
             'description' => 'required',
             'short_desc' => 'required',
             'status' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'sku_no.*' => 'required',
+            'mrp.*' => 'required',
+            'price.*' => 'required',
+            'qty.*' => 'required',
+            'image_attr.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'category_id.required' => 'Category name is required.',
             'prod_name.required' => 'Product Name is required.',
@@ -137,7 +175,12 @@ class ProductController extends Controller
             'brand_id.integer' => 'Brand Name must be an integer.',
             'model_id.required' => 'Model Name is required.',
             'model_id.integer' => 'Model Name must be an integer.',
-            'short_desc.required' => 'Short Description is required.'
+            'short_desc.required' => 'Short Description is required.',
+            'sku_no.*.required' => 'SKU No is required.',
+            'mrp.*.required' => 'MRP is required.',
+            'price.*.required' => 'Price is required.',
+            'qty.*.required' => 'Quantity is required.',
+            'image_attr.*.image' => 'File must be an Image.'
         ]);
 
         $formFields = [
@@ -167,6 +210,31 @@ class ProductController extends Controller
         }
 
         $product->update($formFields);
+
+        #product attributes
+        $skuArr = $request->sku_no;
+
+        foreach($skuArr as $key => $value) {
+            $productAttr['product_id'] = $product->id;
+            $productAttr['sku_no'] = $request->sku_no[$key];
+            $productAttr['mrp'] = $request->mrp[$key];
+            $productAttr['price'] = $request->price[$key];
+            $productAttr['qty'] = $request->qty[$key];
+            $productAttr['size_id'] = $request->size_id[$key];
+            $productAttr['color_id'] = $request->color_id[$key];
+            $attr_id = $request->attr_id[$key];
+
+            if($request->hasFile('image_attr.' . $key)) {
+                $imageHashName = $request->file('image_attr.' . $key)->hashName();
+                $filePath = $request->file('image_attr.' . $key)->storeAs('product/product_attr', $imageHashName, 'public');
+                $productAttr['image'] = $imageHashName;
+            }
+            if(empty($attr_id)) {
+                ProductAttribute::create($productAttr);
+            } else {
+                ProductAttribute::where(['id' => $attr_id])->update($productAttr);
+            }
+        }
 
         return redirect()->back()->with('success', 'Product is updated successfully.');
     }
