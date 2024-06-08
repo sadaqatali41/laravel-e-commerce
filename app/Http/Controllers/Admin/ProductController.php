@@ -167,7 +167,7 @@ class ProductController extends Controller
             'mrp.*' => 'required',
             'price.*' => 'required',
             'qty.*' => 'required',
-            'image_attr.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image_attr.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'category_id.required' => 'Category name is required.',
             'prod_name.required' => 'Product Name is required.',
