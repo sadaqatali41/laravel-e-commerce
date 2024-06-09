@@ -73,4 +73,27 @@ class Select2Controller extends Controller
 
         return $results;
     }
+
+    public function brand(Request $request)
+    {
+        $term = trim($request->term);
+        $brands = DB::table('brands')
+            ->select('id', 'name as text')
+            ->where('name', 'LIKE',  '%' . $term . '%')
+            ->where('status', 'A')
+            ->orderBy('name', 'asc')->simplePaginate(10);
+
+        $morePages = true;
+        if (empty($brands->nextPageUrl())) {
+            $morePages = false;
+        }
+        $results = array(
+            "results" => $brands->items(),
+            "pagination" => array(
+                "more" => $morePages
+            )
+        );
+
+        return $results;
+    }
 }

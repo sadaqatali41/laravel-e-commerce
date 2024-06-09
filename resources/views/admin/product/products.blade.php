@@ -55,13 +55,12 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="brand_id" class=" form-control-label">Brand Name</label>
-                                            <input type="text" id="brand_id" name="brand_id" placeholder="Brand Name.."
-                                                class="form-control form-control-sm" value="{{ old('brand_id') }}">
+                                            <select name="brand_id" id="brand_id" class="form-control form-control-sm"></select>
                                             @error('brand_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="model_id" class=" form-control-label">Model Name</label>
@@ -274,11 +273,12 @@
                                     </div>                                    
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4">                                        
                                         <div class="form-group">
                                             <label for="brand_id" class=" form-control-label">Brand Name</label>
-                                            <input type="text" id="brand_id" name="brand_id" placeholder="Brand Name.."
-                                                class="form-control form-control-sm" value="{{ old('brand_id', $product->brand_id) }}">
+                                            <select name="brand_id" id="brand_id" class="form-control form-control-sm">
+                                                <option selected value="{{ $product->brand_id }}">{{ $product->brand->name }}</option>
+                                            </select>
                                             @error('brand_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
@@ -522,6 +522,23 @@
                 allowClear: true,
                 ajax: {
                     url: "{{ route('admin.category-list') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        }
+                    },
+                    cache: true
+                }
+            });
+
+            $('#brand_id').select2({
+                placeholder: 'Search Brand...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.brand-list') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {

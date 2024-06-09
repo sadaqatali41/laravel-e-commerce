@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +24,9 @@ class Product extends Model
 
     public function images() {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+
+    public function brand() {
+        return $this->belongsTo(Brand::class, 'brand_id', 'id');
     }
 }
