@@ -83,24 +83,130 @@
                                     </div> 
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label for="description" class=" form-control-label">Description</label>
-                                            <textarea name="description" id="description" class="form-control" placeholder="Description" rows="6">{{ old('description') }}</textarea>
+                                            <textarea name="description" id="description" class="form-control" placeholder="Description" rows="4">{{ old('description') }}</textarea>
                                             @error('description')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div> 
-                                    <div class="col-sm-4">
+                                    </div>                                     
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label for="short_desc" class=" form-control-label">Short Description</label>
-                                            <textarea name="short_desc" id="short_desc" class="form-control" placeholder="Short Description" rows="6">{{ old('short_desc') }}</textarea>
+                                            <textarea name="short_desc" id="short_desc" class="form-control" placeholder="Short Description" rows="4">{{ old('short_desc') }}</textarea>
                                             @error('short_desc')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="tech_spec" class=" form-control-label">Technical Specification</label>
+                                            <textarea name="tech_spec" id="tech_spec" class="form-control" placeholder="Technical Specification" rows="4">{{ old('tech_spec') }}</textarea>
+                                            @error('tech_spec')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="used_for" class=" form-control-label">Uses</label>
+                                            <textarea name="used_for" id="used_for" class="form-control" placeholder="Uses" rows="4">{{ old('used_for') }}</textarea>
+                                            @error('used_for')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="warranty" class=" form-control-label">Warranty</label>
+                                            <textarea name="warranty" id="warranty" class="form-control" placeholder="Warranty" rows="4">{{ old('warranty') }}</textarea>
+                                            @error('warranty')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="lead_time" class=" form-control-label">Lead Time</label>
+                                            <input name="lead_time" id="lead_time" class="form-control form-control-sm" placeholder="Lead Time" value="{{ old('lead_time') }}">
+                                            @error('lead_time')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="tax" class=" form-control-label">Tax</label>
+                                            <input name="tax" id="tax" class="form-control form-control-sm" placeholder="Tax" value="{{ old('tax') }}">
+                                            @error('tax')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="tax_type" class=" form-control-label">Tax Type</label>
+                                            <input name="tax_type" id="tax_type" class="form-control form-control-sm" placeholder="Tax Type" value="{{ old('tax_type') }}">
+                                            @error('tax_type')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_promo" class=" form-control-label">Is Promo</label>
+                                            <select name="is_promo" id="is_promo" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_promo') === '1') selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_promo') === '0') selected @endif>No</option>
+                                            </select>
+                                            @error('is_promo')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_featured" class=" form-control-label">Is Featured</label>
+                                            <select name="is_featured" id="is_featured" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_featured') === '1') selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_featured') === '0') selected @endif>No</option>
+                                            </select>
+                                            @error('is_featured')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_discounted" class=" form-control-label">Is Discounted</label>
+                                            <select name="is_discounted" id="is_discounted" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_discounted') === '1') selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_discounted') === '0') selected @endif>No</option>
+                                            </select>
+                                            @error('is_discounted')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_trending" class=" form-control-label">Is Trending</label>
+                                            <select name="is_trending" id="is_trending" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_trending') === '1') selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_trending') === '0') selected @endif>No</option>
+                                            </select>
+                                            @error('is_trending')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -306,24 +412,130 @@
                                     </div> 
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label for="description" class=" form-control-label">Description</label>
-                                            <textarea name="description" id="description" class="form-control" placeholder="Description" rows="6">{{ old('description', $product->description) }}</textarea>
+                                            <textarea name="description" id="description" class="form-control" placeholder="Description" rows="4">{{ old('description', $product->description) }}</textarea>
                                             @error('description')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div> 
-                                    <div class="col-sm-4">
+                                    </div>                                     
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label for="short_desc" class=" form-control-label">Short Description</label>
-                                            <textarea name="short_desc" id="short_desc" class="form-control" placeholder="Short Description" rows="6">{{ old('short_desc', $product->short_desc) }}</textarea>
+                                            <textarea name="short_desc" id="short_desc" class="form-control" placeholder="Short Description" rows="4">{{ old('short_desc', $product->short_desc) }}</textarea>
                                             @error('short_desc')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="tech_spec" class=" form-control-label">Technical Specification</label>
+                                            <textarea name="tech_spec" id="tech_spec" class="form-control" placeholder="Technical Specification" rows="4">{{ old('tech_spec', $product->tech_spec) }}</textarea>
+                                            @error('tech_spec')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="used_for" class=" form-control-label">Uses</label>
+                                            <textarea name="used_for" id="used_for" class="form-control" placeholder="Uses" rows="4">{{ old('used_for', $product->used_for) }}</textarea>
+                                            @error('used_for')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="warranty" class=" form-control-label">Warranty</label>
+                                            <textarea name="warranty" id="warranty" class="form-control" placeholder="Warranty" rows="4">{{ old('warranty', $product->warranty) }}</textarea>
+                                            @error('warranty')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="lead_time" class=" form-control-label">Lead Time</label>
+                                            <input name="lead_time" id="lead_time" class="form-control form-control-sm" placeholder="Lead Time" value="{{ old('lead_time', $product->lead_time) }}">
+                                            @error('lead_time')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="tax" class=" form-control-label">Tax</label>
+                                            <input name="tax" id="tax" class="form-control form-control-sm" placeholder="Tax" value="{{ old('tax', $product->tax) }}">
+                                            @error('tax')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="tax_type" class=" form-control-label">Tax Type</label>
+                                            <input name="tax_type" id="tax_type" class="form-control form-control-sm" placeholder="Tax Type" value="{{ old('tax_type', $product->tax_type) }}">
+                                            @error('tax_type')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_promo" class=" form-control-label">Is Promo</label>
+                                            <select name="is_promo" id="is_promo" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_promo', $product->is_promo) === 1) selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_promo', $product->is_promo) === 0) selected @endif>No</option>
+                                            </select>
+                                            @error('is_promo')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_featured" class=" form-control-label">Is Featured</label>
+                                            <select name="is_featured" id="is_featured" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_featured', $product->is_featured) === 1) selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_featured', $product->is_featured) === 0) selected @endif>No</option>
+                                            </select>
+                                            @error('is_featured')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_discounted" class=" form-control-label">Is Discounted</label>
+                                            <select name="is_discounted" id="is_discounted" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_discounted', $product->is_discounted) === 1) selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_discounted', $product->is_discounted) === 0) selected @endif>No</option>
+                                            </select>
+                                            @error('is_discounted')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_trending" class=" form-control-label">Is Trending</label>
+                                            <select name="is_trending" id="is_trending" class="form-control form-control-sm">
+                                                <option value="1" @if (old('is_trending', $product->is_trending) === 1) selected @endif>Yes</option>
+                                                <option value="0" @if (old('is_trending', $product->is_trending) === 0) selected @endif>No</option>
+                                            </select>
+                                            @error('is_trending')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -486,6 +698,8 @@
 @endsection
 
 @push('script')
+    <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+
     <script>
         $(function(){
 
@@ -621,6 +835,10 @@
                     $(this).closest('tr').remove();
                 }
             });
+
+            CKEDITOR.replace('description');
+            CKEDITOR.replace('short_desc');
+            CKEDITOR.replace('tech_spec');
         });
     </script>
 @endpush
