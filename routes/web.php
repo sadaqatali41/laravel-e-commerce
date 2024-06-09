@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'size' => SizeController::class,
             'color' => ColorController::class,
             'product' => ProductController::class,
-            'brand' => BrandController::class
+            'brand' => BrandController::class,
+            'tax' => TaxController::class
         ]);
     });
 });

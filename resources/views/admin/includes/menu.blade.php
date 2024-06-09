@@ -26,6 +26,10 @@
     <a href="{{ route('admin.brand.index') }}">
         <i class="fa fa-bandcamp"></i>Brands</a>
 </li>
+<li class="@if(request()->routeIs('admin.tax.*')) active @endif">
+    <a href="{{ route('admin.tax.index') }}">
+        <i class="fa fa-percent"></i>Taxes</a>
+</li>
 <li class="@if(request()->routeIs('admin.product.*')) active @endif">
     <a href="{{ route('admin.product.index') }}">
         <i class="fa fa-product-hunt"></i>Products</a>
