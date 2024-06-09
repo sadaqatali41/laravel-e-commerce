@@ -73,8 +73,7 @@ class ProductController extends Controller
             'used_for' => 'required',
             'warranty' => 'required',
             'lead_time' => 'required',
-            'tax' => 'required',
-            'tax_type' => 'required',
+            'tax_id' => 'required|integer',
             'status' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'sku_no.*' => 'required',
@@ -114,8 +113,7 @@ class ProductController extends Controller
             'used_for' => $request->used_for,
             'warranty' => $request->warranty,
             'lead_time' => $request->lead_time,
-            'tax' => $request->tax,
-            'tax_type' => $request->tax_type,
+            'tax_id' => $request->tax_id,
             'is_promo' => $request->is_promo,
             'is_featured' => $request->is_featured,
             'is_discounted' => $request->is_discounted,
@@ -175,7 +173,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load(['category', 'attributes', 'images', 'brand']);
+        $product->load(['category', 'attributes', 'images', 'brand', 'tax']);
         return view('admin.product.products', [
             'product' => $product,
             'exp' => 'edit',
@@ -198,8 +196,7 @@ class ProductController extends Controller
             'used_for' => 'required',
             'warranty' => 'required',
             'lead_time' => 'required',
-            'tax' => 'required',
-            'tax_type' => 'required',
+            'tax_id' => 'required|integer',
             'status' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg|max:2048',
             'sku_no.*' => 'required',
@@ -237,8 +234,7 @@ class ProductController extends Controller
             'used_for' => $request->used_for,
             'warranty' => $request->warranty,
             'lead_time' => $request->lead_time,
-            'tax' => $request->tax,
-            'tax_type' => $request->tax_type,
+            'tax_id' => $request->tax_id,
             'is_promo' => $request->is_promo,
             'is_featured' => $request->is_featured,
             'is_discounted' => $request->is_discounted,

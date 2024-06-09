@@ -96,4 +96,27 @@ class Select2Controller extends Controller
 
         return $results;
     }
+
+    public function tax(Request $request)
+    {
+        $term = trim($request->term);
+        $taxes = DB::table('taxes')
+            ->select('id', 'tax_desc as text')
+            ->where('tax_desc', 'LIKE',  '%' . $term . '%')
+            ->where('status', 'A')
+            ->orderBy('tax_desc', 'asc')->simplePaginate(10);
+
+        $morePages = true;
+        if (empty($taxes->nextPageUrl())) {
+            $morePages = false;
+        }
+        $results = array(
+            "results" => $taxes->items(),
+            "pagination" => array(
+                "more" => $morePages
+            )
+        );
+
+        return $results;
+    }
 }

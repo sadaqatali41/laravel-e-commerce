@@ -27,8 +27,7 @@ return new class extends Migration
             $table->longText('warranty');
             $table->string('keywords');
             $table->string('lead_time')->nullable();
-            $table->string('tax')->nullable();
-            $table->string('tax_type')->nullable();
+            $table->integer('tax_id')->nullable();
             $table->integer('is_promo')->default(0);
             $table->integer('is_featured')->default(0);
             $table->integer('is_discounted')->default(0);

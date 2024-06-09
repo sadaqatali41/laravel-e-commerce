@@ -138,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="lead_time" class=" form-control-label">Lead Time</label>
                                             <input name="lead_time" id="lead_time" class="form-control form-control-sm" placeholder="Lead Time" value="{{ old('lead_time') }}">
@@ -147,27 +147,14 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="tax" class=" form-control-label">Tax</label>
-                                            <input name="tax" id="tax" class="form-control form-control-sm" placeholder="Tax" value="{{ old('tax') }}">
-                                            @error('tax')
-                                                <span class="help-block status--denied">{{ $message }}</span>
-                                            @enderror
+                                            <label for="tax_id" class=" form-control-label">Tax</label>
+                                            <select name="tax_id" id="tax_id" class="form-control form-control-sm"></select>
+                                            @error('tax_id')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="tax_type" class=" form-control-label">Tax Type</label>
-                                            <input name="tax_type" id="tax_type" class="form-control form-control-sm" placeholder="Tax Type" value="{{ old('tax_type') }}">
-                                            @error('tax_type')
-                                                <span class="help-block status--denied">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-3">
+                                    </div>  
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_promo" class=" form-control-label">Is Promo</label>
                                             <select name="is_promo" id="is_promo" class="form-control form-control-sm">
@@ -176,8 +163,10 @@
                                             </select>
                                             @error('is_promo')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3">
+                                    </div>                                  
+                                </div>
+                                <div class="row">                                    
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_featured" class=" form-control-label">Is Featured</label>
                                             <select name="is_featured" id="is_featured" class="form-control form-control-sm">
@@ -187,7 +176,7 @@
                                             @error('is_featured')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_discounted" class=" form-control-label">Is Discounted</label>
                                             <select name="is_discounted" id="is_discounted" class="form-control form-control-sm">
@@ -197,7 +186,7 @@
                                             @error('is_discounted')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_trending" class=" form-control-label">Is Trending</label>
                                             <select name="is_trending" id="is_trending" class="form-control form-control-sm">
@@ -467,7 +456,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="lead_time" class=" form-control-label">Lead Time</label>
                                             <input name="lead_time" id="lead_time" class="form-control form-control-sm" placeholder="Lead Time" value="{{ old('lead_time', $product->lead_time) }}">
@@ -476,27 +465,18 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="tax" class=" form-control-label">Tax</label>
-                                            <input name="tax" id="tax" class="form-control form-control-sm" placeholder="Tax" value="{{ old('tax', $product->tax) }}">
-                                            @error('tax')
-                                                <span class="help-block status--denied">{{ $message }}</span>
-                                            @enderror
+                                            <label for="tax_id" class=" form-control-label">Tax</label>
+                                            <select name="tax_id" id="tax_id" class="form-control form-control-sm">
+                                                @if ($product->tax_id)
+                                                <option value="{{ $product->tax_id }}">{{ $product->tax->tax_desc }}</option>  
+                                                @endif
+                                            </select>
+                                            @error('tax_id')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="tax_type" class=" form-control-label">Tax Type</label>
-                                            <input name="tax_type" id="tax_type" class="form-control form-control-sm" placeholder="Tax Type" value="{{ old('tax_type', $product->tax_type) }}">
-                                            @error('tax_type')
-                                                <span class="help-block status--denied">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_promo" class=" form-control-label">Is Promo</label>
                                             <select name="is_promo" id="is_promo" class="form-control form-control-sm">
@@ -506,7 +486,9 @@
                                             @error('is_promo')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                </div>
+                                <div class="row">                                    
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_featured" class=" form-control-label">Is Featured</label>
                                             <select name="is_featured" id="is_featured" class="form-control form-control-sm">
@@ -516,7 +498,7 @@
                                             @error('is_featured')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_discounted" class=" form-control-label">Is Discounted</label>
                                             <select name="is_discounted" id="is_discounted" class="form-control form-control-sm">
@@ -526,7 +508,7 @@
                                             @error('is_discounted')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="is_trending" class=" form-control-label">Is Trending</label>
                                             <select name="is_trending" id="is_trending" class="form-control form-control-sm">
@@ -753,6 +735,23 @@
                 allowClear: true,
                 ajax: {
                     url: "{{ route('admin.brand-list') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        }
+                    },
+                    cache: true
+                }
+            });
+
+            $('#tax_id').select2({
+                placeholder: 'Search Tax...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.tax-list') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
