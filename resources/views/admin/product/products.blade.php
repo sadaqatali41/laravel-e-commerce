@@ -354,7 +354,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="images" class=" form-control-label">Images</label>
+                                            <label for="images" class="form-control-label">Images</label>
                                             <input type="file" id="images" name="images[]" class="form-control-file" multiple>                                            
                                         </div>
                                         <div class="row">

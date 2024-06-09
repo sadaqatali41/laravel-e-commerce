@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
@@ -35,7 +36,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'coupon' => CouponController::class,
             'size' => SizeController::class,
             'color' => ColorController::class,
-            'product' => ProductController::class
+            'product' => ProductController::class,
+            'brand' => BrandController::class
         ]);
     });
 });
