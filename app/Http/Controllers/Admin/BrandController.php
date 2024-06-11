@@ -15,7 +15,7 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Brand::select(['id', 'name', 'image', 'status']);
+            $data = Brand::select(['id', 'name', 'image', 'is_home', 'status']);
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->addColumn('manage', function($row){
@@ -33,6 +33,13 @@ class BrandController extends Controller
                                         return '<img src="'.asset('storage/brand/' . $row->image).'" class="img-40 img-radius">';
                                     } else {
                                         return 'NA';
+                                    }
+                                })
+                                ->editColumn('is_home', function($row){
+                                    if($row->is_home === 1) {
+                                        return 'Yes';
+                                    } else {
+                                        return 'No';
                                     }
                                 })
                                 ->escapeColumns([])
@@ -64,6 +71,7 @@ class BrandController extends Controller
         $formFields = [
             'name' => $request->name,
             'status' => $request->status,
+            'is_home' => $request->is_home,
             'created_by' => Auth::guard('admin')->user()->id,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
@@ -102,6 +110,7 @@ class BrandController extends Controller
         $formFields = [
             'name' => $request->name,
             'status' => $request->status,
+            'is_home' => $request->is_home,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
 

@@ -27,15 +27,24 @@
                                             <input type="text" id="name" name="name" placeholder="Brand Name.." class="form-control form-control-sm" value="{{ old('name') }}">
                                             @error('name')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_home" class=" form-control-label">Home Page Visibility</label>
+                                            <select name="is_home" id="is_home" class="form-control form-control-sm">
+                                                <option value="0" @if(old('is_home') === 0) selected @endif>Do not Show on Home Page</option>
+                                                <option value="1" @if(old('is_home') === 1) selected @endif>Show on Home Page</option>
+                                            </select>
+                                        </div>
                                     </div>                                    
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="image" class=" form-control-label">Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
@@ -80,14 +89,23 @@
                                             @error('name')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="image" class=" form-control-label">Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="is_home" class=" form-control-label">Home Page Visibility</label>
+                                            <select name="is_home" id="is_home" class="form-control form-control-sm">
+                                                <option value="0" @if(old('is_home', $brand->is_home) === 0) selected @endif>Do not Show on Home Page</option>
+                                                <option value="1" @if(old('is_home', $brand->is_home) === 1) selected @endif>Show on Home Page</option>
+                                            </select>
+                                        </div>
+                                    </div>                            
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
@@ -96,7 +114,7 @@
                                             </select>
                                             @error('status')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
-                                    </div>                            
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">                                        
@@ -134,6 +152,7 @@
                                         <th>#</th>
                                         <th>Brand Name</th>
                                         <th>Image</th>
+                                        <th>Home Visibility</th>
                                         <th>Status</th>
                                         <th>Manage</th>
                                     </tr>
@@ -170,6 +189,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
                     {data: 'image', name: 'image'},
+                    {data: 'is_home', name: 'is_home'},
                     {data: 'status', name: 'status'},
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
