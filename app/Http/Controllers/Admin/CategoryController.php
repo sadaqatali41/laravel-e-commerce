@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Category::select(['id', 'name', 'slug', 'image', 'status']);
+            $data = Category::select(['id', 'name', 'slug', 'image', 'is_home', 'status']);
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->addColumn('manage', function($row){
@@ -34,6 +34,14 @@ class CategoryController extends Controller
                                     } else {
                                         return 'NA';
                                     }
+                                })
+                                ->editColumn('is_home', function($row){
+                                    if($row->is_home === 1) {
+                                        return 'Yes';
+                                    } else {
+                                        return 'No';
+                                    }
+                                        
                                 })
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
@@ -66,6 +74,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->slug),
             'status' => $request->status,
+            'is_home' => $request->is_home,
             'created_by' => Auth::guard('admin')->user()->id,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
@@ -106,6 +115,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->slug),
             'status' => $request->status,
+            'is_home' => $request->is_home,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
 

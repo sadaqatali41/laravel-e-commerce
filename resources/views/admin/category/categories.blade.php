@@ -49,6 +49,15 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="is_home" class=" form-control-label">Home Page Visibility</label>
+                                            <select name="is_home" id="is_home" class="form-control form-control-sm">
+                                                <option value="0" @if(old('is_home') === 0) selected @endif>Do not Show on Home Page</option>
+                                                <option value="1" @if(old('is_home') === 1) selected @endif>Show on Home Page</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="image" class=" form-control-label">Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')<span class="help-block status--denied">{{ $message }}</span>@enderror
@@ -110,6 +119,15 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="is_home" class=" form-control-label">Home Page Visibility</label>
+                                            <select name="is_home" id="is_home" class="form-control form-control-sm">
+                                                <option value="0" @if(old('is_home', $category->is_home) === 0) selected @endif>Do not Show on Home Page</option>
+                                                <option value="1" @if(old('is_home', $category->is_home) === 1) selected @endif>Show on Home Page</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="image" class=" form-control-label">Image</label>
                                             <input type="file" id="image" name="image" class="form-control-file">
                                             @error('image')<span class="help-block status--denied">{{ $message }}</span>@enderror
@@ -149,6 +167,7 @@
                                         <th>Category Name</th>
                                         <th>Category Slug</th>
                                         <th>Image</th>
+                                        <th>Home Visibility</th>
                                         <th>Status</th>
                                         <th>Manage</th>
                                     </tr>
@@ -186,6 +205,7 @@
                     {data: 'name', name: 'name'},
                     {data: 'slug', name: 'slug'},
                     {data: 'image', name: 'image'},
+                    {data: 'is_home', name: 'is_home'},
                     {data: 'status', name: 'status'},
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
