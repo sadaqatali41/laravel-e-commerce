@@ -34,3 +34,7 @@
     <a href="{{ route('admin.product.index') }}">
         <i class="fa fa-product-hunt"></i>Products</a>
 </li>
+<li class="@if(request()->routeIs('admin.user.*')) active @endif">
+    <a href="{{ route('admin.user.index') }}">
+        <i class="fa fa-users"></i>Users</a>
+</li>
