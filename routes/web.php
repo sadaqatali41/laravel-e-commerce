@@ -10,13 +10,10 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 # Admin Routes
 Route::prefix('admin')->name('admin.')->group(function(){
@@ -47,3 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
         ]);
     });
 });
+
+
+#front end route
+Route::get('/', [HomeController::class, 'index']);
