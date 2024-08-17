@@ -103,7 +103,7 @@
                   @foreach ($promos as $promo)
                   <div class="aa-single-promo-right">
                     <div class="aa-promo-banner">                      
-                      <img src="{{ asset('storage/category/' . $promo->image) }}" alt="img">                      
+                      <img src="{{ asset('storage/category/' . $promo->image) }}" alt="img">
                       <div class="aa-prom-content">
                         <span>Exclusive Item</span>
                         <h4>
@@ -132,10 +132,11 @@
               <div class="aa-product-inner">
                 <!-- start prduct navigation -->
                  <ul class="nav nav-tabs aa-products-tab">
-                    <li class="active"><a href="#men" data-toggle="tab">Men</a></li>
-                    <li><a href="#women" data-toggle="tab">Women</a></li>
-                    <li><a href="#sports" data-toggle="tab">Sports</a></li>
-                    <li><a href="#electronics" data-toggle="tab">Electronics</a></li>
+                    @foreach ($promos as $key => $cat)
+                      <li class="@if($key == 0) active @endif">
+                        <a href="#{{ $cat->slug }}" data-toggle="tab">{{ $cat->name }}</a>
+                      </li>
+                    @endforeach
                   </ul>
                   <!-- Tab panes -->
                   <div class="tab-content">
