@@ -10,6 +10,8 @@ class Category extends Model
 {
     use HasFactory;
 
+    use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
+
     protected $guarded = [];
 
     public function products() {
