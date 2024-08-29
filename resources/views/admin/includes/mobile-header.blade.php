@@ -2,7 +2,7 @@
     <div class="header-mobile__bar">
         <div class="container-fluid">
             <div class="header-mobile-inner">
-                <a class="logo" href="index.html">
+                <a class="logo" href="{{ url('/') }}">
                     <img src="{{ asset('admin/images/icon/logo.png') }}" alt="CoolAdmin" />
                 </a>
                 <button class="hamburger hamburger--slider" type="button">

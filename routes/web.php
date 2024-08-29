@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
@@ -40,7 +41,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'product' => ProductController::class,
             'brand' => BrandController::class,
             'tax' => TaxController::class,
-            'user' => UserController::class
+            'user' => UserController::class,
+            'slider' => SliderController::class
         ]);
     });
 });
