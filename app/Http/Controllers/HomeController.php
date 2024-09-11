@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
+use App\Models\Admin\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index() 
     {
+        #sliders
+        $result['sliders'] = Slider::select(['title', 'short_title', 'description', 'image'])->active()->get();
+
         $result['promos'] = Category::select(['id', 'name', 'slug', 'image'])
                                     ->with([
                                         'products' => function($q) {
