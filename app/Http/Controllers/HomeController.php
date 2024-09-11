@@ -14,7 +14,9 @@ class HomeController extends Controller
     public function index() 
     {
         #sliders
-        $result['sliders'] = Slider::select(['title', 'short_title', 'description', 'image'])->active()->get();
+        $result['sliders'] = Slider::select(['title', 'short_title', 'description', 'image'])
+                                    ->active()
+                                    ->get();
 
         $result['promos'] = Category::select(['id', 'name', 'slug', 'image'])
                                     ->with([
