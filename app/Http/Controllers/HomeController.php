@@ -13,7 +13,6 @@ class HomeController extends Controller
 {
     public function index() 
     {
-        #sliders
         $result['sliders'] = Slider::select(['title', 'short_title', 'description', 'image'])
                                     ->active()
                                     ->get();
@@ -67,5 +66,14 @@ class HomeController extends Controller
                                         ->limit(8)
                                         ->get();
         return view('index', $result);
+    }
+
+    public function category($slug) 
+    {
+        dd($slug);
+    }
+    public function product($slug) 
+    {
+        dd($slug);
     }
 }
