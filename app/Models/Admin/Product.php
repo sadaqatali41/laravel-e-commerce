@@ -35,4 +35,14 @@ class Product extends Model
     public function tax() {
         return $this->belongsTo(Taxes::class, 'tax_id', 'id');
     }
+
+    // ! define scope here
+
+    public function scopeActive($query) {
+        return $query->where('status', 'A');
+    }
+
+    public function scopeProductType($query, $type) {
+        return $query->where('is_' . $type, 1);
+    }
 }

@@ -118,7 +118,7 @@
                   <ul class="aa-product-catg aa-popular-slider">
                     <!-- start single product item -->
                     @foreach ($trending as $item)
-                      <x-home.product :product="$item" />                        
+                      <x-home.product :product="$item" />
                     @endforeach
                   </ul>
                   <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
