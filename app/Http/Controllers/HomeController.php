@@ -89,7 +89,18 @@ class HomeController extends Controller
 
     public function category($slug) 
     {
-        dd($slug);
+        $products = Product::with([
+            'attributes' => function($q) {
+                return $q->where('status', 'A');
+            }
+        ])
+        ->whereHas('category', function($query) {
+            $query->where('slug', 'men');
+        })
+        ->active()
+        ->paginate(14);
+        
+        return view('products')->with(['products' => $products]);
     }
     public function product($slug) 
     {
