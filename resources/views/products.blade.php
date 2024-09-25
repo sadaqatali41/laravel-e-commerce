@@ -10,7 +10,7 @@
                     <h2>Fashion</h2>
                     <ol class="breadcrumb">
                         <li><a href="{{ url('/') }}">Home</a></li>
-                        <li class="active">Women</li>
+                        <li class="active">{{ $products->first()->category->name }}</li>
                     </ol>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                             <ul class="aa-product-catg">
                                 <!-- start single product item -->
                                 @foreach ($products as $product)
-                                    <x-home.product :product="$product" />                                    
+                                    <x-home.product :product="$product" />
                                 @endforeach
                             </ul>
                             <!-- quick view modal -->
@@ -63,11 +63,11 @@
                         <div class="aa-sidebar-widget">
                             <h3>Category</h3>
                             <ul class="aa-catg-nav">
-                                <li><a href="#">Men</a></li>
-                                <li><a href="">Women</a></li>
-                                <li><a href="">Kids</a></li>
-                                <li><a href="">Electornics</a></li>
-                                <li><a href="">Sports</a></li>
+                                @foreach ($promos as $cat)
+                                    <li>
+                                        <a href="{{ route('category.product', $cat->slug) }}">{{ $cat->name }}</a>
+                                    </li>                                    
+                                @endforeach
                             </ul>
                         </div>
                         <!-- single sidebar -->

@@ -89,18 +89,35 @@ class HomeController extends Controller
 
     public function category($slug) 
     {
-        $products = Product::with([
-            'attributes' => function($q) {
-                return $q->where('status', 'A');
-            }
-        ])
-        ->whereHas('category', function($query) {
-            $query->where('slug', 'men');
-        })
-        ->active()
-        ->paginate(14);
+        $seconds = 120;
+
+        $result['products'] = Cache::remember('products-of-' . $slug, $seconds, function() use ($slug) {
+            return Product::with([
+                            'category:id,name',
+                            'attributes' => function($q) {
+                                $q->select('id', 'product_id', 'mrp', 'price')
+                                    ->where('status', 'A');
+                            }           
+                        ])
+                        ->whereHas('category', function($query) use ($slug) {
+                            $query->where('slug', $slug);
+                        })
+                        ->active()
+                        ->paginate(14);
+        });
+
+        $result['promos'] = Cache::remember('top-promos', $seconds, function(){
+            return Category::select(['id', 'name', 'slug'])                        
+                            ->where([
+                                'is_home' => 1, 
+                                'status' => 'A'
+                            ])
+                            ->inRandomOrder()
+                            ->limit(5)
+                            ->get();
+        });
         
-        return view('products')->with(['products' => $products]);
+        return view('products', $result);
     }
     public function product($slug) 
     {
