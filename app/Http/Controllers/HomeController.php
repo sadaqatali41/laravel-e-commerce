@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin\Brand;
 use App\Models\Admin\Slider;
+use Config;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
 use App\Models\Admin\Category;
@@ -12,17 +13,22 @@ use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
+    private $seconds;
+
+    public function __construct()
+    {
+        $this->seconds = Config::get('constants.CACHE_EXP');
+    }
+
     public function index() 
     {
-        $seconds = 120;
-
-        $result['sliders'] = Cache::remember('sliders', $seconds, function(){
+        $result['sliders'] = Cache::remember('sliders', $this->seconds, function(){
             return Slider::select(['title', 'short_title', 'description', 'image'])
                         ->active()
                         ->get();
         });
 
-        $result['promos'] = Cache::remember('promos', $seconds, function(){
+        $result['promos'] = Cache::remember('promos', $this->seconds, function(){
             return Category::select(['id', 'name', 'slug', 'image'])
                             ->with([
                                 'products' => function($q) {
@@ -36,13 +42,13 @@ class HomeController extends Controller
                             ->get();
         });
         
-        $result['brands'] = Cache::remember('brands', $seconds, function(){
+        $result['brands'] = Cache::remember('brands', $this->seconds, function(){
             return Brand::select(['name', 'image'])
                         ->where(['is_home' => 1, 'status' => 'A'])
                         ->get();
         });
 
-        $result['trending'] = Cache::remember('trending', $seconds, function(){
+        $result['trending'] = Cache::remember('trending', $this->seconds, function(){
             return Product::select('id', 'prod_name', 'slug', 'image')
                             ->with([
                                 'attributes' => function($q) {
@@ -56,7 +62,7 @@ class HomeController extends Controller
                             ->get();
         });
 
-        $result['featured'] = Cache::remember('featured', $seconds, function(){
+        $result['featured'] = Cache::remember('featured', $this->seconds, function(){
             return Product::select('id', 'prod_name', 'slug', 'image')
                             ->with([
                                 'attributes' => function($q) {
@@ -70,7 +76,7 @@ class HomeController extends Controller
                             ->get();
         });
 
-        $result['isPromo'] = Cache::remember('promo', $seconds, function(){
+        $result['isPromo'] = Cache::remember('promo', $this->seconds, function(){
             return Product::select('id', 'prod_name', 'slug', 'image')
                             ->with([
                                 'attributes' => function($q) {
@@ -89,11 +95,9 @@ class HomeController extends Controller
 
     public function category($slug) 
     {
-        $seconds = 120;
-
-        $result['products'] = Cache::remember('products-of-' . $slug, $seconds, function() use ($slug) {
+        $result['products'] = Cache::remember('products-of-' . $slug, $this->seconds, function() use ($slug) {
             return Product::with([
-                            'category:id,name',
+                            'category:id,name,image',
                             'attributes' => function($q) {
                                 $q->select('id', 'product_id', 'mrp', 'price')
                                     ->where('status', 'A');
@@ -106,7 +110,7 @@ class HomeController extends Controller
                         ->paginate(14);
         });
 
-        $result['promos'] = Cache::remember('top-promos', $seconds, function(){
+        $result['promos'] = Cache::remember('top-promos', $this->seconds, function(){
             return Category::select(['id', 'name', 'slug'])                        
                             ->where([
                                 'is_home' => 1, 
@@ -114,6 +118,19 @@ class HomeController extends Controller
                             ])
                             ->inRandomOrder()
                             ->limit(5)
+                            ->get();
+        });
+
+        $result['t_r_p'] = Cache::remember('top-rated-product', $this->seconds, function(){
+            return Product::select('id', 'prod_name', 'slug', 'image')
+                            ->with([
+                                'attributes' => function($q) {
+                                    $q->select('id', 'product_id', 'mrp', 'price')
+                                        ->where('status', 'A');
+                                }
+                            ])
+                            ->inRandomOrder()
+                            ->take(3)
                             ->get();
         });
         
