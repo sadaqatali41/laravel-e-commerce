@@ -138,6 +138,14 @@ class HomeController extends Controller
     }
     public function product($slug) 
     {
-        dd($slug);
+        $product = Product::with([
+                            'images',
+                            'attributes',
+                            'category:id,name,slug',
+                            ])
+                            ->where('slug', $slug)
+                            ->first();
+        // return $product;
+        return view('product-details', compact('product'));
     }
 }
