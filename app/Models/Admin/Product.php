@@ -2,7 +2,9 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Admin\Size;
 use App\Models\Admin\Brand;
+use App\Models\Admin\Color;
 use App\Models\Admin\Category;
 use App\Models\Admin\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +36,16 @@ class Product extends Model
 
     public function tax() {
         return $this->belongsTo(Taxes::class, 'tax_id', 'id');
+    }
+
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_attributes', 'product_id', 'color_id');
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_attributes', 'product_id', 'size_id');
     }
 
     // ! define scope here

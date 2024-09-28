@@ -66,18 +66,15 @@
                                         <p>{!! $product->short_desc !!}</p>
                                         <h4>Size</h4>
                                         <div class="aa-prod-view-size">
-                                            <a href="#">S</a>
-                                            <a href="#">M</a>
-                                            <a href="#">L</a>
-                                            <a href="#">XL</a>
+                                            @foreach ($product->sizes as $size)
+                                                <a href="#">{{ $size->size }}</a>
+                                            @endforeach
                                         </div>
                                         <h4>Color</h4>
                                         <div class="aa-color-tag">
-                                            <a href="#" class="aa-color-green"></a>
-                                            <a href="#" class="aa-color-yellow"></a>
-                                            <a href="#" class="aa-color-pink"></a>
-                                            <a href="#" class="aa-color-black"></a>
-                                            <a href="#" class="aa-color-white"></a>
+                                            @foreach ($product->colors as $color)
+                                                <a href="#" class="aa-color-{{ strtolower($color->color) }}"></a>                                                
+                                            @endforeach
                                         </div>
                                         <div class="aa-prod-quantity">
                                             <form action="">

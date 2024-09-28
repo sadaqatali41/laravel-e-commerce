@@ -138,14 +138,47 @@ class HomeController extends Controller
     }
     public function product($slug) 
     {
-        $product = Product::with([
-                            'images',
-                            'attributes',
+        $product = Cache::remember($slug, $this->seconds, function() use ($slug){
+            return Product::with([
+                            'images',                            
                             'category:id,name,slug',
+                            'colors' => function($query) {
+                                $query->select('colors.id', 'colors.color') // Select `id` or foreign key columns
+                                    ->where('colors.status', 'A');
+                            },
+
+                            'sizes' => function($query) {
+                                $query->select('sizes.id', 'sizes.size') // Select `id` or foreign key columns
+                                    ->where('sizes.status', 'A');
+                            }
+                        ])
+                        ->where('slug', $slug)
+                        ->first();
+        });
+
+        $products = Product::with([
+                                'attributes' => function($q) {
+                                    $q->select('id', 'product_id', 'mrp', 'price')
+                                        ->where('status', 'A');
+                                }
                             ])
-                            ->where('slug', $slug)
-                            ->first();
-        // return $product;
-        return view('product-details', compact('product'));
+                            ->whereHas('category', function($query) use ($slug){
+                                $query->whereHas('products', function($q) use ($slug) {
+                                    $q->where([
+                                        'slug' => $slug,
+                                        'status' => 'A'
+                                    ]);
+                                });
+                            })
+                            ->latest()
+                            ->limit(8)
+                            ->get();
+
+        // return $products;
+        return view('product-details', compact([
+                                                        'product', 
+                                                        'products'
+                                                    ])
+                                                );
     }
 }
