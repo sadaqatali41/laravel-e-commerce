@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin\Brand;
-use App\Models\Admin\Slider;
 use Config;
+use App\Models\Admin\Brand;
+use App\Models\Admin\Color;
+use App\Models\Admin\Slider;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
 use App\Models\Admin\Category;
@@ -133,6 +134,29 @@ class HomeController extends Controller
                             ->take(3)
                             ->get();
         });
+
+        #fetch color
+        $result['colors'] = Cache::remember('colors', $this->seconds, function(){
+            return Color::select('id', 'color')
+                        ->active()
+                        ->inRandomOrder()
+                        ->get();
+        });
+
+        #fetch recently viewed product
+        if(session()->has('recently_viewed')) {
+            $recentlyViewedIds = session()->get('recently_viewed', []);
+            $recentlyViewedProducts = Product::select('id', 'prod_name', 'slug', 'price', 'image')
+                                            ->with([
+                                                'attributes' => function($q) {
+                                                    $q->select('id', 'product_id', 'mrp', 'price')
+                                                        ->where('status', 'A');
+                                                }
+                                            ])
+                                            ->whereIn('id', $recentlyViewedIds)
+                                            ->get();
+            $result['rvp'] = $recentlyViewedProducts;
+        }
         
         return view('products', $result);
     }
@@ -146,7 +170,6 @@ class HomeController extends Controller
                                 $query->select('colors.id', 'colors.color') // Select `id` or foreign key columns
                                     ->where('colors.status', 'A');
                             },
-
                             'sizes' => function($query) {
                                 $query->select('sizes.id', 'sizes.size') // Select `id` or foreign key columns
                                     ->where('sizes.status', 'A');
@@ -156,29 +179,45 @@ class HomeController extends Controller
                         ->first();
         });
 
-        $products = Product::with([
-                                'attributes' => function($q) {
-                                    $q->select('id', 'product_id', 'mrp', 'price')
-                                        ->where('status', 'A');
-                                }
-                            ])
-                            ->whereHas('category', function($query) use ($slug){
-                                $query->whereHas('products', function($q) use ($slug) {
-                                    $q->where([
-                                        'slug' => $slug,
-                                        'status' => 'A'
-                                    ]);
-                                });
-                            })
-                            ->latest()
-                            ->limit(8)
-                            ->get();
+        $products = Cache::remember('related-product', $this->seconds, function() use ($slug){
+            return Product::with([
+                            'attributes' => function($q) {
+                                $q->select('id', 'product_id', 'mrp', 'price')
+                                    ->where('status', 'A');
+                            }
+                        ])
+                        ->whereHas('category', function($query) use ($slug){
+                            $query->whereHas('products', function($q) use ($slug) {
+                                $q->where([
+                                    'slug' => $slug,
+                                    'status' => 'A'
+                                ]);
+                            });
+                        })
+                        ->latest()
+                        ->limit(8)
+                        ->get();
+        });
+
+        // recently viewed products
+        $this->storeInSession($product->id);
+
+        $result['product'] = $product;
+        $result['products'] = $products;
 
         // return $products;
-        return view('product-details', compact([
-                                                        'product', 
-                                                        'products'
-                                                    ])
-                                                );
+        return view('product-details', $result);
+    }
+
+    public function storeInSession($productId) 
+    {
+        $recentlyViewed = session()->get('recently_viewed', []);
+
+        if (!in_array($productId, $recentlyViewed)) {
+            array_unshift($recentlyViewed, $productId);
+            $recentlyViewed = array_slice($recentlyViewed, 0, 5);
+        }
+
+        session()->put('recently_viewed', $recentlyViewed);
     }
 }

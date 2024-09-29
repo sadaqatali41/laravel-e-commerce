@@ -90,18 +90,9 @@
                         <div class="aa-sidebar-widget">
                             <h3>Shop By Color</h3>
                             <div class="aa-color-tag">
-                                <a class="aa-color-green" href="#"></a>
-                                <a class="aa-color-yellow" href="#"></a>
-                                <a class="aa-color-pink" href="#"></a>
-                                <a class="aa-color-purple" href="#"></a>
-                                <a class="aa-color-blue" href="#"></a>
-                                <a class="aa-color-orange" href="#"></a>
-                                <a class="aa-color-gray" href="#"></a>
-                                <a class="aa-color-black" href="#"></a>
-                                <a class="aa-color-white" href="#"></a>
-                                <a class="aa-color-cyan" href="#"></a>
-                                <a class="aa-color-olive" href="#"></a>
-                                <a class="aa-color-orchid" href="#"></a>
+                                @foreach ($colors as $color)
+                                    <a class="aa-color-{{ strtolower($color->color) }}" href="#"></a>                                    
+                                @endforeach
                             </div>
                         </div>
                         <!-- single sidebar -->
@@ -109,33 +100,11 @@
                             <h3>Recently Views</h3>
                             <div class="aa-recently-views">
                                 <ul>
-                                    <li>
-                                        <a href="#" class="aa-cartbox-img">
-                                            <img alt="img" src="{{ asset('assets/img/woman-small-2.jpg') }}">
-                                        </a>
-                                        <div class="aa-cartbox-info">
-                                            <h4>
-                                                <a href="#">Product Name</a>
-                                            </h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="aa-cartbox-img"><img alt="img"
-                                                src="{{ asset('assets/img/woman-small-1.jpg') }}"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="aa-cartbox-img"><img alt="img"
-                                                src="{{ asset('assets/img/woman-small-2.jpg') }}"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                    </li>
+                                    @isset($rvp)
+                                        @foreach ($rvp as $view)
+                                            <x-home.top-rated-product :trp="$view" />
+                                        @endforeach 
+                                    @endisset
                                 </ul>
                             </div>
                         </div>
