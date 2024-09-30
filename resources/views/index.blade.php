@@ -80,10 +80,7 @@
                         @foreach ($category->products as $product)
                         <x-home.product :product="$product" />                            
                         @endforeach
-                      </ul>
-                      @if(count($category->products) > 0)
-                      <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
-                      @endif
+                      </ul>                      
                     </div>                        
                     @endforeach
                   </div>
@@ -121,7 +118,6 @@
                       <x-home.product :product="$item" />
                     @endforeach
                   </ul>
-                  <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
                 </div>
                 <!-- / popular product category -->
                 
@@ -133,7 +129,6 @@
                       <x-home.product :product="$item" />
                     @endforeach
                   </ul>
-                  <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
                 </div>
                 <!-- / featured product category -->
 
@@ -145,7 +140,6 @@
                       <x-home.product :product="$item" />
                     @endforeach
                   </ul>
-                   <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
                 </div>
                 <!-- / latest product category -->              
               </div>
