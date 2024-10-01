@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Config;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Color;
 use App\Models\Admin\Slider;
@@ -11,6 +10,7 @@ use App\Models\Admin\Product;
 use App\Models\Admin\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class HomeController extends Controller
 {
@@ -219,5 +219,10 @@ class HomeController extends Controller
         }
 
         session()->put('recently_viewed', $recentlyViewed);
+    }
+
+    public function contact()
+    {
+        return view('contact');
     }
 }

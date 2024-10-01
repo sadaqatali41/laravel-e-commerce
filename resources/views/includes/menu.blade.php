@@ -14,35 +14,32 @@
                 <div class="navbar-collapse collapse">
                     <!-- Left nav -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ url('/') }}">Home</a></li>
-                        @foreach ($menus as $menu)
-                            <li><a href="{{ url('/') }}">{{ $menu->name }}</a></li>                            
-                        @endforeach
                         <li>
-                            <a href="#">Men 
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Casual</a></li>
-                                <li><a href="#">Sports</a></li>
-                                <li><a href="#">Formal</a></li>
-                                <li><a href="#">Standard</a></li>
-                                <li><a href="#">T-Shirts</a></li>
-                                <li><a href="#">Shirts</a></li>
-                                <li><a href="#">Jeans</a></li>
-                                <li><a href="#">Trousers</a></li>
-                                <li><a href="#">And more.. <span class="caret"></span></a>
+                            <a href="{{ url('/') }}">Home</a>
+                        </li>
+                        @foreach ($categories as $category)
+                            <li>                                
+                                @if($category->subcategories->count())
+                                    <a href="#">{{ $category->name }}
+                                        <span class="caret"></span>
+                                    </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Sleep Wear</a></li>
-                                        <li><a href="#">Sandals</a></li>
-                                        <li><a href="#">Loafers</a></li>
+                                        @foreach ($category->subcategories as $subcategory)
+                                            <li>
+                                                <a href="#">{{ $subcategory->name }}</a>
+                                            </li>
+                                        @endforeach
                                     </ul>
-                                </li>
-                            </ul>
+                                @else
+                                    <a href="{{ route('category.product', $category->slug) }}">{{ $category->name }}</a>
+                                @endif
+                            </li>                            
+                        @endforeach                        
+                        <li>
+                            <a href="{{ route('contact') }}">Contact</a>
                         </li>                        
-                        <li><a href="contact.html">Contact</a></li>                        
                     </ul>
-                </div><!--/.nav-collapse -->
+                </div>
             </div>
         </div>
     </div>

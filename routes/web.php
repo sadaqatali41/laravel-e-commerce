@@ -11,3 +11,4 @@ require_once __DIR__ . '/auth.php';
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.product');
 Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.list');
+Route::get('/contact-us', [HomeController::class, 'contact'])->name('contact');
