@@ -25,6 +25,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::get('/category-list', [Select2Controller::class, 'category'])->name('category-list');
+        Route::get('/subcategory-list', [Select2Controller::class, 'subcategory'])->name('subcategory-list');
         Route::get('/size-list', [Select2Controller::class, 'size'])->name('size-list');
         Route::get('/color-list', [Select2Controller::class, 'color'])->name('color-list');
         Route::get('/brand-list', [Select2Controller::class, 'brand'])->name('brand-list');

@@ -6,6 +6,7 @@ use App\Models\Admin\Size;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Color;
 use App\Models\Admin\Category;
+use App\Models\Admin\SubCategory;
 use App\Models\Admin\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,10 @@ class Product extends Model
 
     public function category() {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function subcategory() {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id', 'id');
     }
 
     public function attributes() {

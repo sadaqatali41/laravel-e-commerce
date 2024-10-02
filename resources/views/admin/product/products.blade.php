@@ -23,9 +23,9 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="category_id" class=" form-control-label">Category Name</label>
-                                            <select name="category_id" id="category_id" class="form-control form-control-sm"></select>
-                                            @error('category_id')
+                                            <label for="sub_category_id" class=" form-control-label">Sub Category</label>
+                                            <select name="sub_category_id" id="sub_category_id" class="form-control form-control-sm"></select>
+                                            @error('sub_category_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -337,11 +337,11 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label for="category_id" class=" form-control-label">Category Name</label>
-                                            <select name="category_id" id="category_id" class="form-control form-control-sm">
-                                                <option selected value="{{ $product->category_id }}">{{ $product->category->name }}</option>
+                                            <label for="sub_category_id" class=" form-control-label">Sub Category</label>
+                                            <select name="sub_category_id" id="sub_category_id" class="form-control form-control-sm">
+                                                <option selected value="{{ $product->sub_category_id }}">{{ $product->subcategory->name }}</option>
                                             </select>
-                                            @error('category_id')
+                                            @error('sub_category_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -664,7 +664,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Product Name</th>
-                                        <th>Category Name</th>
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
                                         <th>Product Slug</th>
                                         <th>Image</th>
                                         <th>Status</th>
@@ -705,6 +706,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'prod_name', name: 'prod_name'},
                     {data: 'category_id', name: 'category_id'},
+                    {data: 'sub_category_id', name: 'sub_category_id'},
                     {data: 'slug', name: 'slug'},
                     {data: 'image', name: 'image'},
                     {data: 'status', name: 'status'},
@@ -713,11 +715,11 @@
                 order: [0, 'desc']
             });
 
-            $('#category_id').select2({
-                placeholder: 'Search Category...',
+            $('#sub_category_id').select2({
+                placeholder: 'Search Sub Category...',
                 allowClear: true,
                 ajax: {
-                    url: "{{ route('admin.category-list') }}",
+                    url: "{{ route('admin.subcategory-list') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {

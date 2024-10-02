@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Admin\ProductAttribute;
-use App\Models\Admin\ProductImage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
 use Yajra\DataTables\DataTables;
+use App\Models\Admin\ProductImage;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Admin\ProductAttribute;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -17,11 +18,15 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Product::select(['id', 'prod_name', 'category_id', 'slug', 'image', 'status']);
+            $data = Product::with('category', 'subcategory')
+                                ->select(['id', 'prod_name', 'category_id', 'sub_category_id', 'slug', 'image', 'status']);
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->editColumn('category_id', function($row){
                                     return $row->category->name;
+                                })
+                                ->editColumn('sub_category_id', function($row){
+                                    return $row->subcategory->name;
                                 })
                                 ->addColumn('manage', function($row){
                                     return '<a href="'.route('admin.product.edit', $row->id).'"><i class="fa fa-edit"></i></a>';
@@ -61,7 +66,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'category_id' => 'required',
+            'sub_category_id' => 'required',
             'prod_name' => 'required|unique:products,prod_name',
             'slug' => 'required|unique:products,slug',
             'brand_id' => 'required|integer',
@@ -83,7 +88,7 @@ class ProductController extends Controller
             'image_attr' => 'required',
             'image_attr.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ], [
-            'category_id.required' => 'Category name is required.',
+            'sub_category_id.required' => 'Sub Category is required.',
             'prod_name.required' => 'Product Name is required.',
             'brand_id.required' => 'Brand Name is required.',
             'brand_id.integer' => 'Brand Name must be an integer.',
@@ -100,10 +105,16 @@ class ProductController extends Controller
             'image_attr.*.image' => 'File must be an Image.'
         ]);
 
+        $category_id = DB::table('sub_categories')
+                        ->where('id', $request->sub_category_id)
+                        ->value('category_id');
+
         $formFields = [
-            'category_id' => $request->category_id,
+            'category_id' => $category_id,
+            'sub_category_id' => $request->sub_category_id,
             'prod_name' => $request->prod_name,
             'slug' => Str::slug($request->slug),
+            'price' => mt_rand(100, 499),
             'brand_id' => $request->brand_id,
             'model_id' => $request->model_id,
             'keywords' => $request->keywords,
@@ -173,7 +184,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $product->load(['category', 'attributes', 'images', 'brand', 'tax']);
+        $product->load(['subcategory', 'attributes', 'images', 'brand', 'tax']);
         return view('admin.product.products', [
             'product' => $product,
             'exp' => 'edit',
@@ -184,7 +195,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $this->validate($request, [
-            'category_id' => 'required',
+            'sub_category_id' => 'required',
             'prod_name' => 'required|unique:products,prod_name,' . $product->id,
             'slug' => 'required|unique:products,slug,' . $product->id,
             'brand_id' => 'required|integer',
@@ -205,7 +216,7 @@ class ProductController extends Controller
             'qty.*' => 'required',
             'image_attr.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ], [
-            'category_id.required' => 'Category name is required.',
+            'sub_category_id.required' => 'Sub Category is required.',
             'prod_name.required' => 'Product Name is required.',
             'brand_id.required' => 'Brand Name is required.',
             'brand_id.integer' => 'Brand Name must be an integer.',
@@ -221,8 +232,13 @@ class ProductController extends Controller
             'image_attr.*.image' => 'File must be an Image.'
         ]);
 
+        $category_id = DB::table('sub_categories')
+                        ->where('id', $request->sub_category_id)
+                        ->value('category_id');
+
         $formFields = [
-            'category_id' => $request->category_id,
+            'category_id' => $category_id,
+            'sub_category_id' => $request->sub_category_id,
             'prod_name' => $request->prod_name,
             'slug' => Str::slug($request->slug),
             'brand_id' => $request->brand_id,
