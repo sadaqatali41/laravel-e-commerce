@@ -31,27 +31,40 @@ class Select2Controller extends Controller
     }
     public function subcategory(Request $request)
     {
-        $term = trim($request->term);
-        $categories = DB::table('sub_categories')
-            ->select('id', 'name as text')
-            ->where('name', 'LIKE',  '%' . $term . '%')
-            ->where('status', 'A')
-            ->orderBy('name', 'asc')
-            ->simplePaginate(10);
+        $search = trim($request->input('term'));
+        
+        $results = DB::table('categories')
+                    ->join('sub_categories', 'categories.id', '=', 'sub_categories.category_id')
+                    ->select(
+                        'categories.name as category_name',
+                        'sub_categories.id as sub_category_id',
+                        'sub_categories.name as sub_category_name'
+                    )
+                    ->when($search, function ($query) use ($search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('categories.name', 'like', "%{$search}%")
+                              ->orWhere('sub_categories.name', 'like', "%{$search}%");
+                        });
+                    })
+                    ->paginate(10);
 
-        $morePages = true;
-        if (empty($categories->nextPageUrl())) {
-            $morePages = false;
+        $formattedResults = [];
+
+        foreach ($results as $result) {
+            $formattedResults[] = [
+                'id' => $result->sub_category_id,
+                'text' => $result->category_name . ' - ' . $result->sub_category_name
+            ];
         }
-        $results = array(
-            "results" => $categories->items(),
-            "pagination" => array(
-                "more" => $morePages
-            )
-        );
 
-        return $results;
+        return response()->json([
+            'results' => $formattedResults,
+            'pagination' => [
+                'more' => $results->hasMorePages()
+            ]
+        ]);
     }
+
     public function size(Request $request)
     {
         $term = trim($request->term);

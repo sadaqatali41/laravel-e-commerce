@@ -339,7 +339,7 @@
                                         <div class="form-group">
                                             <label for="sub_category_id" class=" form-control-label">Sub Category</label>
                                             <select name="sub_category_id" id="sub_category_id" class="form-control form-control-sm">
-                                                <option selected value="{{ $product->sub_category_id }}">{{ $product->subcategory->name }}</option>
+                                                <option selected value="{{ $product->sub_category_id }}">{{ $product->category->name . ' - ' . $product->subcategory->name }}</option>
                                             </select>
                                             @error('sub_category_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
@@ -727,6 +727,14 @@
                             term: params.term || '',
                             page: params.page || 1
                         }
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
                     },
                     cache: true
                 }
