@@ -94,9 +94,9 @@ class HomeController extends Controller
         return view('index', $result);
     }
 
-    public function category($slug) 
+    public function category($slug, $subSlug = null) 
     {
-        $result['products'] = Cache::remember('products-of-' . $slug, $this->seconds, function() use ($slug) {
+        $result['products'] = Cache::remember('products-of-' . $slug, $this->seconds, function() use ($slug, $subSlug) {
             return Product::with([
                             'category:id,name,image',
                             'attributes' => function($q) {
@@ -106,6 +106,11 @@ class HomeController extends Controller
                         ])
                         ->whereHas('category', function($query) use ($slug) {
                             $query->where('slug', $slug);
+                        })
+                        ->when($subSlug, function($query) use ($subSlug){
+                            $query->whereHas('subcategory', function($subQuery) use($subSlug) {
+                                $subQuery->where('slug', $subSlug);
+                            });
                         })
                         ->active()
                         ->paginate(14);

@@ -30,7 +30,7 @@
                             <ul class="aa-product-catg">
                                 <!-- start single product item -->
                                 @foreach ($products as $product)
-                                    <x-home.product :product="$product" />
+                                    <x-home.product-card :product="$product" />
                                 @endforeach
                             </ul>
                             <!-- quick view modal -->

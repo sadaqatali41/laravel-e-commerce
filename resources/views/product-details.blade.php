@@ -198,7 +198,7 @@
                             <ul class="aa-product-catg aa-related-item-slider">
                                 <!-- start single product item -->
                                 @foreach ($products as $product)
-                                    <x-home.product :product="$product" />
+                                    <x-home.product-card :product="$product" />
                                 @endforeach
                             </ul>
                             <!-- quick view modal -->

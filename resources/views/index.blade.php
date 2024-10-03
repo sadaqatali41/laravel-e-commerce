@@ -78,7 +78,7 @@
                     <div class="tab-pane fade @if($key == 0) in active @endif" id="{{ $category->id }}">
                       <ul class="aa-product-catg">
                         @foreach ($category->products as $product)
-                        <x-home.product :product="$product" />                            
+                        <x-home.product-card :product="$product" />                            
                         @endforeach
                       </ul>                      
                     </div>                        
@@ -115,7 +115,7 @@
                   <ul class="aa-product-catg aa-popular-slider">
                     <!-- start single product item -->
                     @foreach ($trending as $item)
-                      <x-home.product :product="$item" />
+                      <x-home.product-card :product="$item" />
                     @endforeach
                   </ul>
                 </div>
@@ -126,7 +126,7 @@
                  <ul class="aa-product-catg aa-featured-slider">
                     <!-- start single product item -->
                     @foreach ($featured as $item)
-                      <x-home.product :product="$item" />
+                      <x-home.product-card :product="$item" />
                     @endforeach
                   </ul>
                 </div>
@@ -137,7 +137,7 @@
                   <ul class="aa-product-catg aa-latest-slider">
                     <!-- start single product item -->
                     @foreach ($isPromo as $item)
-                      <x-home.product :product="$item" />
+                      <x-home.product-card :product="$item" />
                     @endforeach
                   </ul>
                 </div>
