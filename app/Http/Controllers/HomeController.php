@@ -96,7 +96,9 @@ class HomeController extends Controller
 
     public function category($slug, $subSlug = null) 
     {
-        $result['products'] = Cache::remember('products-of-' . $slug, $this->seconds, function() use ($slug, $subSlug) {
+        $cacheName = $subSlug != null ? $slug . '-' . $subSlug : $slug;
+
+        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug) {
             return Product::with([
                             'category:id,name,image',
                             'attributes' => function($q) {

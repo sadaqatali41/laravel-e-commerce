@@ -96,19 +96,19 @@
                             </div>
                         </div>
                         <!-- single sidebar -->
+                        @isset($rvp)
                         <div class="aa-sidebar-widget">
                             <h3>Recently Views</h3>
                             <div class="aa-recently-views">
-                                <ul>
-                                    @isset($rvp)
-                                        @foreach ($rvp as $view)
-                                            <x-home.top-rated-product :trp="$view" />
-                                        @endforeach 
-                                    @endisset
+                                <ul>                                    
+                                    @foreach ($rvp as $view)
+                                        <x-home.top-rated-product :trp="$view" />
+                                    @endforeach 
                                 </ul>
                             </div>
                         </div>
-                        <!-- single sidebar -->
+                        @endisset
+                            <!-- single sidebar -->
                         <div class="aa-sidebar-widget">
                             <h3>Top Rated Products</h3>
                             <div class="aa-recently-views">
