@@ -13,7 +13,7 @@
                     <h2>Fashion</h2>
                     <ol class="breadcrumb">
                         <li><a href="{{ url('/') }}">Home</a></li>
-                        <li class="active">{{ $category->category->name }}</li>
+                        <li class="active">{{ $category->category->name ?? '' }}</li>
                     </ol>
                 </div>
             </div>
