@@ -42,7 +42,6 @@ class HomeController extends Controller
                             ])
                             ->isHome()
                             ->active()
-                            ->latest()
                             ->limit(5)
                             ->get();
         });

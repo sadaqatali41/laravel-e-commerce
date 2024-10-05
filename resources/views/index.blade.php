@@ -28,24 +28,31 @@
       <div class="row">
         <div class="col-md-12">
           <div class="aa-promo-area">
-            <div class="row">
+            <div class="row">              
               <!-- promo left -->
-              <div class="col-md-5 no-padding">                
-                <div class="aa-promo-left">
-                  <div class="aa-promo-banner">                    
-                    <img src="{{ asset('assets/img/promo-banner-1.jpg') }}" alt="img">                    
-                    <div class="aa-prom-content">
-                      <span>75% Off</span>
-                      <h4><a href="#">For Women</a></h4>                      
+              @if($promos->isNotEmpty())
+                @php $leftPromo = $promos->last() @endphp
+                <div class="col-md-5 no-padding">                
+                  <div class="aa-promo-left">
+                    <div class="aa-promo-banner">                    
+                      <img src="{{ asset('storage/category/' . $leftPromo->image) }}" alt="img">                    
+                      <div class="aa-prom-content">
+                        <span>75% Off</span>
+                        <h4>
+                          <a href="{{ route('category.product', $leftPromo->slug) }}">For {{ $leftPromo->name }}</a>
+                        </h4>                      
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              @endif
               <!-- promo right -->
               <div class="col-md-7 no-padding">
                 <div class="aa-promo-right">
                   @foreach ($promos as $promo)
-                  <x-home.category :promo="$promo" />                      
+                    @if($loop->last == false)
+                      <x-home.category :promo="$promo" />
+                    @endif
                   @endforeach
                 </div>
               </div>
