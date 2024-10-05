@@ -24,7 +24,8 @@ class HomeController extends Controller
     public function index() 
     {
         $result['sliders'] = Cache::remember('sliders', $this->seconds, function(){
-            return Slider::select(['title', 'short_title', 'description', 'image'])
+            return Slider::select(['category_id', 'title', 'short_title', 'description', 'image'])
+                        ->with('category:id,slug')
                         ->active()
                         ->get();
         });
