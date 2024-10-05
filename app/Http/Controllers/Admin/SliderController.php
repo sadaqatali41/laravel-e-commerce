@@ -15,11 +15,15 @@ class SliderController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Slider::select(['id', 'title', 'short_title', 'image', 'description', 'status']);
+            $data = Slider::with('category')
+                            ->select(['id', 'category_id', 'title', 'short_title', 'image', 'description', 'status']);
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->addColumn('manage', function($row){
                                     return '<a href="'.route('admin.slider.edit', $row->id).'"><i class="fa fa-edit"></i></a>';
+                                })
+                                ->editColumn('category_id', function($row){
+                                    return $row->category->name ?? '';
                                 })
                                 ->editColumn('status', function($row){
                                     if($row->status === 'A') {
@@ -56,6 +60,7 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'category_id' => 'required|numeric',
             'title' => 'required|max:30',
             'short_title' => 'required|max:20',
             'description' => 'required|max:80',
@@ -67,6 +72,7 @@ class SliderController extends Controller
             'short_title' => $request->short_title,
             'description' => $request->description,
             'status' => $request->status,
+            'category_id' => $request->category_id,
             'created_by' => Auth::guard('admin')->user()->id,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
@@ -87,6 +93,7 @@ class SliderController extends Controller
 
     public function edit(Slider $slider)
     {
+        $slider->load('category');
         return view('admin.slider.sliders', [
             'slider' => $slider,
             'exp' => 'edit',
@@ -97,6 +104,7 @@ class SliderController extends Controller
     public function update(Request $request, Slider $slider)
     {
         $this->validate($request, [
+            'category_id' => 'required|numeric',
             'title' => 'required|max:30',
             'short_title' => 'required|max:20',
             'description' => 'required|max:80',
@@ -108,6 +116,7 @@ class SliderController extends Controller
             'short_title' => $request->short_title,
             'description' => $request->description,
             'status' => $request->status,
+            'category_id' => $request->category_id,
             'updated_by' => Auth::guard('admin')->user()->id,
         ];
 

@@ -44,6 +44,13 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="category_id" class="form-control-label">Category</label>
+                                            <select name="category_id" id="category_id" class="form-control form-control-sm"></select>
+                                            @error('category_id')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="status" class="form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
                                                 <option value="A" @if(old('status') === 'A') selected @endif>Active</option>
@@ -51,7 +58,7 @@
                                             </select>
                                             @error('status')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
-                                    </div>                            
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="image" class="form-control-label">Image</label>
@@ -113,6 +120,17 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="category_id" class="form-control-label">Category</label>
+                                            <select name="category_id" id="category_id" class="form-control form-control-sm">
+                                                @if ($slider->category !== null)
+                                                <option value="{{ $slider->category_id }}">{{ $slider->category->name }}</option>   
+                                                @endif
+                                            </select>
+                                            @error('category_id')<span class="help-block status--denied">{{ $message }}</span>@enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
                                                 <option value="A" @if(old('status', $slider->status) === 'A') selected @endif>Active</option>
@@ -159,6 +177,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Category</th>
                                         <th>Title</th>
                                         <th>Short Title</th>
                                         <th>Description</th>
@@ -198,6 +217,7 @@
                 },
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'category_id', name: 'category_id'},
                     {data: 'title', name: 'title'},
                     {data: 'short_title', name: 'short_title'},
                     {data: 'description', name: 'description'},
@@ -206,6 +226,23 @@
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
                 order: [0, 'desc']
+            });
+
+            $('#category_id').select2({
+                placeholder: 'Search Category...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.category-list') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        }
+                    },
+                    cache: true
+                }
             });
         });
     </script>
