@@ -21,4 +21,13 @@ class Category extends Model
     public function subcategories() {
         return $this->hasMany(SubCategory::class, 'category_id', 'id');
     }
+
+    // ! define category scope
+    public function scopeIsHome($query) {
+        return $query->where('is_home', 1);
+    }
+
+    public function scopeActive($query) {
+        return $query->where('status', 'A');
+    }
 }

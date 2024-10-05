@@ -40,7 +40,10 @@ class HomeController extends Controller
                                     $q->where('status', 'A');
                                 },
                             ])
-                            ->where(['is_home' => 1, 'status' => 'A'])
+                            ->isHome()
+                            ->active()
+                            ->latest()
+                            ->limit(5)
                             ->get();
         });
         
