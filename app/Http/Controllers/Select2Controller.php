@@ -32,6 +32,7 @@ class Select2Controller extends Controller
     public function subcategory(Request $request)
     {
         $search = trim($request->input('term'));
+        $category_id = trim($request->input('category_id'));
         
         $results = DB::table('categories')
                     ->join('sub_categories', 'categories.id', '=', 'sub_categories.category_id')
@@ -40,6 +41,7 @@ class Select2Controller extends Controller
                         'sub_categories.id as sub_category_id',
                         'sub_categories.name as sub_category_name'
                     )
+                    ->where('categories.id', '=', $category_id)
                     ->when($search, function ($query) use ($search) {
                         $query->where(function ($q) use ($search) {
                             $q->where('categories.name', 'like', "%{$search}%")

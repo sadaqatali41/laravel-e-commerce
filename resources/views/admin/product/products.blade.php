@@ -23,6 +23,15 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="category_id" class=" form-control-label">Category</label>
+                                            <select name="category_id" id="category_id" class="form-control form-control-sm"></select>
+                                            @error('category_id')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="sub_category_id" class=" form-control-label">Sub Category</label>
                                             <select name="sub_category_id" id="sub_category_id" class="form-control form-control-sm"></select>
                                             @error('sub_category_id')
@@ -40,7 +49,9 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8">
                                         <div class="form-group">
                                             <label for="slug" class=" form-control-label">Slug</label>
                                             <input type="text" id="slug" name="slug" placeholder="Product Slug.."
@@ -49,7 +60,7 @@
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">
@@ -337,9 +348,22 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label for="category_id" class=" form-control-label">Category</label>
+                                            <select name="category_id" id="category_id" class="form-control form-control-sm">
+                                                <option selected value="{{ $product->category_id }}">{{ $product->category->name }}</option>
+                                            </select>
+                                            @error('category_id')
+                                                <span class="help-block status--denied">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label for="sub_category_id" class=" form-control-label">Sub Category</label>
                                             <select name="sub_category_id" id="sub_category_id" class="form-control form-control-sm">
-                                                <option selected value="{{ $product->sub_category_id }}">{{ $product->category->name . ' - ' . $product->subcategory->name }}</option>
+                                                @if($product->sub_category_id !== null)
+                                                    <option selected value="{{ $product->sub_category_id }}">{{ $product->category->name . ' - ' . $product->subcategory->name }}</option>
+                                                @endif
                                             </select>
                                             @error('sub_category_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
@@ -356,7 +380,9 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8">
                                         <div class="form-group">
                                             <label for="slug" class=" form-control-label">Slug</label>
                                             <input type="text" id="slug" name="slug" placeholder="Product Slug.."
@@ -365,7 +391,7 @@
                                                 <span class="help-block status--denied">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4">                                        
@@ -715,6 +741,25 @@
                 order: [0, 'desc']
             });
 
+            $('#category_id').select2({
+                placeholder: 'Search Category...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.category-list') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        }
+                    },
+                    cache: true
+                }
+            }).on('select2:select', function(){
+                $('#sub_category_id').val(null).trigger('change.select2');
+            });
+
             $('#sub_category_id').select2({
                 placeholder: 'Search Sub Category...',
                 allowClear: true,
@@ -725,7 +770,8 @@
                     data: function(params) {
                         return {
                             term: params.term || '',
-                            page: params.page || 1
+                            page: params.page || 1,
+                            category_id: $('#category_id').val()
                         }
                     },
                     processResults: function (data) {
@@ -737,6 +783,12 @@
                         };
                     },
                     cache: true
+                }
+            }).on('select2:opening', function(){
+                let category_id = $('#category_id').val();
+                if(category_id === null) {
+                    alert('Select Category First.');
+                    return false;
                 }
             });
 
