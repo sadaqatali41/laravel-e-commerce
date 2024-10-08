@@ -73,7 +73,9 @@
                                         <h4>Color</h4>
                                         <div class="aa-color-tag">
                                             @foreach ($product->colors as $color)
-                                                <a href="#" class="aa-color-{{ strtolower($color->color) }}"></a>                                                
+                                                <a href="javascript:void(0)" 
+                                                onclick=""
+                                                class="aa-color-{{ strtolower($color->color) }}"></a>                                                
                                             @endforeach
                                         </div>
                                         <div class="aa-prod-quantity">
@@ -93,8 +95,8 @@
                                         </div>
                                         <div class="aa-prod-view-bottom">
                                             <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
-                                            <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
-                                            <a class="aa-add-to-cart-btn" href="#">Compare</a>
+                                            {{-- <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
+                                            <a class="aa-add-to-cart-btn" href="#">Compare</a> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -103,6 +105,9 @@
                         <div class="aa-product-details-bottom">
                             <ul class="nav nav-tabs" id="myTab2">
                                 <li><a href="#description" data-toggle="tab">Description</a></li>
+                                <li><a href="#technical_specification" data-toggle="tab">Technical Specification</a></li>
+                                <li><a href="#uses" data-toggle="tab">Uses</a></li>
+                                <li><a href="#warranty" data-toggle="tab">Warranty</a></li>
                                 <li><a href="#review" data-toggle="tab">Reviews</a></li>
                             </ul>
                             <!-- Tab panes -->
@@ -110,21 +115,32 @@
                                 <div class="tab-pane fade in active" id="description">
                                     {!! $product->description !!}
                                 </div>
-                                <div class="tab-pane fade " id="review">
+                                <div class="tab-pane fade" id="technical_specification">
+                                    {!! $product->tech_spec !!}
+                                </div>
+                                <div class="tab-pane fade" id="uses">
+                                    {!! $product->used_for !!}
+                                </div>
+                                <div class="tab-pane fade" id="warranty">
+                                    {!! $product->warranty !!}
+                                </div>
+                                <div class="tab-pane fade" id="review">
                                     <div class="aa-product-review-area">
                                         <h4>2 Reviews for T-Shirt</h4>
                                         <ul class="aa-review-nav">
+                                            {{-- single review --}}
                                             <li>
                                                 <div class="media">
                                                     <div class="media-left">
                                                         <a href="#">
-                                                            <img class="media-object" src="img/testimonial-img-3.jpg"
+                                                            <img class="media-object" src="{{ asset('assets/img/testimonial-img-3.jpg') }}"
                                                                 alt="girl image">
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h4 class="media-heading"><strong>Marla Jobs</strong> - <span>March
-                                                                26, 2016</span></h4>
+                                                        <h4 class="media-heading">
+                                                            <strong>Marla Jobs</strong> - <span>March 26, 2016</span>
+                                                        </h4>
                                                         <div class="aa-product-rating">
                                                             <span class="fa fa-star"></span>
                                                             <span class="fa fa-star"></span>
@@ -135,29 +151,7 @@
                                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                                                     </div>
                                                 </div>
-                                            </li>
-                                            <li>
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <a href="#">
-                                                            <img class="media-object" src="img/testimonial-img-3.jpg"
-                                                                alt="girl image">
-                                                        </a>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h4 class="media-heading"><strong>Marla Jobs</strong> - <span>March
-                                                                26, 2016</span></h4>
-                                                        <div class="aa-product-rating">
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star-o"></span>
-                                                        </div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            </li>                                            
                                         </ul>
                                         <h4>Add a review</h4>
                                         <div class="aa-your-rating">
