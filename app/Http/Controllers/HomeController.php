@@ -176,9 +176,18 @@ class HomeController extends Controller
             return Product::with([
                             'images',                            
                             'category:id,name,slug',
-                            'colors' => function($query) {
+                            'colors' => function($query) use($slug) {
                                 $query->select('colors.id', 'colors.color')
-                                    ->where('colors.status', 'A');
+                                    ->where('colors.status', 'A')
+                                    ->with(['productAttributes' => function ($query) use ($slug) {
+                                        $query->select('product_attributes.color_id', 'product_attributes.image', 'product_attributes.price')
+                                              ->where('product_attributes.product_id', function($q) use ($slug) {
+                                                $q->select('id')
+                                                    ->from('products')
+                                                    ->where('slug', $slug)
+                                                    ->limit(1);
+                                              });
+                                    }]);
                             },
                             'sizes' => function($query) {
                                 $query->select('sizes.id', 'sizes.size')

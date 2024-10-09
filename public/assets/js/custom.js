@@ -354,6 +354,14 @@ jQuery(function($){
         // instead of a settings object
       ]
     }); 
+
+    $(document).on('click', '.clickEvent', function(){
+      let src = $(this).data('src');
+      
+      $('.simpleLens-big-image-container').html(`<a data-lens-image="${src}" class="simpleLens-lens-image">
+                                                    <img src="${src}" class="simpleLens-big-image">
+                                                </a>`);
+    });
     
 });
 

@@ -73,9 +73,9 @@
                                         <h4>Color</h4>
                                         <div class="aa-color-tag">
                                             @foreach ($product->colors as $color)
-                                                <a href="javascript:void(0)" 
-                                                onclick=""
-                                                class="aa-color-{{ strtolower($color->color) }}"></a>                                                
+                                                <a href="javascript:void(0)"
+                                                data-src="{{ asset('storage/product/product_attr/' . $color->productAttributes->first()->image) }}"                                                 
+                                                class="aa-color-{{ strtolower($color->color) }} clickEvent"></a>                                                
                                             @endforeach
                                         </div>
                                         <div class="aa-prod-quantity">
