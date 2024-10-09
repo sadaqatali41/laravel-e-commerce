@@ -177,11 +177,11 @@ class HomeController extends Controller
                             'images',                            
                             'category:id,name,slug',
                             'colors' => function($query) {
-                                $query->select('colors.id', 'colors.color') // Select `id` or foreign key columns
+                                $query->select('colors.id', 'colors.color')
                                     ->where('colors.status', 'A');
                             },
                             'sizes' => function($query) {
-                                $query->select('sizes.id', 'sizes.size') // Select `id` or foreign key columns
+                                $query->select('sizes.id', 'sizes.size')
                                     ->where('sizes.status', 'A');
                             }
                         ])
@@ -189,7 +189,7 @@ class HomeController extends Controller
                         ->first();
         });
 
-        $products = Cache::remember('related-product', $this->seconds, function() use ($slug){
+        $products = Cache::remember('related-product-' . $slug, $this->seconds, function() use ($slug){
             return Product::with([
                             'attributes' => function($q) {
                                 $q->select('id', 'product_id', 'mrp', 'price')

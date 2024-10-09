@@ -67,7 +67,7 @@
                                         <h4>Size</h4>
                                         <div class="aa-prod-view-size">
                                             @foreach ($product->sizes as $size)
-                                                <a href="#">{{ $size->size }}</a>
+                                                <a href="javascript:void(0)">{{ $size->size }}</a>
                                             @endforeach
                                         </div>
                                         <h4>Color</h4>
