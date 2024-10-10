@@ -66,7 +66,7 @@ class SizeController extends Controller
 
     public function edit(Size $size)
     {
-        return view('admin.size.edit', [
+        return view('admin.size.sizes', [
             'size' => $size,
             'exp' => 'edit',
             'title' => 'Update Size'
