@@ -12,7 +12,7 @@ class Color extends Model
 
     protected $guarded = [];
 
-    public function productAttributes()
+    public function attributes()
     {
         return $this->hasMany(ProductAttribute::class, 'color_id', 'id');
     }

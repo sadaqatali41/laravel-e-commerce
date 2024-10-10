@@ -356,11 +356,51 @@ jQuery(function($){
     }); 
 
     $(document).on('click', '.clickEvent', function(){
-      let src = $(this).data('src');
+      let EL = $(this);
+      let src = EL.data('src');
+      let color_id = EL.data('id');
+      $('#color_id').val(color_id);
       
-      $('.simpleLens-big-image-container').html(`<a data-lens-image="${src}" class="simpleLens-lens-image">
-                                                    <img src="${src}" class="simpleLens-big-image">
-                                                </a>`);
+      $('.simpleLens-big-image-container').html(`<a data-lens-image="${src}" class="simpleLens-lens-image"><img src="${src}" class="simpleLens-big-image"></a>`);
+      $('#error').html('');
+    });
+
+    $(document).on('click', '.getSize', function(){
+      let EL = $(this);
+      let size = EL.data('size');
+      let size_id = EL.data('id');
+      let color_id = '';
+      EL.closest('div').find('a').not(EL).css('border', '1px solid #ddd');
+      EL.css('border', '1px solid #333');
+      $('#size_id').val(size_id);
+
+      /* hide every color */
+      $('.clickEvent').addClass('hidden');
+      let shownColors =  $('.size_' + size);
+      shownColors.removeClass('hidden');
+      $('#color_id').val(color_id);
+      
+      let shownColorLen = shownColors.length;
+      if(shownColorLen == 1) {
+        color_id = shownColors.attr('data-id');
+        $('#color_id').val(color_id);
+      }
+      $('#error').html('');
+    });
+
+    $(document).on('click', '.aa-add-to-cart-btn', function(){
+      let EL = $(this);
+      let product_id = EL.data('id');
+      let color_id = $('#color_id').val();
+      let size_id = $('#size_id').val();
+      
+      if(size_id == '') {
+        $('#error').html('Size is missing.');
+      } else if(color_id == '') {
+        $('#error').html('Color is missing.');
+      } else if(product_id == '') {
+        $('#error').html('Product is missing.');
+      }
     });
     
 });

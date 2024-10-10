@@ -60,27 +60,40 @@
                                     <div class="aa-product-view-content">
                                         <h3>{{ $product->prod_name }}</h3>
                                         <div class="aa-price-block">
+                                            @php $firstAttr = $product->attributes->first() @endphp
                                             <span class="aa-product-view-price">${{ $product->price }}</span>
                                             <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                                         </div>
                                         <p>{!! $product->short_desc !!}</p>
                                         <h4>Size</h4>
                                         <div class="aa-prod-view-size">
-                                            @foreach ($product->sizes as $size)
-                                                <a href="javascript:void(0)">{{ $size->size }}</a>
+                                            @php $sizeArr = [] @endphp
+                                            @foreach ($product->attributes as $attr)
+                                                @if($attr->size->count())
+                                                    @php $sizeArr[$attr->size->id] = $attr->size->size @endphp
+                                                @endif
+                                            @endforeach                                            
+                                            @foreach ($sizeArr as $size_id => $size)
+                                                <a href="javascript:void(0)" 
+                                                class="getSize" 
+                                                data-id="{{ $size_id }}"
+                                                data-size="{{ $size }}">{{ $size }}</a>
                                             @endforeach
                                         </div>
                                         <h4>Color</h4>
                                         <div class="aa-color-tag">
-                                            @foreach ($product->colors as $color)
+                                            @foreach ($product->attributes as $attr)
                                                 <a href="javascript:void(0)"
-                                                data-src="{{ asset('storage/product/product_attr/' . $color->productAttributes->first()->image) }}"                                                 
-                                                class="aa-color-{{ strtolower($color->color) }} clickEvent"></a>                                                
+                                                data-src="{{ asset('storage/product/product_attr/' . $attr->image) }}"
+                                                data-id="{{ $attr->color->id }}"
+                                                data-price="{{ $attr->price }}"
+                                                data-mrp="{{ $attr->mrp }}"
+                                                class="aa-color-{{ strtolower($attr->color->color) }} clickEvent size_{{ $attr->size->size }}"></a>
                                             @endforeach
                                         </div>
                                         <div class="aa-prod-quantity">
                                             <form action="">
-                                                <select id="" name="">
+                                                <select id="quantity" name="quantity">
                                                     <option selected="1" value="0">1</option>
                                                     <option value="1">2</option>
                                                     <option value="2">3</option>
@@ -94,7 +107,8 @@
                                             </p>
                                         </div>
                                         <div class="aa-prod-view-bottom">
-                                            <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                                            <a class="aa-add-to-cart-btn" data-id="{{ $product->id }}" href="javascript:void(0)">Add To Cart</a>
+                                            <p id="error" style="color: #ff6666;"></p>
                                             {{-- <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                                             <a class="aa-add-to-cart-btn" href="#">Compare</a> --}}
                                         </div>
@@ -205,4 +219,6 @@
         </div>
     </section>
     <!-- / product category -->
+    <input type="hidden" name="color_id" id="color_id">
+    <input type="hidden" name="size_id" id="size_id">
 @endsection
