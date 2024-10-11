@@ -199,6 +199,7 @@ class HomeController extends Controller
                                 ]);
                             });
                         })
+                        ->where('slug', '!=', $slug)
                         ->latest()
                         ->limit(8)
                         ->get();

@@ -401,6 +401,7 @@ jQuery(function($){
       let product_id = EL.data('id');
       let color_id = $('#color_id').val();
       let size_id = $('#size_id').val();
+      let quantity = $('#quantity').val();
       
       if(size_id == '') {
         $('#error').html('Size is missing.');
@@ -409,9 +410,8 @@ jQuery(function($){
       } else if(product_id == '') {
         $('#error').html('Product is missing.');
       } else {
-        alert('done');
+        alert('done'+ quantity);
       }
-    });
-    
+    });    
 });
 
