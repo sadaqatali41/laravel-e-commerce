@@ -61,15 +61,22 @@
                                         <h3>{{ $product->prod_name }}</h3>
                                         <div class="aa-price-block">
                                             @php $firstAttr = $product->attributes->first() @endphp
-                                            <span class="aa-product-view-price">${{ $product->price }}</span>
-                                            <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
+                                            <span class="aa-product-view-price price">${{ $firstAttr->price }}</span>
+                                            @if($firstAttr->mrp != $firstAttr->price)
+                                                &nbsp;
+                                                <span class="aa-product-view-price mrp">
+                                                    <del>${{ $firstAttr->mrp }}</del>
+                                                </span>
+                                            @endif
+                                            <p class="aa-product-avilability" style="margin-bottom: 3px;">Avilability: <span>In stock</span></p>
+                                            <p style="color: #ff6666; font-weight: bold;">{{ $product->lead_time }}</p>
                                         </div>
                                         <p>{!! $product->short_desc !!}</p>
                                         <h4>Size</h4>
                                         <div class="aa-prod-view-size">
                                             @php $sizeArr = [] @endphp
                                             @foreach ($product->attributes as $attr)
-                                                @if($attr->size->count())
+                                                @if($attr->size()->exists())
                                                     @php $sizeArr[$attr->size->id] = $attr->size->size @endphp
                                                 @endif
                                             @endforeach                                            
@@ -92,14 +99,11 @@
                                             @endforeach
                                         </div>
                                         <div class="aa-prod-quantity">
-                                            <form action="">
+                                            <form>
                                                 <select id="quantity" name="quantity">
-                                                    <option selected="1" value="0">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="2">3</option>
-                                                    <option value="3">4</option>
-                                                    <option value="4">5</option>
-                                                    <option value="5">6</option>
+                                                    @for ($i = 1; $i <= 9; $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>                                                        
+                                                    @endfor
                                                 </select>
                                             </form>
                                             <p class="aa-prod-category">

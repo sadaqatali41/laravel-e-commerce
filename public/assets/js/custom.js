@@ -359,7 +359,11 @@ jQuery(function($){
       let EL = $(this);
       let src = EL.data('src');
       let color_id = EL.data('id');
+      let mrp = EL.data('mrp');
+      let price = EL.data('price');
       $('#color_id').val(color_id);
+      $('.price').html('$' + price);
+      $('.mrp').html('<del>$'+ mrp +'</del>');
       
       $('.simpleLens-big-image-container').html(`<a data-lens-image="${src}" class="simpleLens-lens-image"><img src="${src}" class="simpleLens-big-image"></a>`);
       $('#error').html('');
@@ -383,7 +387,11 @@ jQuery(function($){
       let shownColorLen = shownColors.length;
       if(shownColorLen == 1) {
         color_id = shownColors.attr('data-id');
+        let price = shownColors.attr('data-price');
+        let mrp = shownColors.attr('data-mrp');
         $('#color_id').val(color_id);
+        $('.price').html('$' + price);
+        $('.mrp').html('<del>$'+ mrp +'</del>');
       }
       $('#error').html('');
     });
@@ -400,6 +408,8 @@ jQuery(function($){
         $('#error').html('Color is missing.');
       } else if(product_id == '') {
         $('#error').html('Product is missing.');
+      } else {
+        alert('done');
       }
     });
     
