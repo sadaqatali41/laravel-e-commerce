@@ -402,6 +402,7 @@ jQuery(function($){
       let color_id = $('#color_id').val();
       let size_id = $('#size_id').val();
       let quantity = $('#quantity').val();
+      let _token = $('input[name="_token"]').val();
       
       if(size_id == '') {
         $('#error').html('Size is missing.');
@@ -410,7 +411,22 @@ jQuery(function($){
       } else if(product_id == '') {
         $('#error').html('Product is missing.');
       } else {
-        alert('done'+ quantity);
+        $.ajax({
+          url: '/add-to-cart',
+          type: 'POST',
+          data: {
+            product_id: product_id,
+            color_id: color_id,
+            size_id: size_id,
+            quantity: quantity,
+            _token: _token
+          },
+          success: function(res) {
+            alert(res.message);
+            $('.aa-cart-notify').html(res.totItms);
+            EL.html('ADDED TO CART');
+          }
+        });
       }
     });    
 });

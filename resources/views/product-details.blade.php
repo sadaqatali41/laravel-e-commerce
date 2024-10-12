@@ -225,4 +225,5 @@
     <!-- / product category -->
     <input type="hidden" name="color_id" id="color_id">
     <input type="hidden" name="size_id" id="size_id">
+    @csrf
 @endsection

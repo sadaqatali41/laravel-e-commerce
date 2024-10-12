@@ -226,7 +226,7 @@ class HomeController extends Controller
 
         session()->put('recently_viewed', $recentlyViewed);
     }
-
+    
     public function contact()
     {
         return view('contact');
