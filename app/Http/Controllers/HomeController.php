@@ -105,7 +105,7 @@ class HomeController extends Controller
             return Product::with([
                             'category:id,name,image',
                             'attributes' => function($q) {
-                                $q->select('id', 'product_id', 'mrp', 'price')
+                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
                                     ->where('status', 'A');
                             }           
                         ])
@@ -187,7 +187,7 @@ class HomeController extends Controller
         $products = Cache::remember('related-product-' . $slug, $this->seconds, function() use ($slug){
             return Product::with([
                             'attributes' => function($q) {
-                                $q->select('id', 'product_id', 'mrp', 'price')
+                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
                                     ->where('status', 'A');
                             }
                         ])

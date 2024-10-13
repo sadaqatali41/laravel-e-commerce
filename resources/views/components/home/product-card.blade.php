@@ -5,7 +5,11 @@
             <img src="{{ asset('storage/product/' . $product->image) }}" alt="{{ $product->prod_name }}">
         </a>
         @php $firstAttr = $product->attributes->first(); @endphp
-        <a class="aa-add-card-btn" href="#" data-id="{{ $product->id }}">
+        <a class="aa-add-card-btn" 
+        href="javascript:void(0)" 
+        data-id="{{ $product->id }}" 
+        data-c="{{ $firstAttr->color_id }}"
+        data-s="{{ $firstAttr->size_id }}">
             <span class="fa fa-shopping-cart"></span>Add To Cart
         </a>
         <figcaption>

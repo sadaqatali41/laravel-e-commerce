@@ -402,6 +402,16 @@ jQuery(function($){
       $('#error').html('');
     });
 
+    $(document).on('click', '.aa-add-card-btn', function(){
+      let EL = $(this);
+      let product_id = EL.data('id');
+      let color_id = EL.data('c');
+      let size_id = EL.data('s');
+      let quantity = 1;
+
+      addToCart(EL, product_id, color_id, size_id, quantity);
+    });
+
     $(document).on('click', '.aa-add-to-cart-btn', function(){
       let EL = $(this);
       let product_id = EL.data('id');
@@ -416,22 +426,26 @@ jQuery(function($){
       } else if(product_id == '') {
         $('#error').html('Product is missing.');
       } else {
-        $.ajax({
-          url: '/add-to-cart',
-          type: 'POST',
-          data: {
-            product_id: product_id,
-            color_id: color_id,
-            size_id: size_id,
-            quantity: quantity
-          },
-          success: function(res) {
-            alert(res.message);
-            $('.aa-cart-notify').html(res.totItms);
-            EL.html('ADDED TO CART');
-          }
-        });
+        addToCart(EL, product_id, color_id, size_id, quantity);
       }
-    });    
+    });
+    
+    function addToCart(EL, product_id, color_id, size_id, quantity) {
+      $.ajax({
+        url: '/add-to-cart',
+        type: 'POST',
+        data: {
+          product_id: product_id,
+          color_id: color_id,
+          size_id: size_id,
+          quantity: quantity
+        },
+        success: function(res) {
+          alert(res.message);
+          $('.aa-cart-notify').html(res.totItms);
+          EL.html('ADDED TO CART');
+        }
+      });
+    }
 });
 
