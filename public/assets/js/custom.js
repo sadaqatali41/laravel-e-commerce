@@ -353,7 +353,13 @@ jQuery(function($){
         // settings: "unslick"
         // instead of a settings object
       ]
-    }); 
+    });
+    
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
 
     $(document).on('click', '.clickEvent', function(){
       let EL = $(this);
@@ -402,7 +408,6 @@ jQuery(function($){
       let color_id = $('#color_id').val();
       let size_id = $('#size_id').val();
       let quantity = $('#quantity').val();
-      let _token = $('input[name="_token"]').val();
       
       if(size_id == '') {
         $('#error').html('Size is missing.');
@@ -418,8 +423,7 @@ jQuery(function($){
             product_id: product_id,
             color_id: color_id,
             size_id: size_id,
-            quantity: quantity,
-            _token: _token
+            quantity: quantity
           },
           success: function(res) {
             alert(res.message);
