@@ -16,3 +16,4 @@ Route::get('/contact-us', [HomeController::class, 'contact'])->name('contact');
 
 # cart routes
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);
+Route::get('/my-cart', [CartController::class, 'index'])->name('cart');

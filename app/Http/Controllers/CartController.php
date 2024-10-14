@@ -5,11 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Admin\ProductAttribute;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
+    public function index()
+    {
+        $seconds = Config::get('constants.CACHE_EXP');
+        $session_id = Session::getId();
+        if(auth()->check()) {
+            $user_id = auth()->user()->id;
+            $column_nm = 'user_id';
+            $column_val = $user_id;
+        } else {
+            $column_nm = 'session_id';
+            $column_val = $session_id;
+        }
+        $carts = Cache::remember('my-carts', $seconds, function() use ($column_nm, $column_val) {
+            return Cart::where($column_nm, '=', $column_val)
+                        ->with([
+                            'attribute' => function($query) {
+                                $query->with('size:id,size', 'color:id,color', 'product:id,prod_name,slug');
+                            }
+                        ])
+                        ->get();
+        });
+        return view('my-cart')->withCarts($carts);
+    }
+
     public function addToCart(Request $request) {
         $product_id = $request->product_id;
         $color_id = $request->color_id;
