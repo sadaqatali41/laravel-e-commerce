@@ -47,14 +47,14 @@
                                                             <a class="remove" data-id="{{ $cart->id }}" href="javascript:void(0)"><fa class="fa fa-close"></fa></a>
                                                         </td>
                                                         <td>
-                                                            <a href="{{ route('product.list', $cart->attribute->product->slug) }}">
+                                                            <a href="{{ route('product.list', $cart->product->slug) }}">
                                                                 <img src="{{ asset('storage/product/product_attr/' . $cart->attribute->image) }}" alt="img">
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a class="aa-cart-title" href="{{ route('product.list', $cart->attribute->product->slug) }}">{{ $cart->attribute->product->prod_name }}</a>
-                                                            <p style="margin: 0;">{{ 'Size : ' . $cart->attribute->size->size }}</p>
-                                                            <p style="margin: 0;">{{ 'Color : ' . $cart->attribute->color->color }}</p>
+                                                            <a class="aa-cart-title" href="{{ route('product.list', $cart->product->slug) }}">{{ $cart->product->prod_name }}</a>
+                                                            <p style="margin: 0;">{{ 'Size : ' . $cart->size->size }}</p>
+                                                            <p style="margin: 0;">{{ 'Color : ' . $cart->color->color }}</p>
                                                         </td>
                                                         <td>${{ $cart->attribute->price }}</td>
                                                         <td>
@@ -63,9 +63,9 @@
                                                             type="number" 
                                                             min="1"
                                                             value="{{ $cart->quantity }}"
-                                                            data-p="{{ $cart->attribute->product->id }}"
-                                                            data-c="{{ $cart->attribute->color->id }}"
-                                                            data-s="{{ $cart->attribute->size->id }}"
+                                                            data-p="{{ $cart->product->product_id }}"
+                                                            data-c="{{ $cart->color->color_id }}"
+                                                            data-s="{{ $cart->size->size_id }}"
                                                             data-prc="{{ $cart->attribute->price }}"
                                                             >
                                                         </td>

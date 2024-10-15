@@ -29,8 +29,15 @@ class CartController extends Controller
         $carts = Cache::remember('my-carts-' . $itemCount, $seconds, function() use ($column_nm, $column_val) {
             return Cart::where($column_nm, '=', $column_val)
                         ->with([
-                            'attribute' => function($query) {
-                                $query->with('size:id,size', 'color:id,color', 'product:id,prod_name,slug');
+                            'attribute',
+                            'product' => function($query) {
+                                $query->select('products.id as product_id', 'prod_name', 'slug');
+                            },
+                            'color' => function($query) {
+                                $query->select('colors.id as color_id', 'color');
+                            },
+                            'size' => function($query) {
+                                $query->select('sizes.id as size_id', 'size');
                             }
                         ])
                         ->get();
