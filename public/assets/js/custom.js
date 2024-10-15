@@ -479,5 +479,27 @@ jQuery(function($){
       $('#subtotal').html('$' + subtotal);
       $('#total').html('$' + total);
     }
+
+    $(document).on('click', '.remove', function(){
+      if(confirm('Do you want to remove?')) {
+        let EL = $(this);
+        let cart_id = EL.data('id');
+
+        $.ajax({
+          url: '/delete',
+          type: 'POST',
+          data: {
+            cart_id: cart_id
+          },
+          success: function(res) {
+            if(res.status === 'success') {
+              $.when(EL.closest('tr').remove()).then(function(){
+                cal_tot();
+              });
+            }
+          }
+        });
+      }
+    });
 });
 

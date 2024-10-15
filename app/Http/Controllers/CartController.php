@@ -24,7 +24,9 @@ class CartController extends Controller
             $column_nm = 'session_id';
             $column_val = $session_id;
         }
-        $carts = Cache::remember('my-carts', $seconds, function() use ($column_nm, $column_val) {
+        $itemCount = Cart::where($column_nm, '=', $column_val)->sum('quantity');
+
+        $carts = Cache::remember('my-carts-' . $itemCount, $seconds, function() use ($column_nm, $column_val) {
             return Cart::where($column_nm, '=', $column_val)
                         ->with([
                             'attribute' => function($query) {
@@ -69,6 +71,16 @@ class CartController extends Controller
         return response()->json([
             'message'   => 'Product added to cart successfully',
             'totItms'   => $totalCartItems
+        ], 200);
+    }
+
+    public function delete(Request $request) {
+        $cart_id = $request->cart_id;
+        Cart::find($cart_id)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Item Deleted Successfully'
         ], 200);
     }
 }
