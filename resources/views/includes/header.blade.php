@@ -81,53 +81,60 @@
                         </div>
                         <!-- / logo  -->
                         <!-- cart box -->
+                        @php
+                            if(!request()->routeIs('cart')) {
+                                $cartArr = myCart();
+                                $carts = $cartArr['carts'];
+                                $totalPrice = $cartArr['totalPrice'];
+                                $cartCount = $cartArr['cartCount'];
+                            }
+                        @endphp
                         <div class="aa-cartbox">
-                            <a class="aa-cart-link" href="#">
+                            <a class="aa-cart-link" href="{{ route('cart') }}">
                                 <span class="fa fa-shopping-basket"></span>
                                 <span class="aa-cart-title">SHOPPING CART</span>
-                                <span class="aa-cart-notify">2</span>
+                                <span class="aa-cart-notify">{{ $cartCount }}</span>
                             </a>
-                            <div class="aa-cartbox-summary">
-                                <ul>
-                                    <li>
-                                        <a class="aa-cartbox-img" href="#"><img
-                                                src="{{ asset('assets/img/woman-small-2.jpg') }}" alt="img"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                        <a class="aa-remove-product" href="#"><span
-                                                class="fa fa-times"></span></a>
-                                    </li>
-                                    <li>
-                                        <a class="aa-cartbox-img" href="#"><img
-                                                src="{{ asset('assets/img/woman-small-1.jpg') }}" alt="img"></a>
-                                        <div class="aa-cartbox-info">
-                                            <h4><a href="#">Product Name</a></h4>
-                                            <p>1 x $250</p>
-                                        </div>
-                                        <a class="aa-remove-product" href="#"><span
-                                                class="fa fa-times"></span></a>
-                                    </li>
-                                    <li>
-                                        <span class="aa-cartbox-total-title">
-                                            Total
-                                        </span>
-                                        <span class="aa-cartbox-total-price">
-                                            $500
-                                        </span>
-                                    </li>
-                                </ul>
-                                <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
-                            </div>
+                            @if($cartCount > 0)
+                                <div class="aa-cartbox-summary">
+                                    <ul>
+                                        @foreach($carts as $cart)
+                                            <li>
+                                                <a class="aa-cartbox-img" href="{{ route('product.list', $cart->product->slug) }}">
+                                                    <img src="{{ asset('storage/product/product_attr/' . $cart->attribute->image) }}" alt="img">
+                                                </a>
+                                                <div class="aa-cartbox-info">
+                                                    <h4>
+                                                        <a href="{{ route('product.list', $cart->product->slug) }}">{{ $cart->product->prod_name }}</a>
+                                                    </h4>
+                                                    <p>{{ $cart->quantity }} x ${{ $cart->attribute->price }}</p>
+                                                </div>
+                                                <a class="aa-remove-product" data-id="{{ $cart->id }}" href="javascript:void(0)">
+                                                    <span class="fa fa-times"></span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                        <li>
+                                            <span class="aa-cartbox-total-title">
+                                                Total
+                                            </span>
+                                            <span class="aa-cartbox-total-price">
+                                                ${{ $totalPrice }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
+                                </div>
+                            @endif
                         </div>
                         <!-- / cart box -->
                         <!-- search box -->
                         <div class="aa-search-box">
                             <form action="">
-                                <input type="text" name="" id=""
-                                    placeholder="Search here ex. 'man' ">
-                                <button type="submit"><span class="fa fa-search"></span></button>
+                                <input type="text" name="search" id="search" placeholder="Search here ex. 'man' ">
+                                <button type="submit">
+                                    <span class="fa fa-search"></span>
+                                </button>
                             </form>
                         </div>
                         <!-- / search box -->

@@ -478,6 +478,7 @@ jQuery(function($){
       
       $('#subtotal').html('$' + subtotal);
       $('#total').html('$' + total);
+      $('.aa-cartbox-total-price').html('$' + total);
     }
 
     $(document).on('click', '.remove', function(){
@@ -500,6 +501,10 @@ jQuery(function($){
           }
         });
       }
+    });
+
+    $(document).on('click', '.aa-remove-product', function(){
+
     });
 });
 
