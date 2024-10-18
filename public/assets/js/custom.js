@@ -478,7 +478,6 @@ jQuery(function($){
       
       $('#subtotal').html('$' + subtotal);
       $('#total').html('$' + total);
-      $('.aa-cartbox-total-price').html('$' + total);
     }
 
     $(document).on('click', '.remove', function(){
@@ -486,25 +485,52 @@ jQuery(function($){
         let EL = $(this);
         let cart_id = EL.data('id');
 
-        $.ajax({
-          url: '/delete',
-          type: 'POST',
-          data: {
-            cart_id: cart_id
-          },
-          success: function(res) {
-            if(res.status === 'success') {
-              $.when(EL.closest('tr').remove()).then(function(){
-                cal_tot();
-              });
-            }
+        deleteCartItem(EL, cart_id)
+        .done(function(data){
+          if(data.status === 'success') {
+            $.when(EL.closest('tr').remove()).then(function(){
+              // update cart header count and its list
+              cal_tot();
+            });
           }
+        })
+        .fail(function(error){
+          console.log(error);
         });
       }
     });
 
     $(document).on('click', '.aa-remove-product', function(){
+      if(confirm('Do you want to remove?')) {
+        let EL = $(this);
+        let cart_id = EL.data('id');
 
+        deleteCartItem(EL, cart_id)
+        .done(function(data){
+          if(data.status === 'success') {
+            EL.closest('li').remove();
+            let lastSegment = window.location.pathname.split('/').pop();
+            if(lastSegment === 'my-cart') {
+              $('.remove[data-id="' + cart_id + '"]').closest('tr').remove();
+              cal_tot();
+            }
+            // update cart header count and its list
+          }
+        })
+        .fail(function(error){
+          console.log(error);
+        });
+      }
     });
+
+    function deleteCartItem(EL, cart_id) {
+      return $.ajax({
+        url: '/delete',
+        type: 'POST',
+        data: {
+          cart_id: cart_id
+        }
+      });
+    }
 });
 
