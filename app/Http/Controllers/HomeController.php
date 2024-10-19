@@ -118,6 +118,7 @@ class HomeController extends Controller
                             });
                         })
                         ->active()
+                        ->orderBy('prod_name', 'asc')
                         ->paginate(14);
         });
 

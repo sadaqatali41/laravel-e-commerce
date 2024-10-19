@@ -1,4 +1,4 @@
-@props(['product'])
+@props(['product', 'isVisible' => false])
 <li>
     <figure>
         <a class="aa-product-img" href="{{ route('product.list', $product->slug) }}">
@@ -21,6 +21,9 @@
             <span class="aa-product-price">
             <del>${{ $firstAttr->mrp }}</del>
             </span>
+        @endif
+        @if($isVisible)
+            <p class="aa-product-descrip">{!! $product->short_desc !!}</p>
         @endif
         </figcaption>
     </figure>                          
