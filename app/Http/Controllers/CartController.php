@@ -38,7 +38,6 @@ class CartController extends Controller
             ], [
                 'quantity' => $quantity
             ]);
-            $totalCartItems = Cart::where('user_id', $user_id)->count();
         } else {
             Cart::updateOrCreate([
                 'session_id' => $session_id,
@@ -46,11 +45,14 @@ class CartController extends Controller
             ], [
                 'quantity' => $quantity
             ]);
-            $totalCartItems = Cart::where('session_id', $session_id)->count();
         }
+        /* find cart items */ 
+        $carts = myCart();
+        $cartString = view('cart-string', $carts)->render();
+
         return response()->json([
             'message'   => 'Product added to cart successfully',
-            'totItms'   => $totalCartItems
+            'cartItems' => $cartString
         ], 200);
     }
 
@@ -58,9 +60,14 @@ class CartController extends Controller
         $cart_id = $request->cart_id;
         Cart::find($cart_id)->delete();
 
+        /* find cart items */ 
+        $carts = myCart();
+        $cartString = view('cart-string', $carts)->render();
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'Item Deleted Successfully'
+            'status'    => 'success',
+            'message'   => 'Item Deleted Successfully',
+            'cartItems' => $cartString
         ], 200);
     }
 }

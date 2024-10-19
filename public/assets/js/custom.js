@@ -461,7 +461,7 @@ jQuery(function($){
             alert(res.message);
             EL.html('ADDED TO CART');
           }
-          $('.aa-cart-notify').html(res.totItms);
+          $('.aa-cartbox').html(res.cartItems);
         }
       });
     }
@@ -490,6 +490,7 @@ jQuery(function($){
           if(data.status === 'success') {
             $.when(EL.closest('tr').remove()).then(function(){
               // update cart header count and its list
+              $('.aa-cartbox').html(data.cartItems);
               cal_tot();
             });
           }
@@ -515,6 +516,7 @@ jQuery(function($){
               cal_tot();
             }
             // update cart header count and its list
+            $('.aa-cartbox').html(data.cartItems);
           }
         })
         .fail(function(error){
