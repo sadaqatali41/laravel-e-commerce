@@ -534,5 +534,9 @@ jQuery(function($){
         }
       });
     }
+
+    $(document).on('change', '#sort_by', function(){
+      $('.aa-sort-form').submit();
+    });
 });
 

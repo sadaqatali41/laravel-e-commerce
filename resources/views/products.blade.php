@@ -28,12 +28,13 @@
                     <div class="aa-product-catg-content">
                         <div class="aa-product-catg-head">
                             <div class="aa-product-catg-head-left">
-                                <form action="" class="aa-sort-form">
+                                <form class="aa-sort-form">
                                     <label for="sort_by">Sort by</label>
-                                    <select name="sort_by" id="sort_by">                                        
-                                        <option value="prod_name" selected>Name</option>
-                                        <option value="3">Price</option>
-                                        <option value="4">Date</option>
+                                    <select name="sb" id="sort_by">
+                                        <option value="pn" @if($sb == 'pn') selected  @endif>Name</option>
+                                        <option value="pa" @if($sb == 'pa') selected  @endif>Price - Ascending</option>
+                                        <option value="pd" @if($sb == 'pd') selected  @endif>Price - Descending</option>
+                                        <option value="d" @if($sb == 'd') selected  @endif>Date</option>
                                     </select>
                                 </form>
                             </div>

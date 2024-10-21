@@ -20,7 +20,7 @@
                         @foreach ($categories as $category)
                             <li>                                
                                 @if($category->subcategories->count())
-                                    <a href="#">{{ $category->name }}
+                                    <a href="{{ route('category.product', [$category->slug]) }}">{{ $category->name }}
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">

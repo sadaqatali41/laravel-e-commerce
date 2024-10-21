@@ -97,17 +97,29 @@ class HomeController extends Controller
         return view('index', $result);
     }
 
-    public function category($slug, $subSlug = null) 
+    public function category(Request $request, $slug, $subSlug = null) 
     {
         $cacheName = $subSlug != null ? $slug . '-' . $subSlug : $slug;
 
-        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug) {
+        $sort_by = $request->sb;
+        if($sort_by == null || $sort_by == 'pn') {
+            $sort_by = 'pn';
+        }
+        $cacheName .= '-' . $sort_by;
+
+        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by) {
             return Product::with([
                             'category:id,name,image',
-                            'attributes' => function($q) {
+                            'attributes' => function($q) use ($sort_by) {
                                 $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
-                                    ->where('status', 'A');
-                            }           
+                                    ->where('status', 'A')
+                                    ->when($sort_by === 'pa', function($q){
+                                        $q->orderBy('price', 'asc');
+                                    })
+                                    ->when($sort_by === 'pd', function($q){
+                                        $q->orderBy('price', 'desc');
+                                    });
+                            }
                         ])
                         ->whereHas('category', function($query) use ($slug) {
                             $query->where('slug', $slug);
@@ -117,8 +129,13 @@ class HomeController extends Controller
                                 $subQuery->where('slug', $subSlug);
                             });
                         })
+                        ->when($sort_by === 'pn', function($q){
+                            $q->orderBy('prod_name', 'asc');
+                        })
+                        ->when($sort_by === 'd', function($q){
+                            $q->orderBy('created_at', 'desc');
+                        })
                         ->active()
-                        ->orderBy('prod_name', 'asc')
                         ->paginate(14);
         });
 
@@ -168,6 +185,7 @@ class HomeController extends Controller
                                             ->get();
             $result['rvp'] = $recentlyViewedProducts;
         }
+        $result['sb'] = $sort_by;
         
         return view('products', $result);
     }
