@@ -3,9 +3,7 @@
 @section('content')
     <!-- catg header banner section -->
     <section id="aa-catg-head-banner">
-        @php
-            $category = $products->first();
-        @endphp
+        @php $category = $products->first(); @endphp
         <img src="{{ asset('assets/img/fashion/fashion-header-bg-8.jpg') }}" alt="fashion img">
         <div class="aa-catg-head-banner-area">
             <div class="container">
@@ -102,7 +100,19 @@
                                 <a href="#">Head Phone</a>
                                 <a href="#">Pen Drive</a>
                             </div>
-                        </div>                        
+                        </div>
+                        <div class="aa-sidebar-widget">
+                            <h3>Shop By Price</h3>              
+                            <!-- price range -->
+                            <div class="aa-sidebar-price-range">
+                                <form action="">
+                                    <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background"></div>
+                                    <span id="skip-value-lower" class="example-val">30.00</span>
+                                    <span id="skip-value-upper" class="example-val">100.00</span>
+                                    <button class="aa-filter-btn" type="submit">Filter</button>
+                                </form>
+                            </div>              
+                        </div>
                         <!-- single sidebar -->
                         <div class="aa-sidebar-widget">
                             <h3>Shop By Color</h3>
@@ -125,7 +135,7 @@
                             </div>
                         </div>
                         @endisset
-                            <!-- single sidebar -->
+                        <!-- single sidebar -->
                         <div class="aa-sidebar-widget">
                             <h3>Top Rated Products</h3>
                             <div class="aa-recently-views">

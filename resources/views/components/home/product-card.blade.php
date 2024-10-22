@@ -14,7 +14,7 @@
         </a>
         <figcaption>
         <h4 class="aa-product-title">
-            <a href="#">{{ $product->prod_name }}</a>
+            <a href="{{ route('product.list', $product->slug) }}">{{ $product->prod_name }}</a>
         </h4>
         <span class="aa-product-price">${{ $firstAttr->price }}</span>
         @if ($firstAttr->mrp > $firstAttr->price)

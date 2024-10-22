@@ -113,14 +113,10 @@ class HomeController extends Controller
                             'attributes' => function($q) use ($sort_by) {
                                 $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
                                     ->where('status', 'A')
-                                    ->when($sort_by === 'pa', function($q){
-                                        $q->orderBy('price', 'asc');
-                                    })
-                                    ->when($sort_by === 'pd', function($q){
-                                        $q->orderBy('price', 'desc');
-                                    });
+                                    ->orderBy('price', 'asc');
                             }
                         ])
+                        ->withAggregate('attributes', 'price', 'min')
                         ->whereHas('category', function($query) use ($slug) {
                             $query->where('slug', $slug);
                         })
@@ -134,6 +130,12 @@ class HomeController extends Controller
                         })
                         ->when($sort_by === 'd', function($q){
                             $q->orderBy('created_at', 'desc');
+                        })
+                        ->when($sort_by === 'pa', function($q){
+                            $q->orderBy('attributes_min_price', 'asc');
+                        })
+                        ->when($sort_by === 'pd', function($q){
+                            $q->orderBy('attributes_min_price', 'desc');
                         })
                         ->active()
                         ->paginate(14);
