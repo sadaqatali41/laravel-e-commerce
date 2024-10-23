@@ -11,6 +11,7 @@ use App\Models\Admin\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Str;
 
 class HomeController extends Controller
 {
@@ -101,9 +102,11 @@ class HomeController extends Controller
     {
         $cacheName = $subSlug != null ? $slug . '-' . $subSlug : $slug;
 
-        $sort_by = $request->sb;
-        $minPrice = $request->ps ?? 0;
-        $maxPrice = $request->pe ?? 0;
+        $sort_by    = $request->sb;
+        $minPrice   = $request->ps ?? 0;
+        $maxPrice   = $request->pe ?? 0;
+        $color_id   = $request->cl ?? '';
+        $colorIds = null;
 
         if($sort_by == null || $sort_by == 'pn') {
             $sort_by = 'pn';
@@ -115,19 +118,29 @@ class HomeController extends Controller
         if($maxPrice !== null && $maxPrice !== 0) {
             $cacheName .= '-' . $maxPrice;
         }
+        if($color_id !== null && $color_id !== '') {
+            $cacheName .= '-' . $color_id;
+            $colorIds = Str::of($color_id)->split('/-/');
+        }
 
-        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by, $minPrice, $maxPrice) {
+        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by, $minPrice, $maxPrice,  $colorIds) {
+
             return Product::with([
                             'category:id,name,image',
-                            'attributes' => function($q) use ($sort_by) {
+                            'attributes' => function($q) {
                                 $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
-                                    ->where('status', 'A')
+                                    ->where('status', 'A')                                    
                                     ->orderBy('price', 'asc');
                             }
                         ])
                         ->withAggregate('attributes', 'price', 'min')
                         ->whereHas('category', function($query) use ($slug) {
                             $query->where('slug', $slug);
+                        })
+                        ->when($colorIds, function($q) use ($colorIds){
+                            $q->whereHas('attributes', function($query) use ($colorIds) {
+                                $query->whereIn('color_id', $colorIds);
+                            });
                         })
                         ->when($subSlug, function($query) use ($subSlug){
                             $query->whereHas('subcategory', function($subQuery) use($subSlug) {
@@ -202,6 +215,7 @@ class HomeController extends Controller
         $result['sb'] = $sort_by;
         $result['ps'] = $minPrice;
         $result['pe'] = $maxPrice;
+        $result['cl'] = $color_id;
         
         return view('products', $result);
     }

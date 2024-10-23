@@ -553,5 +553,18 @@ jQuery(function($){
 
       $('.aa-sort-form').submit();
     });
+
+    $(document).on('click', '.aa-color-tag > a', function(){
+      let color_id = $(this).data('id');
+      let colors = $('#cl').val();
+      if(colors == '') {
+        colors = color_id;
+      } else if(colors.indexOf(color_id) == -1) {
+        colors += '-' + color_id;
+      }
+      $('#cl').val(colors);
+
+      $('.aa-sort-form').submit();
+    });
 });
 

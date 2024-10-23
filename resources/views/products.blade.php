@@ -36,6 +36,7 @@
                                     </select>
                                     <input type="hidden" name="ps" id="ps" value="{{ $ps }}" placeholder="Price Start">
                                     <input type="hidden" name="pe" id="pe" value="{{ $pe }}" placeholder="Price End">
+                                    <input type="hidden" name="cl" id="cl" value="{{ $cl }}" placeholder="Color Ids">
                                 </form>
                             </div>
                             <div class="aa-product-catg-head-right">
@@ -120,7 +121,7 @@
                             <h3>Shop By Color</h3>
                             <div class="aa-color-tag">
                                 @foreach ($colors as $color)
-                                    <a class="aa-color-{{ strtolower($color->color) }}" href="#"></a>                                    
+                                    <a class="aa-color-{{ strtolower($color->color) }}" data-id="{{ $color->id }}" href="javascript:void(0)"></a>                                    
                                 @endforeach
                             </div>
                         </div>
