@@ -240,6 +240,12 @@ jQuery(function($){
     jQuery(function(){
       if($('body').is('.productPage')){
        var skipSlider = document.getElementById('skipstep');
+       var ps = parseFloat($('#ps').val()) || 0;
+       var pe = parseFloat($('#pe').val()) || 0;
+       if(ps == 0 || pe == 0) {
+        ps = 100;
+        pe = 1700;
+       }
         noUiSlider.create(skipSlider, {
             range: {
                 'min': 0,
@@ -256,7 +262,7 @@ jQuery(function($){
             },
             snap: true,
             connect: true,
-            start: [100, 1700]
+            start: [ps, pe]
         });
         // for value print
         var skipValues = [
@@ -536,6 +542,15 @@ jQuery(function($){
     }
 
     $(document).on('change', '#sort_by', function(){
+      $('.aa-sort-form').submit();
+    });
+
+    $(document).on('click', '.aa-filter-btn', function(){
+      let lower = parseFloat($('#skip-value-lower').html());
+      let upper = parseFloat($('#skip-value-upper').html());
+      $('#ps').val(lower);
+      $('#pe').val(upper);
+
       $('.aa-sort-form').submit();
     });
 });

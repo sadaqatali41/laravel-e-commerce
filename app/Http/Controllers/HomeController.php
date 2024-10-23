@@ -102,12 +102,21 @@ class HomeController extends Controller
         $cacheName = $subSlug != null ? $slug . '-' . $subSlug : $slug;
 
         $sort_by = $request->sb;
+        $minPrice = $request->ps ?? 0;
+        $maxPrice = $request->pe ?? 0;
+
         if($sort_by == null || $sort_by == 'pn') {
             $sort_by = 'pn';
         }
         $cacheName .= '-' . $sort_by;
+        if($minPrice !== null && $minPrice !== 0) {
+            $cacheName .= '-' . $minPrice;
+        }
+        if($maxPrice !== null && $maxPrice !== 0) {
+            $cacheName .= '-' . $maxPrice;
+        }
 
-        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by) {
+        $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by, $minPrice, $maxPrice) {
             return Product::with([
                             'category:id,name,image',
                             'attributes' => function($q) use ($sort_by) {
@@ -136,6 +145,9 @@ class HomeController extends Controller
                         })
                         ->when($sort_by === 'pd', function($q){
                             $q->orderBy('attributes_min_price', 'desc');
+                        })
+                        ->when($minPrice > 0 && $maxPrice > 0, function($q) use ($minPrice, $maxPrice) {
+                            $q->havingBetween('attributes_min_price', [$minPrice, $maxPrice]);
                         })
                         ->active()
                         ->paginate(14);
@@ -188,6 +200,8 @@ class HomeController extends Controller
             $result['rvp'] = $recentlyViewedProducts;
         }
         $result['sb'] = $sort_by;
+        $result['ps'] = $minPrice;
+        $result['pe'] = $maxPrice;
         
         return view('products', $result);
     }

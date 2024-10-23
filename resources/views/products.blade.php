@@ -34,6 +34,8 @@
                                         <option value="pd" @if($sb == 'pd') selected  @endif>Price - Descending</option>
                                         <option value="d" @if($sb == 'd') selected  @endif>Date</option>
                                     </select>
+                                    <input type="hidden" name="ps" id="ps" value="{{ $ps }}" placeholder="Price Start">
+                                    <input type="hidden" name="pe" id="pe" value="{{ $pe }}" placeholder="Price End">
                                 </form>
                             </div>
                             <div class="aa-product-catg-head-right">
@@ -109,7 +111,7 @@
                                     <div id="skipstep" class="noUi-target noUi-ltr noUi-horizontal noUi-background"></div>
                                     <span id="skip-value-lower" class="example-val">30.00</span>
                                     <span id="skip-value-upper" class="example-val">100.00</span>
-                                    <button class="aa-filter-btn" type="submit">Filter</button>
+                                    <button class="aa-filter-btn" type="button">Filter</button>
                                 </form>
                             </div>              
                         </div>
