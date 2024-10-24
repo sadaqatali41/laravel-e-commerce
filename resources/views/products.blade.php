@@ -86,7 +86,7 @@
                             <ul class="aa-catg-nav">
                                 @foreach ($promos as $cat)
                                     <li>
-                                        <a href="{{ route('category.product', $cat->slug) }}">{{ $cat->name }}</a>
+                                        <a href="{{ route('category.product', $cat->slug) }}" style="color: @if($cat->slug == $slug) #ff6666 @else #333333 @endif">{{ $cat->name }}</a>
                                     </li>                                    
                                 @endforeach
                             </ul>
@@ -121,7 +121,11 @@
                             <h3>Shop By Color</h3>
                             <div class="aa-color-tag">
                                 @foreach ($colors as $color)
-                                    <a class="aa-color-{{ strtolower($color->color) }}" data-id="{{ $color->id }}" href="javascript:void(0)"></a>                                    
+                                    @if(in_array($color->id, $cl_id))
+                                        <a class="aa-color-{{ strtolower($color->color) }} color-active" data-id="{{ $color->id }}" href="javascript:void(0)"></a>
+                                    @else
+                                        <a class="aa-color-{{ strtolower($color->color) }}" data-id="{{ $color->id }}" href="javascript:void(0)"></a>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>

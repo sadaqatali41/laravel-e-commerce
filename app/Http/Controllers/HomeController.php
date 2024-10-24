@@ -106,8 +106,8 @@ class HomeController extends Controller
         $minPrice   = $request->ps ?? 0;
         $maxPrice   = $request->pe ?? 0;
         $color_id   = $request->cl ?? '';
-        $colorIds = null;
-
+        $colorIds   = [];
+        
         if($sort_by == null || $sort_by == 'pn') {
             $sort_by = 'pn';
         }
@@ -118,7 +118,7 @@ class HomeController extends Controller
         if($maxPrice !== null && $maxPrice !== 0) {
             $cacheName .= '-' . $maxPrice;
         }
-        if($color_id !== null && $color_id !== '') {
+        if($color_id != null && $color_id != '') {
             $cacheName .= '-' . $color_id;
             $colorIds = Str::of($color_id)->split('/-/');
         }
@@ -128,8 +128,8 @@ class HomeController extends Controller
             return Product::with([
                             'category:id,name,image',
                             'attributes' => function($q) {
-                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
-                                    ->where('status', 'A')                                    
+                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id', 'image')
+                                    ->where('status', 'A')
                                     ->orderBy('price', 'asc');
                             }
                         ])
@@ -194,7 +194,7 @@ class HomeController extends Controller
         $result['colors'] = Cache::remember('colors', $this->seconds, function(){
             return Color::select('id', 'color')
                         ->active()
-                        ->inRandomOrder()
+                        ->orderBy('id')
                         ->get();
         });
 
@@ -212,11 +212,13 @@ class HomeController extends Controller
                                             ->get();
             $result['rvp'] = $recentlyViewedProducts;
         }
-        $result['sb'] = $sort_by;
-        $result['ps'] = $minPrice;
-        $result['pe'] = $maxPrice;
-        $result['cl'] = $color_id;
-        
+        $result['sb']       = $sort_by;
+        $result['ps']       = $minPrice;
+        $result['pe']       = $maxPrice;
+        $result['cl']       = $color_id;
+        $result['cl_id']    = $colorIds != null ? $colorIds->toArray() : $colorIds;
+        $result['slug']     = $slug;
+        // print_r($result['cl_id']);die;
         return view('products', $result);
     }
     public function product($slug) 
@@ -236,7 +238,7 @@ class HomeController extends Controller
         $products = Cache::remember('related-product-' . $slug, $this->seconds, function() use ($slug){
             return Product::with([
                             'attributes' => function($q) {
-                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id')
+                                $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id', 'image')
                                     ->where('status', 'A');
                             }
                         ])

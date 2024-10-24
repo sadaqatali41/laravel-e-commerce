@@ -561,6 +561,10 @@ jQuery(function($){
         colors = color_id;
       } else if(colors.indexOf(color_id) == -1) {
         colors += '-' + color_id;
+      } else if(colors.includes('-')) {
+        colors = colors.replace('-' + color_id, '');
+      } else {
+        colors = '';
       }
       $('#cl').val(colors);
 
