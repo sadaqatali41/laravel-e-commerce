@@ -120,16 +120,22 @@ class HomeController extends Controller
         }
         if($color_id != null && $color_id != '') {
             $cacheName .= '-' . $color_id;
-            $colorIds = Str::of($color_id)->split('/-/');
+            $colorIds = Str::of($color_id)->split('//');
         }
 
         $result['products'] = Cache::remember('products-of-' . $cacheName, $this->seconds, function() use ($slug, $subSlug, $sort_by, $minPrice, $maxPrice,  $colorIds) {
 
             return Product::with([
                             'category:id,name,image',
-                            'attributes' => function($q) {
+                            'attributes' => function($q) use ($colorIds, $minPrice, $maxPrice){
                                 $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id', 'image')
                                     ->where('status', 'A')
+                                    ->when($colorIds, function($query) use ($colorIds) {
+                                        $query->whereIn('color_id', $colorIds);
+                                    })                                    
+                                    ->when($minPrice > 0 && $maxPrice > 0, function($q) use ($minPrice, $maxPrice) {
+                                        $q->whereBetween('price', [$minPrice, $maxPrice]);
+                                    })
                                     ->orderBy('price', 'asc');
                             }
                         ])
@@ -137,9 +143,12 @@ class HomeController extends Controller
                         ->whereHas('category', function($query) use ($slug) {
                             $query->where('slug', $slug);
                         })
-                        ->when($colorIds, function($q) use ($colorIds){
-                            $q->whereHas('attributes', function($query) use ($colorIds) {
+                        ->whereHas('attributes', function ($query) use ($colorIds, $minPrice, $maxPrice) {
+                            $query->when($colorIds, function ($query) use ($colorIds) {
                                 $query->whereIn('color_id', $colorIds);
+                            })                            
+                            ->when($minPrice > 0 && $maxPrice > 0, function($q) use ($minPrice, $maxPrice) {
+                                $q->whereBetween('price', [$minPrice, $maxPrice]);
                             });
                         })
                         ->when($subSlug, function($query) use ($subSlug){
@@ -158,10 +167,7 @@ class HomeController extends Controller
                         })
                         ->when($sort_by === 'pd', function($q){
                             $q->orderBy('attributes_min_price', 'desc');
-                        })
-                        ->when($minPrice > 0 && $maxPrice > 0, function($q) use ($minPrice, $maxPrice) {
-                            $q->havingBetween('attributes_min_price', [$minPrice, $maxPrice]);
-                        })
+                        })                        
                         ->active()
                         ->paginate(14);
         });
@@ -218,7 +224,7 @@ class HomeController extends Controller
         $result['cl']       = $color_id;
         $result['cl_id']    = $colorIds != null ? $colorIds->toArray() : $colorIds;
         $result['slug']     = $slug;
-        // print_r($result['cl_id']);die;
+        
         return view('products', $result);
     }
     public function product($slug) 

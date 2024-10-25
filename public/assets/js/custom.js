@@ -560,9 +560,9 @@ jQuery(function($){
       if(colors == '') {
         colors = color_id;
       } else if(colors.indexOf(color_id) == -1) {
-        colors += '-' + color_id;
-      } else if(colors.includes('-')) {
-        colors = colors.replace('-' + color_id, '');
+        colors += color_id;
+      } else if(colors.includes(color_id)) {
+        colors = colors.replace(color_id, '');
       } else {
         colors = '';
       }
