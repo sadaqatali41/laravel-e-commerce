@@ -16,10 +16,8 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="#"><img src="{{ asset('assets/img/flag/french.jpg') }}"
-                                                    alt="">FRENCH</a></li>
-                                        <li><a href="#"><img src="{{ asset('assets/img/flag/english.jpg') }}"
-                                                    alt="">ENGLISH</a></li>
+                                        <li><a href="#"><img src="{{ asset('assets/img/flag/french.jpg') }}" alt="">FRENCH</a></li>
+                                        <li><a href="#"><img src="{{ asset('assets/img/flag/english.jpg') }}" alt="">ENGLISH</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -95,8 +93,8 @@
                         <!-- / cart box -->
                         <!-- search box -->
                         <div class="aa-search-box">
-                            <form action="">
-                                <input type="text" name="search" id="search" placeholder="Search here ex. 'man' ">
+                            <form action="{{ url('search') }}" id="searchForm">
+                                <input type="text" name="param" id="param" value="{{ request()->get('param') }}" placeholder="Search here ex. 'man' ">
                                 <button type="submit">
                                     <span class="fa fa-search"></span>
                                 </button>

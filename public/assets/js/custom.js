@@ -570,5 +570,12 @@ jQuery(function($){
 
       $('.aa-sort-form').submit();
     });
+
+    $(document).on('submit', '#searchForm', function(){
+      let param = $('#param').val();
+      if(param.length < 3) {
+        return false;
+      }
+    });
 });
 

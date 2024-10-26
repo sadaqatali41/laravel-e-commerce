@@ -13,6 +13,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/category/{slug}/{subcategory?}', [HomeController::class, 'category'])->name('category.product');
 Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.list');
 Route::get('/contact-us', [HomeController::class, 'contact'])->name('contact');
+Route::get('/search', [HomeController::class, 'search']);
 
 # cart routes
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);

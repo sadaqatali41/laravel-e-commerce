@@ -272,6 +272,30 @@ class HomeController extends Controller
         return view('product-details', $result);
     }
 
+    public function search(Request $request)
+    {
+        $param = $request->param;
+
+        $products = Product::with([
+                        'category:id,name,image',
+                        'attributes' => function($q){
+                            $q->select('id', 'product_id', 'mrp', 'price', 'color_id', 'size_id', 'image')
+                                ->where('status', 'A')                                
+                                ->orderBy('price', 'asc');
+                        }
+                    ])                                           
+                    ->active()
+                    ->where(function($query) use ($param){
+                        $query->orWhere('prod_name', 'LIKE', '%'. $param .'%');
+                        $query->orWhere('description', 'LIKE', '%'. $param .'%');
+                        $query->orWhere('short_desc', 'LIKE', '%'. $param .'%');
+                        $query->orWhere('tech_spec', 'LIKE', '%'. $param .'%');
+                        $query->orWhere('used_for', 'LIKE', '%'. $param .'%');
+                    })
+                    ->paginate(14);
+        return view('search')->withProducts($products);
+    }
+
     public function storeInSession($productId) 
     {
         $recentlyViewed = session()->get('recently_viewed', []);
