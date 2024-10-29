@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,5 +44,29 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Your Registration is done successfully!'
         ], 200);
+    }
+
+    public function check(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $credential = $request->only('email', 'password');
+
+        if(Auth::guard('web')->attempt($credential, $request->rememberme)) {
+            $request->session()->regenerate();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login successful!',
+                'url' => url('/')
+            ]);
+        }
+        return response()->json(['error' => 'Invalid email or password.'], 401);
     }
 }

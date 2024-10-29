@@ -607,5 +607,33 @@ jQuery(function($){
         }
       });
     });
+
+    $(document).on('submit', '#loginForm', function(e){
+      e.preventDefault();
+      $('.error-message').remove();
+      $('#loginFormBtn').attr('disabled', true).text('Loading...');
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){
+          if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = data.url;
+          }
+        },
+        error: function(xhr, status, error){
+          if(xhr.status == 422) {
+            $.each(xhr.responseJSON.errors, function(key, value) {
+              $('#' + key + '_login').after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+            });
+          } else if(xhr.status == 401) {
+            $('#email_login').after('<span class="error-message" style="'+ errorStyle +'">' + xhr.responseJSON.error + '</span>');
+          }
+          $('#loginFormBtn').attr('disabled', false).text('Login');
+        }
+      });
+    });
 });
 

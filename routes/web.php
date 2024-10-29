@@ -27,5 +27,6 @@ Route::prefix('user')->name('user.')->group(function(){
     Route::middleware(['guest:web'])->group(function(){
         Route::get('/registration', [UserController::class, 'registration'])->name('registration');
         Route::post('/submit', [UserController::class, 'submit'])->name('submit');
+        Route::post('/check', [UserController::class, 'check'])->name('check');
     });
 });

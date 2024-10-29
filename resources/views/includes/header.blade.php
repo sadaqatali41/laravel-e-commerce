@@ -16,8 +16,16 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="#"><img src="{{ asset('assets/img/flag/french.jpg') }}" alt="">FRENCH</a></li>
-                                        <li><a href="#"><img src="{{ asset('assets/img/flag/english.jpg') }}" alt="">ENGLISH</a></li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="{{ asset('assets/img/flag/french.jpg') }}" alt="">FRENCH
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <img src="{{ asset('assets/img/flag/english.jpg') }}" alt="">ENGLISH
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -47,11 +55,29 @@
                         <!-- / header top left -->
                         <div class="aa-header-top-right">
                             <ul class="aa-head-top-nav-right">
-                                <li><a href="{{ route('user.registration') }}">My Account</a></li>
-                                <li class="hidden-xs"><a href="wishlist.html">Wishlist</a></li>
-                                <li class="hidden-xs"><a href="{{ route('cart') }}">My Cart</a></li>
-                                <li class="hidden-xs"><a href="checkout.html">Checkout</a></li>
-                                <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                                @guest
+                                    <li>
+                                        <a href="{{ route('user.registration') }}">My Account</a>
+                                    </li>                                    
+                                @endguest
+                                <li class="hidden-xs">
+                                    <a href="wishlist.html">Wishlist</a>
+                                </li>
+                                <li class="hidden-xs">
+                                    <a href="{{ route('cart') }}">My Cart</a>
+                                </li>
+                                <li class="hidden-xs">
+                                    <a href="checkout.html">Checkout</a>
+                                </li>
+                                @guest
+                                    <li>
+                                        <a href="" data-toggle="modal" data-target="#login-modal">Login</a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a href="">Logout</a>
+                                    </li>
+                                @endguest
                             </ul>
                         </div>
                     </div>
