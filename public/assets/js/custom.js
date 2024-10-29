@@ -577,5 +577,35 @@ jQuery(function($){
         return false;
       }
     });
+
+    let errorStyle = `
+      margin-top: -10px;
+      color: red;
+      display: block
+    `
+
+    $(document).on('submit', '#registrationForm', function(e){
+      e.preventDefault();
+      $('.error-message').remove();
+      $('#registrationFormBtn').attr('disabled', true).text('Loading...');
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){
+          if(data.status === 'success') {
+            alert(data.message);
+            window.location.reload();
+          }
+        },
+        error: function(xhr, status, error){
+          $.each(xhr.responseJSON.errors, function(key, value) {
+            $('#' + key).after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+          });
+          $('#registrationFormBtn').attr('disabled', false).text('Register');
+        }
+      });
+    });
 });
 

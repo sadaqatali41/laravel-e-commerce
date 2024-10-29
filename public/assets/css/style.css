@@ -2620,6 +2620,7 @@ img {
 /*---- Login form ----*/
 
 .aa-login-form input[type="text"],
+.aa-login-form input[type="email"],
 .aa-login-form input[type="password"] {
   border: 1px solid #ccc;
   font-size: 16px;
