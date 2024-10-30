@@ -29,4 +29,8 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::post('/submit', [UserController::class, 'submit'])->name('submit');
         Route::post('/check', [UserController::class, 'check'])->name('check');
     });
+
+    Route::middleware(['auth:web'])->group(function(){
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    });
 });

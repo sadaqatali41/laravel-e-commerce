@@ -60,6 +60,11 @@
                                         <a href="{{ route('user.registration') }}">My Account</a>
                                     </li>                                    
                                 @endguest
+                                @auth
+                                    <li>
+                                        <a href="javascript:void(0)" style="color: #ff6666;">{{ auth()->user()->name }}</a>
+                                    </li>
+                                @endauth
                                 <li class="hidden-xs">
                                     <a href="wishlist.html">Wishlist</a>
                                 </li>
@@ -75,7 +80,10 @@
                                     </li>
                                 @else
                                     <li>
-                                        <a href="">Logout</a>
+                                        <form action="{{ route('user.logout') }}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link" style="display: inline-block; color: #333333; border-right: 1px solid #ddd; font-size: 14px; padding: 5px 8px; text-decoration: none;">Logout</button>
+                                        </form>
                                     </li>
                                 @endguest
                             </ul>

@@ -69,4 +69,9 @@ class UserController extends Controller
         }
         return response()->json(['error' => 'Invalid email or password.'], 401);
     }
+
+    public function logout() {
+        Auth::guard('web')->logout();
+        return redirect('/');
+    }
 }

@@ -360,6 +360,10 @@ jQuery(function($){
         // instead of a settings object
       ]
     });
+
+    $('#login-modal').on('hidden.bs.modal', function(){
+      $('.error-message').remove();
+    });
     
     $.ajaxSetup({
       headers: {
