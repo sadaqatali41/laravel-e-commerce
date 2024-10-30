@@ -63,6 +63,22 @@ class UserController extends Controller
         $credential = $request->only('email', 'password');
         $remember = $request->has('remember');
 
+        #fetch user
+        $user = User::where('email', $credential['email'])->first();
+        if(is_null($user)) {
+            return response()->json(['error' => 'User not found with this email.'], 401);
+        }
+
+        #check email verify
+        if($user->email_verified_at == null) {
+            return response()->json(['error' => 'Email is not verified. Please check email.'], 401);
+        }
+
+        #check status
+        if($user->status == 'I') {
+            return response()->json(['error' => 'Your account is deactivated.'], 401);
+        }
+
         if(Auth::guard('web')->attempt($credential, $remember)) {
             $request->session()->regenerate();
             if($remember) {
@@ -76,7 +92,7 @@ class UserController extends Controller
                 'status' => 'success',
                 'message' => 'Login successful!',
                 'url' => url('/')
-            ]);
+            ], 200);
         }
         return response()->json(['error' => 'Invalid email or password.'], 401);
     }
