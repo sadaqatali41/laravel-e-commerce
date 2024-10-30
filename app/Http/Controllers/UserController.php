@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -36,10 +37,11 @@ class UserController extends Controller
             'mobile' => $request->mobile,
             'password' => Hash::make($request->password),
             'ip' => $request->ip(),
+            'activation_token' => Str::random(60),
             'status' => 'I',
         ];
 
-        User::create($formFields);
+        $user = User::create($formFields);
 
         return response()->json([
             'status' => 'success',
