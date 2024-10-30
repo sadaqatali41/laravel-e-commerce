@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -58,9 +59,17 @@ class UserController extends Controller
         }
 
         $credential = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
-        if(Auth::guard('web')->attempt($credential, $request->rememberme)) {
+        if(Auth::guard('web')->attempt($credential, $remember)) {
             $request->session()->regenerate();
+            if($remember) {
+                Cookie::queue('email', $request->email, 43200);
+                Cookie::queue('password', $request->password, 43200);
+            } else {
+                Cookie::queue(Cookie::forget('email'));
+                Cookie::queue(Cookie::forget('password'));
+            }
             return response()->json([
                 'status' => 'success',
                 'message' => 'Login successful!',

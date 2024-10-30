@@ -70,15 +70,15 @@
           <h4>Login</h4>
           <form class="aa-login-form" action="{{ route('user.check') }}" id="loginForm">
             <label for="email">Email<span>*</span></label>
-            <input type="email" placeholder="Email" name="email" id="email_login">
+            <input type="email" placeholder="Email" name="email" id="email_login" value="{{ Cookie::get('email') }}">
 
             <label for="password">Password<span>*</span></label>
-            <input type="password" placeholder="Password" name="password" id="password_login">
+            <input type="password" placeholder="Password" name="password" id="password_login" value="{{ Cookie::get('password') }}">
 
             <button class="aa-browse-btn" type="submit" id="loginFormBtn">Login</button>
 
-            <label for="rememberme" class="rememberme">
-              <input type="checkbox" id="rememberme" name="rememberme"> Remember me 
+            <label for="remember" class="rememberme">
+              <input type="checkbox" id="remember" name="remember" value="1" {{ Cookie::get('email') ? 'checked' : '' }}> Remember me 
             </label>
             <p class="aa-lost-password">
               <a href="#">Lost your password?</a>
