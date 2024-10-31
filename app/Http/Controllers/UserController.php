@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\ActivationEmail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,10 +45,30 @@ class UserController extends Controller
 
         $user = User::create($formFields);
 
+        #send email after successfull registration
+        Mail::to($user->email)->send(new ActivationEmail($user));
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Your Registration is done successfully!'
+            'message' => 'Your Registration is done successfully. Please check your email for verification!'
         ], 200);
+    }
+
+    public function activateAccount($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+
+        if (is_null($user)) {
+            return redirect()->route('user.registration')->with('error', 'Invalid activation token.');
+        } else if($user->email_verified_at != null) {
+            return redirect()->route('user.registration')->with('error', 'Your account is already activated.');
+        }
+
+        $user->status = 'A';
+        $user->email_verified_at = now();
+        $user->save();
+
+        return redirect()->route('user.registration')->with('success', 'Account activated successfully! You can now log in.');
     }
 
     public function check(Request $request)

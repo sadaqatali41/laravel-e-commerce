@@ -44,6 +44,15 @@
                                     </form>
                                 </div>
                             </div>
+                            @if(session()->has('error'))
+                                <div class="col-md-6">
+                                    <h3 style="color: red; font-weight: bold; text-align: center;">{{ session('error') }}</h3>
+                                </div>
+                            @elseif(session()->has('success'))
+                                <div class="col-md-6">
+                                    <h3 style="color: green; font-weight: bold; text-align: center;">{{ session('success') }}</h3>
+                                </div>
+                            @endif
                         </div>          
                     </div>
                 </div>

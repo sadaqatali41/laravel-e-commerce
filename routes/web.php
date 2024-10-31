@@ -28,6 +28,7 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::get('/registration', [UserController::class, 'registration'])->name('registration');
         Route::post('/submit', [UserController::class, 'submit'])->name('submit');
         Route::post('/check', [UserController::class, 'check'])->name('check');
+        Route::get('/activate-account/{token}', [UserController::class, 'activateAccount'])->name('activate');
     });
 
     Route::middleware(['auth:web'])->group(function(){
