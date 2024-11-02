@@ -81,15 +81,39 @@
               <input type="checkbox" id="remember" name="remember" value="1" {{ Cookie::get('email') ? 'checked' : '' }}> Remember me 
             </label>
             <p class="aa-lost-password">
-              <a href="#">Lost your password?</a>
+              <a href="javascript:void(0)" id="lostPasswordModalOpen">Lost your password?</a>
             </p>
             <div class="aa-register-now">
               Don't have an account?<a href="{{ route('user.registration') }}">Register now!</a>
             </div>
           </form>
         </div>                        
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+      </div>
+    </div>
+  </div>   
+
+  <!-- Forget Password Modal -->  
+  <div class="modal fade" id="forget-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">                      
+        <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>Forget Password</h4>
+          <form class="aa-login-form" action="{{ route('user.password.reset') }}" id="forgetPasswordForm">
+            <label for="email">Email<span>*</span></label>
+            <input type="email" placeholder="Email" name="email" id="email_forget">
+            <button class="aa-browse-btn" type="submit" id="forgetPasswordFormBtn">Send Reset Link</button>
+            <br><br><br>
+            <p class="aa-lost-password">
+              <a href="javascript:void(0)" id="loginModalOpen">Already have an account? Login</a>
+            </p>
+            <div class="aa-register-now">
+              Don't have an account?<a href="{{ route('user.registration') }}">Register now!</a>
+            </div>
+          </form>
+        </div>                        
+      </div>
+    </div>
   </div>    
 
   <!-- jQuery library -->

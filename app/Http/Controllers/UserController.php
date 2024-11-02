@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\ActivationEmail;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -117,6 +119,97 @@ class UserController extends Controller
             ], 200);
         }
         return response()->json(['error' => 'Invalid email or password.'], 401);
+    }
+
+    public function passwordResetSubmit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        #fetch user
+        $user = User::where('email', $request->email)->first();
+        if(is_null($user)) {
+            return response()->json(['error' => 'User not found with this email.'], 401);
+        }
+
+        #check email verify
+        if($user->email_verified_at == null) {
+            return response()->json(['error' => 'Email is not verified. Please check email.'], 401);
+        }
+
+        #check status
+        if($user->status == 'I') {
+            return response()->json(['error' => 'Your account is deactivated.'], 401);
+        }
+
+        #create token
+        $token = Str::random(60);
+
+        #store token in DB
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()
+        ]);
+
+        #reset link
+        $resetLink = route('user.password.reset.form', ['token' => $token, 'email' => $request->email]);
+
+        Mail::send('emails.reset-email', ['resetLink' => $resetLink, 'name' => $user->name], function ($message) use ($request) {
+            $message->to($request->email);
+            $message->subject('Password Reset Request');
+        });
+
+        #success message
+        return response()->json([
+            'status' => 'success',
+            'message' => 'We have emailed your password reset link!'
+        ], 200);
+    }
+
+    public function showResetForm(Request $request, $token)
+    {
+        #retrieve the token record
+        $tokenData = DB::table('password_resets')->where('email', $request->email)->first();
+        if(is_null($tokenData)) {
+            return redirect()->route('user.registration')->with('error', 'Invalid token.');
+        }
+        return view('reset-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email'                 => 'required|email|exists:users,email',
+            'password'              => 'required|confirmed|min:8',
+            'token'                 => 'required'
+        ]);
+
+        #retrieve the token record
+        $tokenData = DB::table('password_resets')->where('email', $request->email)->first();
+
+        if (!$tokenData || !Hash::check($request->token, $tokenData->token)) {
+            return response()->json(['error' => 'Invalid token.'], 401);
+        }
+
+        #update user's password
+        $user = User::where('email', $request->email)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        #delete the token
+        DB::table('password_resets')->where('email', $request->email)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password has been reset successfully!',
+            'url' => url('/')
+        ], 200);
     }
 
     public function logout() {

@@ -639,5 +639,71 @@ jQuery(function($){
         }
       });
     });
+
+    $(document).on('click', '#lostPasswordModalOpen', function(){
+      $('#login-modal').modal('hide');
+      $('#forget-modal').modal('show');
+    });
+
+    $(document).on('click', '#loginModalOpen', function(){
+      $('#login-modal').modal('show');
+      $('#forget-modal').modal('hide');
+    });
+
+    $(document).on('submit', '#forgetPasswordForm', function(e){
+      e.preventDefault();
+      $('.error-message').remove();
+      $('#forgetPasswordFormBtn').attr('disabled', true).text('Loading...');
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){
+          if(data.status === 'success') {
+            alert(data.message);
+            window.location.reload();
+          }
+        },
+        error: function(xhr, status, error){
+          if(xhr.status == 422) {
+            $.each(xhr.responseJSON.errors, function(key, value) {
+              $('#' + key + '_forget').after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+            });
+          } else if(xhr.status == 401) {
+            $('#email_forget').after('<span class="error-message" style="'+ errorStyle +'">' + xhr.responseJSON.error + '</span>');
+          }
+          $('#forgetPasswordFormBtn').attr('disabled', false).text('Send Reset Link');
+        }
+      });
+    });
+
+    $(document).on('submit', '#resetPasswordForm', function(e){
+      e.preventDefault();
+      $('.error-message').remove();
+      $('#resetPasswordFormBtn').attr('disabled', true).text('Loading...');
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){
+          if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = data.url;
+          }
+        },
+        error: function(xhr, status, error){
+          if(xhr.status == 422) {
+            $.each(xhr.responseJSON.errors, function(key, value) {
+              $('#' + key + '_reset').after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+            });
+          } else if(xhr.status == 401) {
+            $('#password_reset').after('<span class="error-message" style="'+ errorStyle +'">' + xhr.responseJSON.error + '</span>');
+          }
+          $('#resetPasswordFormBtn').attr('disabled', false).text('Submit');
+        }
+      });
+    });
 });
 

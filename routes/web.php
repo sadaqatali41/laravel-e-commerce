@@ -29,6 +29,9 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::post('/submit', [UserController::class, 'submit'])->name('submit');
         Route::post('/check', [UserController::class, 'check'])->name('check');
         Route::get('/activate-account/{token}', [UserController::class, 'activateAccount'])->name('activate');
+        Route::post('/password-reset-submit', [UserController::class, 'passwordResetSubmit'])->name('password.reset');
+        Route::get('/password/reset/{token}', [UserController::class, 'showResetForm'])->name('password.reset.form');
+        Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.update');
     });
 
     Route::middleware(['auth:web'])->group(function(){
