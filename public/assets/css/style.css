@@ -2456,7 +2456,7 @@ img {
 #checkout .checkout-area .checkout-left .panel-group .panel-default .panel-heading .panel-title a {
   display: block; 
 }
-#checkout .checkout-area .checkout-left .panel-group .aa-checkout-coupon .aa-coupon-code {
+#checkout .checkout-area .aa-checkout-coupon .aa-coupon-code {
   border: 1px solid #e5e5e5;
   color: #505050;
   font-size: 14px;
@@ -2471,7 +2471,7 @@ img {
   text-transform: uppercase;
   width: 100%;
 }
-#checkout .checkout-area .checkout-left .panel-group .aa-checkout-coupon input[type="submit"] {
+#checkout .checkout-area .aa-checkout-coupon input[type="submit"] {
   font-size: 14px;
 }
 #checkout .checkout-area .checkout-left .panel-group .aa-checkout-login input[type="text"],

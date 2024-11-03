@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -102,9 +104,18 @@ class UserController extends Controller
         if($user->status == 'I') {
             return response()->json(['error' => 'Your account is deactivated.'], 401);
         }
+        $session_id = Session::getId();
 
         if(Auth::guard('web')->attempt($credential, $remember)) {
+            #check cart data and replace it with logged-in user
+            Cart::where('session_id', '=', $session_id)
+                    ->update([
+                        'user_id' => Auth::guard('web')->user()->id,
+                        'session_id' => null
+                    ]);
+            #regenrate the session
             $request->session()->regenerate();
+            
             if($remember) {
                 Cookie::queue('email', $request->email, 43200);
                 Cookie::queue('password', $request->password, 43200);

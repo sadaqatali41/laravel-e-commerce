@@ -108,7 +108,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a href="#" class="aa-cart-view-btn">Proceed to Checkout</a>
+                                    @auth
+                                        <a href="{{ route('user.checkout') }}" class="aa-cart-view-btn">Proceed to Checkout</a>
+                                    @else
+                                        <a href="javascript:void(0)" class="aa-cart-view-btn">Login Firts</a>
+                                    @endauth
                                 </div>
                             @endif
                         </div>

@@ -71,9 +71,11 @@
                                 <li class="hidden-xs">
                                     <a href="{{ route('cart') }}">My Cart</a>
                                 </li>
-                                <li class="hidden-xs">
-                                    <a href="checkout.html">Checkout</a>
-                                </li>
+                                @auth
+                                    <li class="hidden-xs">
+                                        <a href="{{ route('user.checkout') }}">Checkout</a>
+                                    </li>                                    
+                                @endauth
                                 @guest
                                     <li>
                                         <a href="" data-toggle="modal" data-target="#login-modal">Login</a>

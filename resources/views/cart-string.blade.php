@@ -33,6 +33,6 @@
                 </span>
             </li>
         </ul>
-        <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
+        <a class="aa-cartbox-checkout aa-primary-btn" href="{{ route('cart') }}">Go to Cart</a>
     </div>
 @endif
