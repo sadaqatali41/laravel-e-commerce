@@ -705,5 +705,35 @@ jQuery(function($){
         }
       });
     });
+
+    $(document).on('click', '#applyCoupon', function(){
+      $('#coupon_error').html('');
+      let coupon_cd = $('#coupon_cd').val();
+      let orderVal = $(this).data('val');
+      let url = $(this).data('url');
+      
+      if(coupon_cd !== '') {
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: {
+            'coupon_cd': coupon_cd,
+            'orderVal': orderVal
+          },
+          success: function(res) {
+            if(res.status === 'error') {
+              $('#coupon_error').css('color', 'red').html(res.error);
+            } else {
+              $('#coupon_error').css('color', 'green').html(res.message);
+              $('#coupon_cd').hide();
+              console.log(res);
+            }
+          }
+        });
+      } else {
+        $('#coupon_error').css('color', 'red').html('Please Enter a Valid Coupon.');
+        $('#coupon_cd').focus();
+      }
+    });
 });
 

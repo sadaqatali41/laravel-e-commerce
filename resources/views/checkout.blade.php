@@ -128,9 +128,16 @@
                                         </div>
                                         <h4>Have a Coupon</h4>
                                         <div class="aa-checkout-coupon">
-                                            <input type="text" placeholder="Coupon Code" class="aa-coupon-code">
-                                            <input type="button" value="Apply Coupon" class="aa-browse-btn" style="padding: 8px 13px; width: -webkit-fill-available;">
+                                            <input type="text" placeholder="Coupon Code" class="aa-coupon-code" name="coupon_cd" id="coupon_cd">
+                                            <input type="button" 
+                                            value="Apply Coupon" 
+                                            class="aa-browse-btn" 
+                                            id="applyCoupon" 
+                                            data-val="{{ $totalPrice }}" 
+                                            data-url="{{ route('user.check.coupon') }}"
+                                            style="padding: 8px 13px; width: -webkit-fill-available;">
                                         </div>
+                                        <div id="coupon_error"></div>
                                         <br>
                                         <h4>Payment Method</h4>
                                         <div class="aa-payment-method">                    
