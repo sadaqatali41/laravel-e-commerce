@@ -119,9 +119,10 @@
                                                     @endforeach                                             
                                                 </tbody>
                                                 <tfoot>
+                                                    <tr class="coupon_cd_row hidden"></tr>
                                                     <tr>
                                                         <th>Subtotal</th>
-                                                        <td>${{ $totalPrice }}</td>
+                                                        <th id="totalPrice">${{ $totalPrice }}</th>
                                                     </tr>                                                    
                                                 </tfoot>
                                             </table>

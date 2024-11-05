@@ -725,8 +725,12 @@ jQuery(function($){
               $('#coupon_error').css('color', 'red').html(res.error);
             } else {
               $('#coupon_error').css('color', 'green').html(res.message);
+              $('#totalPrice').html('$' + res.orderVal);
+              $('.coupon_cd_row').html('<th>Coupon <small style="color: red; font-size: 10px; cursor: pointer;">Remove</small></th><th>'+ coupon_cd.toUpperCase() +'</th>').removeClass('hidden');
               $('#coupon_cd').hide();
-              console.log(res);
+              setTimeout(function(){
+                $('#coupon_error').html('');
+              }, 1500);
             }
           }
         });
@@ -734,6 +738,14 @@ jQuery(function($){
         $('#coupon_error').css('color', 'red').html('Please Enter a Valid Coupon.');
         $('#coupon_cd').focus();
       }
+    });
+
+    $(document).on('click', 'th > small', function(){
+      $('#coupon_error').html('');
+      $('#coupon_cd').show().val('');
+      $('.coupon_cd_row').html('').addClass('hidden');
+      let orderVal = $('#applyCoupon').attr('data-val');
+      $('#totalPrice').html('$' + orderVal);
     });
 });
 
