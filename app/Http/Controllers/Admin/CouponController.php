@@ -86,7 +86,7 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon)
     {
-        return view('admin.coupon.edit', [
+        return view('admin.coupon.coupans', [
             'coupon' => $coupon,
             'exp' => 'edit',
             'title' => 'Update Coupan'
