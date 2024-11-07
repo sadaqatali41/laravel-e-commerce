@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="checkout-area">
-                        <form action="">
+                        <form action="{{ route('user.process.order') }}" id="orderForm">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="checkout-left">
@@ -42,50 +42,50 @@
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="Name*" value="{{ auth()->user()->name }}" name="name">
+                                                                    <input type="text" placeholder="Name*" value="{{ auth()->user()->name }}" name="name" id="name">
                                                                 </div>                             
                                                             </div>  
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="email" placeholder="Email*" value="{{ auth()->user()->email }}" name="email" readonly>
+                                                                    <input type="email" placeholder="Email*" value="{{ auth()->user()->email }}" name="email" id="email" readonly>
                                                                 </div>                             
                                                             </div>                                                          
                                                         </div>                                                          
                                                         <div class="row">                                                            
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="tel" placeholder="Phone*" value="{{ auth()->user()->mobile }}" name="mobile" readonly>
+                                                                    <input type="tel" placeholder="Phone*" value="{{ auth()->user()->mobile }}" name="mobile" id="mobile" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="City / Town*" value="{{ auth()->user()->city }}" name="city">
+                                                                    <input type="text" placeholder="City / Town*" value="{{ auth()->user()->city }}" name="city" id="city">
                                                                 </div>
                                                             </div>
                                                         </div> 
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="State*" value="{{ auth()->user()->state }}" name="state">
+                                                                    <input type="text" placeholder="State*" value="{{ auth()->user()->state }}" name="state" id="state">
                                                                 </div>                             
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="Postcode / ZIP*" value="{{ auth()->user()->zip }}" name="zip">
+                                                                    <input type="text" placeholder="Postcode / ZIP*" value="{{ auth()->user()->zip }}" name="zip" id="zip">
                                                                 </div>
                                                             </div>
                                                         </div> 
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <textarea cols="8" rows="3" name="address">{{ auth()->user()->address }}</textarea>
+                                                                    <textarea cols="8" rows="3" name="address" id="address" placeholder="Address">{{ auth()->user()->address }}</textarea>
                                                                 </div>                             
                                                             </div>                            
                                                         </div>                                                        
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="aa-checkout-single-bill">
-                                                                    <input type="text" placeholder="Appartment, Suite etc." name="apartment">
+                                                                    <input type="text" placeholder="Appartment, Suite etc." name="apartment" id="apartment">
                                                                 </div>                             
                                                             </div>                                                            
                                                         </div>                                                                                                                            
@@ -143,13 +143,12 @@
                                         <h4>Payment Method</h4>
                                         <div class="aa-payment-method">                    
                                             <label for="cashdelivery">
-                                                <input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery 
+                                                <input type="radio" id="cashdelivery" name="payment_type" value="COD" checked> Cash on Delivery 
                                             </label>
                                             <label for="paypal">
-                                                <input type="radio" id="paypal" name="optionsRadios" checked> Via Paypal 
-                                            </label>
-                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">    
-                                            <input type="submit" value="Place Order" class="aa-browse-btn">                
+                                                <input type="radio" id="paypal" name="payment_type" value="GT"> Instamojo 
+                                            </label>                                            
+                                            <input type="submit" value="Place Order" class="aa-browse-btn" id="orderFormBtn">                
                                         </div>
                                     </div>
                                 </div>

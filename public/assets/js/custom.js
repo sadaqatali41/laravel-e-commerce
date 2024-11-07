@@ -707,7 +707,7 @@ jQuery(function($){
     });
 
     $(document).on('click', '#applyCoupon', function(){
-      $('#coupon_error').html('');
+      $('#coupon_error, .error-message').html('');
       let coupon_cd = $('#coupon_cd').val();
       let orderVal = $(this).data('val');
       let url = $(this).data('url');
@@ -746,6 +746,34 @@ jQuery(function($){
       $('.coupon_cd_row').html('').addClass('hidden');
       let orderVal = $('#applyCoupon').attr('data-val');
       $('#totalPrice').html('$' + orderVal);
+    });
+
+    $(document).on('submit', '#orderForm', function(e){
+      e.preventDefault();
+      $('.error-message').remove();
+      $('#coupon_error').html('');
+      $('#orderFormBtn').attr('disabled', true).val('Loading...');
+
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data){
+          if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = data.url;
+          }
+        },
+        error: function(xhr, status, error){
+          if(xhr.status == 422) {
+            errorStyle = errorStyle.replace('-10px', 0);
+            $.each(xhr.responseJSON.errors, function(key, value) {
+              $('#' + key).after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+            });
+          }
+          $('#orderFormBtn').attr('disabled', false).val('Place Order');
+        }
+      });
     });
 });
 

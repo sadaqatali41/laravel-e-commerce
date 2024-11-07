@@ -39,5 +39,6 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::post('/logout', [UserController::class, 'logout'])->name('logout');
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/check-valid-coupon', [CheckoutController::class, 'checkValidCoupon'])->name('check.coupon');
+        Route::post('/process-order', [CheckoutController::class, 'processOrder'])->name('process.order');
     });
 });
