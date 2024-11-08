@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Support\Str;
 use App\Models\Admin\Coupon;
 use Illuminate\Http\Request;
@@ -14,6 +16,9 @@ class CheckoutController extends Controller
     public function index()
     {
         $cart = myCart();
+        if($cart['cartCount'] == 0) {
+            return redirect()->route('cart');
+        }
         return view('checkout', $cart);
     }
 
@@ -22,58 +27,9 @@ class CheckoutController extends Controller
         $coupon_cd = $request->coupon_cd;
         $orderVal = $request->orderVal;
         
-        $result = Coupon::where('code', '=', $coupon_cd)
-                            ->where('status', '=', 'A')
-                            ->first();
+        $result = validateCoupon($coupon_cd, $orderVal);
 
-        #check if coupon exists
-        if(is_null($result)) {
-            return response()->json([
-                'status' => 'error',
-                'error' => 'Invalid Coupon Code'
-            ]);
-        }
-
-        #check minimum order requirement
-        if($result->min_order > $orderVal) {
-            return response()->json([
-                'status' => 'error',
-                'error' => 'This Coupon is not valid for Subtotal ' . $orderVal
-            ]);
-        }
-
-        #check if the coupon is one-time use
-        if($result->is_one_time) {
-            #check from order table
-            $userId = auth()->id();
-            $hasUsedCoupon = Order::where('user_id', $userId)
-                                ->where('coupon_cd', $coupon_cd)
-                                ->exists();
-
-            if ($hasUsedCoupon) {
-                return response()->json([
-                    'status' => 'error',
-                    'error' => 'This Coupon has already been used.',
-                ]);
-            }
-        }
-
-        #apply the coupon based on type
-        $newOrderVal = $orderVal;
-        if ($result->type === 'P') {
-            $discountAmount = $orderVal * ($result->value * 0.01);
-            $newOrderVal = $orderVal - $discountAmount;
-        } elseif ($result->type === 'V') {
-            $discountAmount = $result->value;
-            $newOrderVal = max(0, $orderVal - $discountAmount);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Coupon Code is applied',
-            'orderVal' => round($newOrderVal),
-            'discountAmount' => round($discountAmount)
-        ], 200);
+        return response()->json($result, 200);
     }
 
     public function processOrder(Request $request)
@@ -92,6 +48,21 @@ class CheckoutController extends Controller
             'coupon_cd.exists' => 'Invalid Coupon Code',
         ]);
 
+        #fetch my cart
+        $cart = myCart();
+        $orderVal = $cart['totalPrice'];
+        $couponVal = 0;
+        $coupon_cd = null;
+        if($request->input('coupon_cd') != '') {
+            $coupon_cd = Str::upper($request->input('coupon_cd'));
+            $result = validateCoupon($coupon_cd, $orderVal);
+            if($result['status'] == 'success') {
+                $couponVal = $result['couponVal'];
+            } else {
+                return response()->json($result, 200);
+            }
+        }
+
         try {
             DB::beginTransaction();
 
@@ -105,24 +76,41 @@ class CheckoutController extends Controller
                 'pincode' => $request->input('zip'),
                 'address' => $request->input('address'),
                 'apartment' => $request->input('apartment'),
-                'coupon_cd' => Str::upper($request->input('coupon_cd')),
-                'coupon_val' => 0,
+                'coupon_cd' => $coupon_cd,
+                'coupon_val' => $couponVal,
                 'payment_type' => $request->input('payment_type'),
                 'payment_status' => 'PENDING',
                 'payment_id' => null,
-                'total_amt' => 0
+                'total_amt' => $orderVal
             ];
     
             $order = Order::create($orderData);
             $order_id = $order->id;
 
+            foreach($cart['carts'] as $key => $singleCart) {
+                $orderDetails = [
+                    'order_id' => $order_id,
+                    'product_id' => $singleCart->product->product_id,
+                    'product_attribute_id' => $singleCart->product_attribute_id,
+                    'price' => $singleCart->attribute->price,
+                    'quantity' => $singleCart->quantity
+                ];
+                OrderDetail::create($orderDetails);
+            }
+
+            #delete cart items
+            $userId = auth()->id();
+            Cart::where('user_id', '=', $userId)->delete();
+
             #commit the transaction
             DB::commit();
 
+            session()->flash('message', 'Your Order is Successfully Placed with Order ID : ' . $order_id);
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'Your Order is Successfully Placed'
-            ], 500);
+                'url' => route('user.thankyou')
+            ], 200);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -130,6 +118,14 @@ class CheckoutController extends Controller
                 'status' => 'error',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function thankYou() {
+        if(session()->has('message')) {
+            return view('thankyou');
+        } else {
+            return redirect()->route('cart');
         }
     }
 }

@@ -759,15 +759,19 @@ jQuery(function($){
         type: 'POST',
         data: $(this).serialize(),
         success: function(data){
-          if(data.status === 'success') {
-            alert(data.message);
+          if(data.status === 'success') {            
             window.location.href = data.url;
+          }
+          if(data.status === 'error') {
+            $('#coupon_error').css('color', 'red').html(data.error);
+            $('#orderFormBtn').attr('disabled', false).val('Place Order');
           }
         },
         error: function(xhr, status, error){
           if(xhr.status == 422) {
             errorStyle = errorStyle.replace('-10px', 0);
             $.each(xhr.responseJSON.errors, function(key, value) {
+              console.log(key)
               $('#' + key).after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
             });
           }
