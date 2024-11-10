@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Order;
+use Instamojo\Instamojo;
 use App\Models\OrderDetail;
 use Illuminate\Support\Str;
 use App\Models\Admin\Coupon;
@@ -34,6 +35,8 @@ class CheckoutController extends Controller
 
     public function processOrder(Request $request)
     {
+        $payment_url = '';
+
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email',
@@ -98,9 +101,30 @@ class CheckoutController extends Controller
                 OrderDetail::create($orderDetails);
             }
 
+            #payment gateway handling
+            if($request->payment_type === 'GT') {
+                $api = new Instamojo(
+                    config('services.instamojo.api_key'),
+                    config('services.instamojo.auth_token'),
+                    config('services.instamojo.endpoint')
+                );
+                $actualAmount = $orderVal - $couponVal;
+
+                $data = [
+                    'purpose' => 'E-commerce Payment',
+                    'amount' => $actualAmount,
+                    'buyer_name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'redirect_url' => route('user.gateway.redirect'),
+                ];
+                $response = $api->paymentRequestCreate($data);
+                print_r($response);die;
+            }
+
             #delete cart items
             $userId = auth()->id();
-            Cart::where('user_id', '=', $userId)->delete();
+            // Cart::where('user_id', '=', $userId)->delete();
 
             #commit the transaction
             DB::commit();
@@ -109,6 +133,7 @@ class CheckoutController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'payment_url' => $payment_url,
                 'url' => route('user.thankyou')
             ], 200);
 
@@ -116,6 +141,7 @@ class CheckoutController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
+                'payment_url' => $payment_url,
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -127,5 +153,9 @@ class CheckoutController extends Controller
         } else {
             return redirect()->route('cart');
         }
+    }
+
+    public function gatewayRedirect(Request $request) {
+        print_r($_GET);
     }
 }

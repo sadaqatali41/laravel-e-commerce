@@ -41,5 +41,6 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::post('/check-valid-coupon', [CheckoutController::class, 'checkValidCoupon'])->name('check.coupon');
         Route::post('/process-order', [CheckoutController::class, 'processOrder'])->name('process.order');
         Route::get('/thankyou', [CheckoutController::class, 'thankYou'])->name('thankyou');
+        Route::get('/gateway-redirect', [CheckoutController::class, 'gatewayRedirect'])->name('gateway.redirect');
     });
 });
