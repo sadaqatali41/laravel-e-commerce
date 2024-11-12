@@ -61,37 +61,38 @@
   @include('includes.footer')
   <!-- / footer -->
 
-  <!-- Login Modal -->  
-  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">                      
-        <div class="modal-body">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4>Login</h4>
-          <form class="aa-login-form" action="{{ route('user.check') }}" id="loginForm">
-            <label for="email">Email<span>*</span></label>
-            <input type="email" placeholder="Email" name="email" id="email_login" value="{{ Cookie::get('email') }}">
+  <!-- Login Modal -->
+  @guest  
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">                      
+          <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4>Login</h4>
+            <form class="aa-login-form" action="{{ route('user.check') }}" id="loginForm">
+              <label for="email">Email<span>*</span></label>
+              <input type="email" placeholder="Email" name="email" id="email_login" value="{{ Cookie::get('email') }}">
 
-            <label for="password">Password<span>*</span></label>
-            <input type="password" placeholder="Password" name="password" id="password_login" value="{{ Cookie::get('password') }}">
+              <label for="password">Password<span>*</span></label>
+              <input type="password" placeholder="Password" name="password" id="password_login" value="{{ Cookie::get('password') }}">
 
-            <button class="aa-browse-btn" type="submit" id="loginFormBtn">Login</button>
+              <button class="aa-browse-btn" type="submit" id="loginFormBtn">Login</button>
 
-            <label for="remember" class="rememberme">
-              <input type="checkbox" id="remember" name="remember" value="1" {{ Cookie::get('email') ? 'checked' : '' }}> Remember me 
-            </label>
-            <p class="aa-lost-password">
-              <a href="javascript:void(0)" id="lostPasswordModalOpen">Lost your password?</a>
-            </p>
-            <div class="aa-register-now">
-              Don't have an account?<a href="{{ route('user.registration') }}">Register now!</a>
-            </div>
-          </form>
-        </div>                        
+              <label for="remember" class="rememberme">
+                <input type="checkbox" id="remember" name="remember" value="1" {{ Cookie::get('email') ? 'checked' : '' }}> Remember me 
+              </label>
+              <p class="aa-lost-password">
+                <a href="javascript:void(0)" id="lostPasswordModalOpen">Lost your password?</a>
+              </p>
+              <div class="aa-register-now">
+                Don't have an account?<a href="{{ route('user.registration') }}">Register now!</a>
+              </div>
+            </form>
+          </div>                        
+        </div>
       </div>
     </div>
-  </div>   
-
+  @endguest
   <!-- Forget Password Modal -->  
   <div class="modal fade" id="forget-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
