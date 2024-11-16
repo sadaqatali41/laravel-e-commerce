@@ -103,11 +103,7 @@ class CheckoutController extends Controller
 
             #payment gateway handling
             if($request->payment_type === 'GT') {
-                $api = new Instamojo(
-                    config('services.instamojo.api_key'),
-                    config('services.instamojo.auth_token'),
-                    config('services.instamojo.endpoint')
-                );
+                
                 $actualAmount = $orderVal - $couponVal;
 
                 $data = [
@@ -118,8 +114,8 @@ class CheckoutController extends Controller
                     'phone' => $request->phone,
                     'redirect_url' => route('user.gateway.redirect'),
                 ];
-                $response = $api->paymentRequestCreate($data);
-                print_r($response);die;
+                // $response = $api->paymentRequestCreate($data);
+                // print_r($response);die;
             }
 
             #delete cart items

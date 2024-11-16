@@ -8,10 +8,10 @@
         "php": "^8.0.2",
         "doctrine/dbal": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
-        "instamojo/instamojo-php": "^1.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "srmklive/paypal": "~3.0",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "yajra/laravel-datatables-oracle": "10.0"
     },
@@ -32,8 +32,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-        "app/Helpers/Helper.php"
-    ]
+            "app/Helpers/Helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
