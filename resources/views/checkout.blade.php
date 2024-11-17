@@ -146,7 +146,7 @@
                                                 <input type="radio" id="cashdelivery" name="payment_type" value="COD" checked> Cash on Delivery 
                                             </label>
                                             <label for="paypal">
-                                                <input type="radio" id="paypal" name="payment_type" value="GT"> Instamojo 
+                                                <input type="radio" id="paypal" name="payment_type" value="GT"> Paypal 
                                             </label>                                            
                                             <input type="submit" value="Place Order" class="aa-browse-btn" id="orderFormBtn">                
                                         </div>

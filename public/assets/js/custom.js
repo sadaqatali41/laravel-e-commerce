@@ -759,8 +759,12 @@ jQuery(function($){
         type: 'POST',
         data: $(this).serialize(),
         success: function(data){
-          if(data.status === 'success') {            
-            window.location.href = data.url;
+          if(data.status === 'success') {
+            if(data.payment_url !== '') {
+              window.location.href = data.payment_url;
+            } else {
+              window.location.href = data.url;
+            }
           }
           if(data.status === 'error') {
             $('#coupon_error').css('color', 'red').html(data.error);

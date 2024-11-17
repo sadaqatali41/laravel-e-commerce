@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Order;
-use Instamojo\Instamojo;
 use App\Models\OrderDetail;
 use Illuminate\Support\Str;
-use App\Models\Admin\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class CheckoutController extends Controller
 {
@@ -106,21 +105,44 @@ class CheckoutController extends Controller
                 
                 $actualAmount = $orderVal - $couponVal;
 
-                $data = [
-                    'purpose' => 'E-commerce Payment',
-                    'amount' => $actualAmount,
-                    'buyer_name' => $request->name,
-                    'email' => $request->email,
-                    'phone' => $request->phone,
-                    'redirect_url' => route('user.gateway.redirect'),
-                ];
-                // $response = $api->paymentRequestCreate($data);
-                // print_r($response);die;
+                $provider = new PayPalClient;
+                $provider->setApiCredentials(config('paypal'));
+                $provider->getAccessToken();
+
+                $response = $provider->createOrder([
+                    "intent" => "CAPTURE",
+                    "purchase_units" => [
+                        [
+                            "amount" => [
+                                "currency_code" => "USD",
+                                "value" => $actualAmount
+                            ]
+                        ]
+                    ],
+                    "application_context" => [
+                        "cancel_url" => route('user.paypal.cancel'),
+                        "return_url" => route('user.paypal.success'),
+                    ]
+                ]);
+
+                if(!empty($response['id']) && $response['status'] == 'CREATED') {
+                    $txn_id = $response['id'];
+                    $order->update([
+                        'txn_id' => $txn_id, 
+                        'payment_id' => $txn_id
+                    ]);
+
+                    foreach($response['links'] as $link) {
+                        if($link['rel'] == 'approve') {
+                            $payment_url = $link['href'];
+                        }
+                    }
+                }
             }
 
             #delete cart items
             $userId = auth()->id();
-            // Cart::where('user_id', '=', $userId)->delete();
+            Cart::where('user_id', '=', $userId)->delete();
 
             #commit the transaction
             DB::commit();
@@ -143,15 +165,34 @@ class CheckoutController extends Controller
         }
     }
 
+    public function success(Request $request)
+    {
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $provider->getAccessToken();
+
+        $result = $provider->capturePaymentOrder($request->query('token'));
+        if ($result['status'] === 'COMPLETED') {
+            $txn_id = $result['id'];
+            $order = Order::where('txn_id', $txn_id)->first();
+            $order->update([
+                'payment_status' => 'SUCCESS'
+            ]);
+            $order_id = $order->id;
+            return redirect()->route('user.thankyou')->with('message', 'Your Order is Successfully Placed with Order ID : ' . $order_id);
+        }
+    }
+
+    public function cancel()
+    {
+
+    }
+
     public function thankYou() {
         if(session()->has('message')) {
             return view('thankyou');
         } else {
             return redirect()->route('cart');
         }
-    }
-
-    public function gatewayRedirect(Request $request) {
-        print_r($_GET);
     }
 }
