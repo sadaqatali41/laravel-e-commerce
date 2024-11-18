@@ -137,6 +137,9 @@ class CheckoutController extends Controller
                             $payment_url = $link['href'];
                         }
                     }
+                } else {
+                    $order->update(['payment_status' => 'FAILED']);
+                    $payment_url = route('user.paypal.cancel');
                 }
             }
 
@@ -181,11 +184,12 @@ class CheckoutController extends Controller
             $order_id = $order->id;
             return redirect()->route('user.thankyou')->with('message', 'Your Order is Successfully Placed with Order ID : ' . $order_id);
         }
+        return redirect()->route('user.paypal.cancel');
     }
 
     public function cancel()
     {
-
+        abort(403, 'Payment is failed. Please try after sometime.');
     }
 
     public function thankYou() {
