@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,5 +44,8 @@ Route::prefix('user')->name('user.')->group(function(){
         Route::get('/thankyou', [CheckoutController::class, 'thankYou'])->name('thankyou');
         Route::get('paypal/success', [CheckoutController::class, 'success'])->name('paypal.success');
         Route::get('paypal/cancel', [CheckoutController::class, 'cancel'])->name('paypal.cancel');
+        #user orders
+        Route::get('orders', [OrderController::class, 'order'])->name('orders');
+        Route::get('orders/{id}', [OrderController::class, 'orderDetail'])->name('order.detail');
     });
 });

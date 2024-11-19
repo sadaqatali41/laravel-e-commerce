@@ -10,8 +10,7 @@
                             <!-- start language -->
                             <div class="aa-language">
                                 <div class="dropdown">
-                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <img src="{{ asset('assets/img/flag/english.jpg') }}" alt="english flag">ENGLISH
                                         <span class="caret"></span>
                                     </a>
@@ -31,26 +30,32 @@
                             </div>
                             <!-- / language -->
 
-                            <!-- start currency -->
-                            <div class="aa-currency">
-                                <div class="dropdown">
-                                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <i class="fa fa-usd"></i>USD
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="#"><i class="fa fa-euro"></i>EURO</a></li>
-                                        <li><a href="#"><i class="fa fa-jpy"></i>YEN</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- / currency -->
                             <!-- start cellphone -->
                             <div class="cellphone hidden-xs">
-                                <p><span class="fa fa-phone"></span>00-62-658-658</p>
+                                <p><span class="fa fa-phone"></span>+91-8960962290</p>
                             </div>
                             <!-- / cellphone -->
+
+                            <!-- start currency -->
+                            @auth
+                                <div class="aa-currency">
+                                    <div class="dropdown">
+                                        <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <i class="fa fa-user"></i>{{ auth()->user()->name }}
+                                            <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <li>
+                                                <a href="{{ route('user.orders') }}"><i class="fa fa-list-ol" aria-hidden="true"></i>My Orders</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-user-md" aria-hidden="true"></i>My Profile</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endauth
+                            <!-- / currency -->                            
                         </div>
                         <!-- / header top left -->
                         <div class="aa-header-top-right">
@@ -59,15 +64,7 @@
                                     <li>
                                         <a href="{{ route('user.registration') }}">My Account</a>
                                     </li>                                    
-                                @endguest
-                                @auth
-                                    <li>
-                                        <a href="javascript:void(0)" style="color: #ff6666;">{{ auth()->user()->name }}</a>
-                                    </li>
-                                @endauth
-                                <li class="hidden-xs">
-                                    <a href="wishlist.html">Wishlist</a>
-                                </li>
+                                @endguest                                                                
                                 <li class="hidden-xs">
                                     <a href="{{ route('cart') }}">My Cart</a>
                                 </li>
@@ -78,7 +75,7 @@
                                 @endauth
                                 @guest
                                     <li>
-                                        <a href="" data-toggle="modal" data-target="#login-modal">Login</a>
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#login-modal">Login</a>
                                     </li>
                                 @else
                                     <li>
