@@ -4204,3 +4204,17 @@ img {
 .color-active {
   border-radius: 50%;
 }
+
+.order_detail{
+  margin-bottom: 10px;
+  font-weight: bold;
+  line-height: 25px;
+}
+
+.order_id_td{
+  background-color: #ff6666;
+}
+
+.order_id_td a{
+  color:white;
+}

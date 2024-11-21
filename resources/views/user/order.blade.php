@@ -41,7 +41,7 @@
                                     <tbody>
                                         @forelse ($orders as $item)
                                             <tr>
-                                                <td>
+                                                <td class="order_id_td">
                                                     <a href="{{ route('user.order.detail', $item->id) }}">
                                                         {{ $item->id }}
                                                     </a>

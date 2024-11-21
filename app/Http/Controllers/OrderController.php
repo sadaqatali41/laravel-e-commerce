@@ -19,7 +19,12 @@ class OrderController extends Controller
     public function orderDetail($id)
     {
         $user_id = auth()->id();
-        $order = Order::where([
+        $order = Order::with([
+                            'orderDetails.product',
+                            'orderDetails.productAttribute.color',
+                            'orderDetails.productAttribute.size',
+                        ])
+                        ->where([
                             'id' => $id,
                             'user_id' => $user_id
                         ])
