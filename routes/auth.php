@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
@@ -40,7 +41,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'brand' => BrandController::class,
             'tax' => TaxController::class,
             'user' => UserController::class,
-            'slider' => SliderController::class
+            'slider' => SliderController::class,
+            'order' => OrderController::class
         ]);
     });
 });

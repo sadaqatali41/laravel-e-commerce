@@ -2,6 +2,10 @@
     <a href="{{ route('admin.dashboard') }}">
         <i class="fas fa-tachometer-alt"></i>Dashboard</a>
 </li>
+<li class="@if(request()->routeIs('admin.order.*')) active @endif">
+    <a href="{{ route('admin.order.index') }}">
+        <i class="fas fa-shopping-basket"></i>Orders</a>
+</li>
 <li class="@if(request()->routeIs('admin.slider.*')) active @endif">
     <a href="{{ route('admin.slider.index') }}">
         <i class="fas fa-sliders-h"></i>Slider</a>
