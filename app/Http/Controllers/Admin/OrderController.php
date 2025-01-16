@@ -12,5 +12,9 @@ class OrderController extends Controller
         if($request->ajax()) {
             
         }
+        return view('admin.order.order', [
+            'exp' => 'index',
+            'title' => 'Manage Orders'
+        ]);
     }
 }
