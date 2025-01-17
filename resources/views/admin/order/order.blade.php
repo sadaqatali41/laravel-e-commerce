@@ -183,9 +183,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="overview-wrap">
-                        <h2 class="title-1">{{ $title }}</h2>
-                        <a href="{{ route('admin.coupon.create') }}" class="au-btn au-btn-icon au-btn--blue">
-                            <i class="zmdi zmdi-plus"></i>add</a>
+                        <h2 class="title-1">{{ $title }}</h2>                        
                     </div>
                 </div>
             </div>
@@ -196,15 +194,13 @@
                             <table class="table table-striped table-earning table-sm" id="example">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Title</th>
-                                        <th>Code</th>
-                                        <th>Value</th>
-                                        <th>Type</th>
-                                        <th>Min Order</th>
-                                        <th>One Time</th>
-                                        <th>Status</th>
-                                        <th>Manage</th>
+                                        <th>Order ID</th>
+                                        <th>Customer Details</th>
+                                        <th>Total Amount</th>
+                                        <th>Order Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Payment Type</th>
+                                        <th>Order Date</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -228,23 +224,22 @@
             $("#example").DataTable({
                 processing: true,
                 serverSide: true,
+                scrollX: true,
                 language: {
                     infoFiltered: ''
                 },
                 ajax: {
-                    url: "{{ route('admin.coupon.index') }}",
+                    url: "{{ route('admin.order.index') }}",
                     type: 'GET'
                 },
                 columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'title', name: 'title'},
-                    {data: 'code', name: 'code'},
-                    {data: 'value', name: 'value'},
-                    {data: 'type', name: 'type'},
-                    {data: 'min_order', name: 'min_order'},
-                    {data: 'is_one_time', name: 'is_one_time'},
-                    {data: 'status', name: 'status'},
-                    {data: 'manage', name: 'manage', orderable: false, searchable: false},
+                    {data: 'id'},
+                    {data: 'name'},
+                    {data: 'total_amt'},
+                    {data: 'order_status'},
+                    {data: 'payment_status'},
+                    {data: 'payment_type'},
+                    {data: 'created_at'}
                 ],
                 order: [0, 'desc']
             });
