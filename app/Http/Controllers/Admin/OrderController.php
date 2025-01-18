@@ -19,7 +19,13 @@ class OrderController extends Controller
                                     return '<a href="'.route('admin.order.edit', $row->id).'">'. $row->id .'</a>';
                                 })
                                 ->editColumn('name', function($row){
-                                    return $row->name . '<br>' . $row->email . '<br>' . $row->mobile . '<br>' . $row->address . ',' . $row->city . ',' . $row->state . ',' . $row->pincode;
+                                    $address = '';
+                                    $address .= '<p class="mb-0">'. $row->name .'</p>';
+                                    $address .= '<p class="mb-0"><small>'. $row->email .'</small></p>';
+                                    $address .= '<p class="mb-0"><small>'. $row->mobile .'</small></p>';
+                                    $address .= '<p class="mb-0"><small>'. $row->city .', '. $row->state .', '. $row->pincode .'</small></p>';
+
+                                    return $address;
                                 })
                                 ->editColumn('order_status', function($row){
                                     if($row->order_status === 1) {
@@ -52,6 +58,25 @@ class OrderController extends Controller
         return view('admin.order.order', [
             'exp' => 'index',
             'title' => 'Manage Orders'
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $order = Order::with([
+                            'orderDetails.product',
+                            'orderDetails.productAttribute.color',
+                            'orderDetails.productAttribute.size',
+                        ])
+                        ->where([
+                            'id' => $id
+                        ])
+                        ->first();
+        return view('admin.order.order')->with([
+            'exp' => 'edit',
+            'title' => 'Edit Order',
+            'order' => $order,
+
         ]);
     }
 }

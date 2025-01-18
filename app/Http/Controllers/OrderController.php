@@ -29,6 +29,9 @@ class OrderController extends Controller
                             'user_id' => $user_id
                         ])
                         ->first();
+        if($order === null) {
+            abort(500, 'Order detail is not found.');
+        }
         return view('user.order_detail')->with('order', $order);
     }
 }
