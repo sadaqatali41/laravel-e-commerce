@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('apartment');
             $table->string('coupon_cd')->nullable();
             $table->integer('coupon_val');
-            $table->integer('order_status')->default(1)->comment('1=Placed, 2=On The Way, 3=Delivered');
+            $table->integer('order_status')->default(1)->comment('1=Placed, 2=On The Way, 3=Delivered, 4=Cancelled');
             $table->enum('payment_type', ['COD', 'GT']);
             $table->enum('payment_status', ['PENDING', 'SUCCESS', 'FAILED']);
             $table->string('payment_id')->nullable();
