@@ -220,13 +220,35 @@
 
             $(document).on('change', '#order_status', function(){
                 let order_status = $(this).val();
-                let order_id = $('#order_id').val();                
+                let order_id = $('#order_id').val();
+                updateStatus('order_status', order_status, order_id);
             });
 
             $(document).on('change', '#payment_status', function(){
                 let payment_status = $(this).val();
-                let order_id = $('#order_id').val();                
+                let order_id = $('#order_id').val();
+                updateStatus('payment_status', payment_status, order_id);
             });
+
+            function updateStatus(columnName, columnVal, orderId) {
+                $.ajax({
+                    method: 'PUT',
+                    url: "{{ route('admin.order.update', ':order_id') }}".replace(':order_id', orderId),
+                    data: {
+                        'column_name': columnName,
+                        'column_val': columnVal
+                    },
+                    success: function(data) {
+                        if(data.status) {
+                            alert(data.message);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     </script>
 @endpush

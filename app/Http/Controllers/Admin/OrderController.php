@@ -79,4 +79,16 @@ class OrderController extends Controller
 
         ]);
     }
+
+    public function update(Request $request, Order $order) {
+        $column_name = $request->column_name;
+        $column_val = $request->column_val;
+        
+        $order->update([$column_name => $column_val]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $column_name == 'order_status' ? 'Order Status is updated' : 'Payment Status is updated'
+        ]);
+    }
 }
