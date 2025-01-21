@@ -10,7 +10,7 @@
                     <div class="row">                                                   
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="order_status" class=" form-control-label">Update Order Status</label>
+                                <label for="order_status" class="form-control-label">Update Order Status</label>
                                 <select name="order_status" id="order_status" class="form-control form-control-sm">
                                     <option value="1" @if($order->order_status === 1) selected @endif>Placed</option>
                                     <option value="2" @if($order->order_status === 2) selected @endif>On the way</option>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="payment_status" class=" form-control-label">Update Payment Status</label>
+                                <label for="payment_status" class="form-control-label">Update Payment Status</label>
                                 <select name="payment_status" id="payment_status" class="form-control form-control-sm">
                                     <option value="PENDING" @if($order->payment_status === 'PENDING') selected @endif>Pending</option>
                                     <option value="SUCCESS" @if($order->payment_status === 'SUCCESS') selected @endif>Success</option>
@@ -29,7 +29,13 @@
                                 </select>                                
                             </div>
                         </div>
-                        <input type="hidden" name="order_id" id="order_id" value="{{ $order->id }}">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="track_detail" class="form-control-label">Track Details</label>
+                                <button type="button" class="btn btn-sm btn-secondary btn-block" data-toggle="modal" data-target="#trackOrderModal">Track Order</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="order_id" value="{{ $order->id }}">
                     </div>
                 </div>
             </div>
@@ -151,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
             @break
         @default
             <div class="row">
@@ -185,6 +191,46 @@
     @endswitch
 @endsection
 
+@section('modal')
+    <!-- modal medium -->
+    <div class="modal fade" id="trackOrderModal" tabindex="-1" role="dialog" aria-labelledby="trackOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="trackOrderModalLabel">Medium Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.order.store') }}" id="orderTrackFrom">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="courier_name" class="form-control-label">Courier Name</label>
+                                    <input type="text" id="courier_name" name="courier_name" placeholder="Courier Name.." class="form-control form-control-sm">
+                                    <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="tracking_number" class="form-control-label">Tracking Number</label>
+                                    <input type="text" id="tracking_number" name="tracking_number" placeholder="Tracking Number.." class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-sm-2" style="margin-top: 2.1em;">
+                                <button type="submit" class="btn btn-primary btn-sm" id="orderTrackFromBtn">
+                                    <i class="fa fa-dot-circle-o"></i> Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <!-- end modal medium -->
+@endsection
 @push('script')
     <script>
         $(function(){

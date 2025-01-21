@@ -53,7 +53,7 @@
 
             <!-- MAIN CONTENT-->
             <div class="main-content">
-                <div class="section__content">
+                <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <x-alert />
                         @yield('content')
@@ -61,6 +61,7 @@
                 </div>
             </div>
             <!-- END MAIN CONTENT-->
+            @yield('modal', '')
             <!-- END PAGE CONTAINER-->
         </div>
     </div>

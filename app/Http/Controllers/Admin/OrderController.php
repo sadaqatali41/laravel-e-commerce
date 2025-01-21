@@ -61,6 +61,11 @@ class OrderController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        
+    }
+
     public function edit($id)
     {
         $order = Order::with([
