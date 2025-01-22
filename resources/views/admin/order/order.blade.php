@@ -29,12 +29,12 @@
                                 </select>                                
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label for="track_detail" class="form-control-label">Track Details</label>
                                 <button type="button" class="btn btn-sm btn-secondary btn-block" data-toggle="modal" data-target="#trackOrderModal">Track Order</button>
                             </div>
-                        </div>
+                        </div>                        
                         <input type="hidden" id="order_id" value="{{ $order->id }}">
                     </div>
                 </div>
@@ -193,7 +193,7 @@
 
 @section('modal')
     <!-- modal medium -->
-    <div class="modal fade" id="trackOrderModal" tabindex="-1" role="dialog" aria-labelledby="trackOrderModalLabel" aria-hidden="true">
+    <div class="modal fade" id="trackOrderModal" tabindex="-1" role="dialog" aria-labelledby="trackOrderModalLabel" data-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,7 +209,9 @@
                                 <div class="form-group">
                                     <label for="courier_name" class="form-control-label">Courier Name</label>
                                     <input type="text" id="courier_name" name="courier_name" placeholder="Courier Name.." class="form-control form-control-sm">
-                                    <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                    @isset($order->id)
+                                        <input type="hidden" name="order_id" value="{{ $order->id }}">                                        
+                                    @endisset
                                 </div>
                             </div>
                             <div class="col-sm-5">
@@ -225,6 +227,19 @@
                             </div>
                         </div>
                     </form>
+                    @isset($order->trackings)
+                        <ul class="timeline">
+                            @foreach($order->trackings as $tracking)
+                            <li class="timeline-item">
+                                <div class="timeline-content">                                        
+                                    <p><strong>Courier Name:</strong> {{ $tracking->courier_name }}</p>
+                                    <p><strong>Tracking Number:</strong> {{ $tracking->tracking_number }}</p>
+                                    <small><i class="far fa-clock"></i> {{ $tracking->updated_at }}</small>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
+                    @endisset
                 </div>                
             </div>
         </div>
@@ -295,6 +310,32 @@
                     }
                 });
             }
+
+            let errorStyle = `margin-top: 0; color: red; display: block`;
+
+            $(document).on('submit', '#orderTrackFrom', function(e){
+                e.preventDefault();
+                $('.error-message').remove();
+                $('#orderTrackFromBtn').attr('disabled', true).text('Loading...');
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data){
+                        if(data.status === 'success') {
+                            alert(data.message);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        $.each(xhr.responseJSON.errors, function(key, value) {
+                            $('#' + key).after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+                        });                        
+                        $('#orderTrackFromBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    }
+                });
+            });
         });
     </script>
 @endpush
