@@ -67,8 +67,13 @@
                             Payment ID: {{$order->txn_id}}
                         @endif                        
                     </div>
-                    {{-- <b>Track Details</b><br/>
-                    {{$order->track_details}}  --}}
+                    <h4>Trackings Details : </h4>
+                    <dl style="margin-left: 1.5em;">
+                        @foreach($order->trackings as $key => $tracking)
+                            <dt>{{ $tracking->trackings }}</dt>
+                            <dd style="margin-left: 1em; font-style: italic;"><i class="fa fa-clock-o"></i> {{ $tracking->created_at }}</dd>
+                        @endforeach
+                    </dl>
                 </div>
                 <div class="col-md-12">
                     <div class="cart-view-area">

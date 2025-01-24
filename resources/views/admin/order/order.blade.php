@@ -204,20 +204,14 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('admin.order.store') }}" id="orderTrackFrom">
-                        <div class="row">
+                        <div class="row">                            
                             <div class="col-sm-5">
                                 <div class="form-group">
-                                    <label for="courier_name" class="form-control-label">Courier Name</label>
-                                    <input type="text" id="courier_name" name="courier_name" placeholder="Courier Name.." class="form-control form-control-sm">
+                                    <label for="trackings" class="form-control-label">Tracking Details</label>
+                                    <input type="text" id="trackings" name="trackings" placeholder="Tracking Details.." class="form-control form-control-sm">
                                     @isset($order->id)
                                         <input type="hidden" name="order_id" value="{{ $order->id }}">                                        
                                     @endisset
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <div class="form-group">
-                                    <label for="tracking_number" class="form-control-label">Tracking Number</label>
-                                    <input type="text" id="tracking_number" name="tracking_number" placeholder="Tracking Number.." class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-sm-2" style="margin-top: 2.1em;">
@@ -228,17 +222,12 @@
                         </div>
                     </form>
                     @isset($order->trackings)
-                        <ul class="timeline">
-                            @foreach($order->trackings as $tracking)
-                            <li class="timeline-item">
-                                <div class="timeline-content">                                        
-                                    <p><strong>Courier Name:</strong> {{ $tracking->courier_name }}</p>
-                                    <p><strong>Tracking Number:</strong> {{ $tracking->tracking_number }}</p>
-                                    <small><i class="far fa-clock"></i> {{ $tracking->updated_at }}</small>
-                                </div>
-                            </li>
+                        <dl>
+                            @foreach($order->trackings as $key => $tracking)
+                                <dt class="font-weight-normal">{{ $tracking->trackings }}</dt>
+                                <dd class="font-weight-light font-italic m-l-15"><i class="far fa-clock"></i> {{ $tracking->created_at }}</dd>
                             @endforeach
-                        </ul>
+                        </dl>
                     @endisset
                 </div>                
             </div>

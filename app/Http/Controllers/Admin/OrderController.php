@@ -63,24 +63,19 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'courier_name' => 'required|string|max:100',
-            'tracking_number' => 'required|unique:order_trackings,tracking_number|max:100',
-        ], [
-            'courier_name.required' => 'Courier Name is required',
-            'courier_name.string' => 'Courier name should be string',
-            'courier_name.max' => 'Courier name should <= 100 chars',
-            'tracking_number.required' => 'Tracking Number is required',
-            'tracking_number.unique' => 'Tracking Number already exists',
-            'tracking_number.max' => 'Tracking number should <= 100 chars',
+        $this->validate($request, [            
+            'trackings' => 'required|string|max:100',
+        ], [            
+            'trackings.required' => 'Tracking Detail is required',            
+            'trackings.string' => 'Tracking Detail should be string',            
+            'trackings.max' => 'Tracking Detail should <= 100 chars',
         ]);
 
         $order_id = $request->order_id;
         $order = Order::find($order_id);
 
-        $order->trackings()->create([
-            'courier_name' => $request->courier_name,
-            'tracking_number' => $request->tracking_number,
+        $order->trackings()->create([            
+            'trackings' => $request->trackings,
 
         ]);
 
@@ -97,7 +92,7 @@ class OrderController extends Controller
                             'orderDetails.productAttribute.color',
                             'orderDetails.productAttribute.size',
                             'trackings' => function($q) {
-                                return $q->latest();
+                                return $q->oldest();
                             }
                         ])
                         ->where([

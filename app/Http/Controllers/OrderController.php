@@ -23,6 +23,9 @@ class OrderController extends Controller
                             'orderDetails.product',
                             'orderDetails.productAttribute.color',
                             'orderDetails.productAttribute.size',
+                            'trackings' => function($q) {
+                                return $q->oldest();
+                            }
                         ])
                         ->where([
                             'id' => $id,
