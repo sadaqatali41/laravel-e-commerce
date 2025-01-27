@@ -7,12 +7,16 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function order() 
+    public function order(Request $request) 
     {
         $user_id = auth()->id();
         $orders = Order::where('user_id', $user_id)
                         ->latest()
-                        ->get();
+                        ->paginate(5);
+        if($request->ajax()) {
+            $view = view('data', compact('orders'))->render();
+            return response()->json(['html' => $view]);
+        }
         return view('user.order')->with('orders', $orders);
     }
 
