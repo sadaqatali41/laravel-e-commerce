@@ -783,5 +783,39 @@ jQuery(function($){
         }
       });
     });
+
+    // user order pagination
+    var page = 1;
+
+    $(document).on('click', '#loadMoreOrder', function(){
+      let url = $(this).data('url');
+      let EL = $(this);
+      page++;
+      loadMoreOrders(page, url, EL);
+    });
+
+  function loadMoreOrders(page, url, buttonEle) {
+
+    $.ajax({
+      url: url + "?page=" + page,
+      datatype: "html",
+      type: "GET",
+      beforeSend: function () {
+        buttonEle.attr('disabled', true).html('Loading...');
+      }
+    })
+    .done(function (response) {
+      console.log(response.html);
+      if (response.html == '') {
+        buttonEle.hide();
+        return;
+      }
+      buttonEle.attr('disabled', false).html('Load More Orders...');
+      $("#orderTblBody").append(response.html);
+    })
+    .fail(function (jqXHR, ajaxOptions, thrownError) {
+      console.log('Server error occured');
+    });  
+  }
 });
 

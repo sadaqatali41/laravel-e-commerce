@@ -43,11 +43,13 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @if(count($orders) >= 10)
                             <div class="row">
                                 <div class="col-md-12 text-center">
-                                    <button type="button" class="btn btn-primary" id="loadMoreOrder">Load More Orders...</button>
+                                    <button type="button" class="btn btn-primary" id="loadMoreOrder" data-url="{{ route('user.orders') }}">Load More Orders...</button>
                                 </div>
-                            </div>                                                       
+                            </div>
+                            @endif                                                       
                         </div>
                     </div>
                 </div>

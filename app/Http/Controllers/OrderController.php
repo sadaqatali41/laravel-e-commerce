@@ -12,9 +12,9 @@ class OrderController extends Controller
         $user_id = auth()->id();
         $orders = Order::where('user_id', $user_id)
                         ->latest()
-                        ->paginate(5);
+                        ->paginate(10);
         if($request->ajax()) {
-            $view = view('data', compact('orders'))->render();
+            $view = view('user.order_tmp', compact('orders'))->render();
             return response()->json(['html' => $view]);
         }
         return view('user.order')->with('orders', $orders);
