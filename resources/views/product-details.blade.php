@@ -144,7 +144,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="review">
                                     <div class="aa-product-review-area">
-                                        <h4>2 Reviews for T-Shirt</h4>
+                                        <h4>2 Reviews for : {{ $product->prod_name }}</h4>
                                         <ul class="aa-review-nav">
                                             {{-- single review --}}
                                             <li>
@@ -172,33 +172,25 @@
                                             </li>                                            
                                         </ul>
                                         <h4>Add a review</h4>
-                                        <div class="aa-your-rating">
-                                            <p>Your Rating</p>
-                                            <a href="#"><span class="fa fa-star-o"></span></a>
-                                            <a href="#"><span class="fa fa-star-o"></span></a>
-                                            <a href="#"><span class="fa fa-star-o"></span></a>
-                                            <a href="#"><span class="fa fa-star-o"></span></a>
-                                            <a href="#"><span class="fa fa-star-o"></span></a>
-                                        </div>
                                         <!-- review form -->
                                         <form action="" class="aa-review-form">
+                                            <div class="form-group">                                                
+                                                <label for="rating">Your Rating</label>
+                                                <select class="form-control" name="rating" required>
+                                                    <option value="">Select Rating</option>
+                                                    <option value="1">Worst</option>
+                                                    <option value="2">Bad</option>
+                                                    <option value="3">Good</option>
+                                                    <option value="4">Very Good</option>
+                                                    <option value="5">Fantastic</option>
+                                                </select>
+                                                <input type="hidden" name="prod_id" value="{{ $product->id }}">
+                                            </div>
                                             <div class="form-group">
                                                 <label for="message">Your Review</label>
                                                 <textarea class="form-control" rows="3" id="message"></textarea>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="name">Name</label>
-                                                <input type="text" class="form-control" id="name"
-                                                    placeholder="Name">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="email" class="form-control" id="email"
-                                                    placeholder="example@gmail.com">
-                                            </div>
-
-                                            <button type="submit"
-                                                class="btn btn-default aa-review-submit">Submit</button>
+                                            <button type="submit" class="btn btn-default aa-review-submit">Submit</button>
                                         </form>
                                     </div>
                                 </div>
