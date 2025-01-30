@@ -144,39 +144,44 @@
                                 </div>
                                 <div class="tab-pane fade" id="review">
                                     <div class="aa-product-review-area">
-                                        <h4>2 Reviews for : {{ $product->prod_name }}</h4>
+                                        @if($product->reviews()->exists())
+                                        <h4>{{ count($product->reviews) }} Review(s) for : {{ $product->prod_name }}</h4>
                                         <ul class="aa-review-nav">
-                                            {{-- single review --}}
+                                            @foreach($product->reviews as $review)
                                             <li>
                                                 <div class="media">
                                                     <div class="media-left">
-                                                        <a href="#">
+                                                        <a href="javascript:void(0)">
                                                             <img class="media-object" src="{{ asset('assets/img/testimonial-img-3.jpg') }}"
                                                                 alt="girl image">
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
                                                         <h4 class="media-heading">
-                                                            <strong>Marla Jobs</strong> - <span>March 26, 2016</span>
+                                                            <strong>{{ $review->user->name }}</strong> - <span>{{ $review->created_at }}</span>
                                                         </h4>
                                                         <div class="aa-product-rating">
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star"></span>
-                                                            <span class="fa fa-star-o"></span>
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                @if($i <= $review->rating)
+                                                                    <span class="fa fa-star"></span>
+                                                                @else
+                                                                    <span class="fa fa-star-o"></span>
+                                                                @endif                                                            
+                                                            @endfor
                                                         </div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                                        <p>{{ $review->review }}</p>
                                                     </div>
                                                 </div>
-                                            </li>                                            
+                                            </li>
+                                            @endforeach                                            
                                         </ul>
+                                        @endif
                                         <h4>Add a review</h4>
                                         <!-- review form -->
-                                        <form action="" class="aa-review-form">
+                                        <form id="productReviewForm" action="{{ route('user.product-review.store') }}" class="aa-review-form">
                                             <div class="form-group">                                                
                                                 <label for="rating">Your Rating</label>
-                                                <select class="form-control" name="rating" required>
+                                                <select class="form-control" name="rating" id="rating">
                                                     <option value="">Select Rating</option>
                                                     <option value="1">Worst</option>
                                                     <option value="2">Bad</option>
@@ -184,13 +189,13 @@
                                                     <option value="4">Very Good</option>
                                                     <option value="5">Fantastic</option>
                                                 </select>
-                                                <input type="hidden" name="prod_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="message">Your Review</label>
-                                                <textarea class="form-control" rows="3" id="message"></textarea>
+                                                <label for="product_review">Your Review</label>
+                                                <textarea class="form-control" rows="3" name="product_review" id="product_review"></textarea>
                                             </div>
-                                            <button type="submit" class="btn btn-default aa-review-submit">Submit</button>
+                                            <button type="submit" id="productReviewFormBtn" class="btn btn-default aa-review-submit">Submit</button>
                                         </form>
                                     </div>
                                 </div>

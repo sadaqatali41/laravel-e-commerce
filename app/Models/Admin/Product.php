@@ -8,6 +8,7 @@ use App\Models\Admin\Color;
 use App\Models\Admin\Category;
 use App\Models\Admin\SubCategory;
 use App\Models\Admin\ProductAttribute;
+use App\Models\ProductReview;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -51,6 +52,11 @@ class Product extends Model
     public function sizes()
     {
         return $this->belongsToMany(Size::class, 'product_attributes', 'product_id', 'size_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
 
     // ! define scope here

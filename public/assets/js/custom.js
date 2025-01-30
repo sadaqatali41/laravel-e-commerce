@@ -817,5 +817,30 @@ jQuery(function($){
       console.log('Server error occured');
     });  
   }
+
+  $(document).on('submit', '#productReviewForm', function(e){
+    e.preventDefault();
+    $('.error-message').remove();
+    $('#productReviewFormBtn').attr('disabled', true).text('Loading...');
+
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'POST',
+      data: $(this).serialize(),
+      success: function(data){
+        if(data.status === 'success') {
+          alert(data.message);
+          window.location.href = data.url;
+        }
+      },
+      error: function(xhr, status, error){
+        errorStyle = errorStyle.replace('-10px', 0);
+        $.each(xhr.responseJSON.errors, function(key, value) {
+          $('#' + key).after('<span class="error-message" style="'+ errorStyle +'">' + value[0] + '</span>');
+        });        
+        $('#productReviewFormBtn').attr('disabled', false).text('Submit');
+      }
+    });
+  });
 });
 

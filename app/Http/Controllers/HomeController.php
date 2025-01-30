@@ -235,6 +235,11 @@ class HomeController extends Controller
                             'category:id,name,slug',
                             'attributes' => function($query) {
                                 $query->with('color', 'size');
+                            },
+                            'reviews' => function($q) {
+                                return $q->where('status', '=', 'A')
+                                            ->latest()
+                                            ->with('user:id,name');
                             }                            
                         ])
                         ->where('slug', $slug)
