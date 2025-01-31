@@ -830,7 +830,7 @@ jQuery(function($){
       success: function(data){
         if(data.status === 'success') {
           alert(data.message);
-          window.location.href = data.url;
+          window.location.reload();
         }
       },
       error: function(xhr, status, error){

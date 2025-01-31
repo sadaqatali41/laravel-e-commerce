@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products', 'id')->cascadeOnDelete();
             $table->integer('rating');
             $table->text('review');
-            $table->enum('status', ['A', 'I'])->comment('A=Approved, I=Inactive');
+            $table->enum('status', ['A', 'I'])->default('I')->comment('A=Approved, I=Inactive');
             $table->timestamps();
         });
     }
