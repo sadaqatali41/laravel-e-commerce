@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TaxController;
@@ -42,7 +43,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             'tax' => TaxController::class,
             'user' => UserController::class,
             'slider' => SliderController::class,
-            'order' => OrderController::class
+            'order' => OrderController::class,
+            'product-review' => ProductReviewController::class
         ]);
     });
 });
