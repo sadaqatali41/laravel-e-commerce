@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -25,11 +26,26 @@ class CartController extends Controller
         $quantity = $request->quantity;
         $session_id = Session::getId();
 
-        $pa_id = ProductAttribute::select('id')
+        // Fetch Product Attribute ID
+        $pa_id = ProductAttribute::select('id', 'qty')
                                 ->where('product_id', '=', $product_id)
                                 ->where('size_id', '=', $size_id)
                                 ->where('color_id', '=', $color_id)
                                 ->first();
+
+        // Fetch Successfully ordered quantity for above product_attributes_id(pa_id)
+        $orderedQuantity = OrderDetail::join('orders', 'orders.id', '=', 'order_details.order_id')
+                                        ->where('order_details.product_attribute_id', '=', $pa_id->id)
+                                        ->where('order_details.product_id', '=', $product_id)
+                                        ->sum('order_details.quantity');
+        // Calculate remaining stock
+        $remainingStock = $pa_id->qty - $orderedQuantity;
+        if($quantity > $remainingStock) {
+            return response()->json([
+                'message'   => "Stock is not available"
+            ], 200);
+        }
+
         if(auth()->check()) {
             $user_id = auth()->user()->id;
             Cart::updateOrCreate([
