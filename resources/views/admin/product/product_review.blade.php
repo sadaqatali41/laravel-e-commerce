@@ -70,6 +70,32 @@
                 ],
                 order: [0, 'desc']
             });
+
+            $(document).on('click', '.mark_as', function(){
+                if(!confirm('Do you want to perform this action?')) {
+                    return false;
+                }
+                let id = $(this).data('id');
+                let status = $(this).data('s');
+
+                $.ajax({
+                    type: 'PUT',
+                    url: "{{ route('admin.product-review.update', ':reviewId') }}".replace(':reviewId', id),
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    success: function(data) {
+                        if(data.status === 'success') {
+                            alert(data.message);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            });
         });
     </script>
 @endpush

@@ -46,4 +46,10 @@ class ProductReviewController extends Controller
             'title' => 'Manage Product Review',
         ]);
     }
+
+    public function update(Request $request, ProductReview $productReview)
+    {
+        $productReview->update(['status' => $request->status]);
+        return response()->json(['status' => 'success', 'message' => 'Product Review is updated.'], 200);
+    }
 }
