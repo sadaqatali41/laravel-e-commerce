@@ -43,6 +43,9 @@ class SliderController extends Controller
                                     if($request->category_id) {
                                         $query->where('category_id', $request->category_id);
                                     }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
                                 })                                
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])

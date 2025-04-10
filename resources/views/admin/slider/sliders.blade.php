@@ -174,6 +174,15 @@
                                 <select id="category_id" class="form-control form-control-sm"></select>
                             </div>
                         </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="status" class="form-control form-control-sm rounded">
+                                    <option value="">--Select Status--</option>
+                                    <option value="A">Active</option>
+                                    <option value="I">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
@@ -220,6 +229,7 @@
                     type: 'GET',
                     data: function(d) {
                         d.category_id = $('#category_id').val();
+                        d.status = $('#status').val();
                     }
                 },
                 columns: [
@@ -253,6 +263,10 @@
             });
 
             $(document).on('change', '#category_id', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#status', () => {
                 table.draw();
             });
 
