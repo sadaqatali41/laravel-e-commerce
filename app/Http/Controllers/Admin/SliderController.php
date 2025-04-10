@@ -83,7 +83,9 @@ class SliderController extends Controller
 
         Slider::create($formFields);
 
-        return redirect()->back()->with('success', 'Slider is created successfully.');
+        session()->flash('success', 'Slider is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show(Slider $slider)
@@ -135,7 +137,9 @@ class SliderController extends Controller
 
         $slider->update($formFields);
 
-        return redirect()->back()->with('success', 'Slider is updated successfully.');
+        session()->flash('success', 'Slider is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy(Slider $slider)

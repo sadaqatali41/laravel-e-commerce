@@ -18,8 +18,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.slider.store') }}" enctype="multipart/form-data" method="post">
-                                @csrf
+                            <form id="sliderAddForm" action="{{ route('admin.slider.store') }}" enctype="multipart/form-data" method="post">                                
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -68,7 +67,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="sliderAddFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -91,9 +90,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.slider.update', $slider->id) }}" enctype="multipart/form-data" method="post">
-                                @csrf
-                                @method('PUT')
+                            <form id="sliderEditForm" action="{{ route('admin.slider.update', $slider->id) }}" enctype="multipart/form-data">                                
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -150,7 +147,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="sliderEditFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -243,6 +240,73 @@
                     },
                     cache: true
                 }
+            });
+
+            $(document).on('submit', '#sliderAddForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#sliderAddFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            if ($input.hasClass('select2-hidden-accessible')) {
+                                $input.next('.select2-container').after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            } else {
+                                $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            }
+                        });                        
+                        $('#sliderAddFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
+
+            $(document).on('submit', '#sliderEditForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                formData.append('_method', 'PUT');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#sliderEditFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            if ($input.hasClass('select2-hidden-accessible')) {
+                                $input.next('.select2-container').after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            } else {
+                                $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            }
+                        });                        
+                        $('#sliderEditFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
             });
         });
     </script>
