@@ -168,9 +168,16 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <select id="category_id" class="form-control form-control-sm"></select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <table class="table table-striped table-earning table-sm" id="example">
+                            <table class="table table-striped table-earning table-sm" id="example" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -201,7 +208,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 scrollX: true,
@@ -210,7 +217,10 @@
                 },
                 ajax: {
                     url: "{{ route('admin.slider.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.category_id = $('#category_id').val();
+                    }
                 },
                 columns: [
                     {data: 'id', name: 'id'},
@@ -240,6 +250,10 @@
                     },
                     cache: true
                 }
+            });
+
+            $(document).on('change', '#category_id', () => {
+                table.draw();
             });
 
             $(document).on('submit', '#sliderAddForm', function(e){

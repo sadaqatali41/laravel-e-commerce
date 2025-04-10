@@ -38,6 +38,11 @@ class SliderController extends Controller
                                     } else {
                                         return 'NA';
                                     }
+                                })
+                                ->filter(function($query) use ($request){
+                                    if($request->category_id) {
+                                        $query->where('category_id', $request->category_id);
+                                    }
                                 })                                
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
