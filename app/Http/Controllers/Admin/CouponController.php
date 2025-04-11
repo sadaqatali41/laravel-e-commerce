@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Admin\Coupon;
 use Illuminate\Http\Request;
@@ -40,6 +41,18 @@ class CouponController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
+                                })
+                                ->filter(function($query) use ($request){
+                                    $array = [0, 1];
+                                    if($request->type) {
+                                        $query->where('type', $request->type);
+                                    }
+                                    if(Arr::has($array, $request->is_one_time)) {
+                                        $query->where('is_one_time', $request->is_one_time);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
                                 })                                
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
@@ -76,7 +89,9 @@ class CouponController extends Controller
 
         Coupon::create($formFields);
 
-        return redirect()->back()->with('success', 'Coupon is created successfully.');
+        session()->flash('success', 'Coupon is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show($id)
@@ -109,7 +124,9 @@ class CouponController extends Controller
 
         $coupon->update($formFields);
 
-        return redirect()->back()->with('success', 'Coupon is updated successfully.');
+        session()->flash('success', 'Coupon is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy($id)
