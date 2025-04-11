@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\Brand;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\DataTables;
 
 class BrandController extends Controller
 {
@@ -42,6 +43,15 @@ class BrandController extends Controller
                                         return 'No';
                                     }
                                 })
+                                ->filter(function($query) use ($request){
+                                    $array = [0, 1];
+                                    if(Arr::has($array, $request->is_home)) {
+                                        $query->where('is_home', $request->is_home);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }) 
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -82,7 +92,9 @@ class BrandController extends Controller
 
         Brand::create($formFields);
 
-        return redirect()->back()->with('success', 'Brand is created successfully.');
+        session()->flash('success', 'Brand is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show($id)
@@ -129,7 +141,9 @@ class BrandController extends Controller
 
         $brand->update($formFields);
 
-        return redirect()->back()->with('success', 'Brand is updated successfully.');
+        session()->flash('success', 'Brand is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy($id)
