@@ -18,8 +18,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.category.store') }}" enctype="multipart/form-data" method="post">
-                                @csrf
+                            <form id="categoryAddForm" action="{{ route('admin.category.store') }}" enctype="multipart/form-data" method="post">                                
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -64,7 +63,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="categoryAddFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -87,9 +86,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.category.update', $category->id) }}" enctype="multipart/form-data" method="post">
-                                @csrf
-                                @method('PUT')
+                            <form id="categoryEditForm" action="{{ route('admin.category.update', $category->id) }}" enctype="multipart/form-data" method="post">                                
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -137,7 +134,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="categoryEditFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -158,6 +155,24 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <select id="is_home" class="form-control form-control-sm rounded">
+                                <option value="">Select Visibility</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="status" class="form-control form-control-sm rounded">
+                                    <option value="">--Select Status--</option>
+                                    <option value="A">Active</option>
+                                    <option value="I">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
                             <table class="table table-striped table-earning table-sm" id="example">
@@ -190,7 +205,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
@@ -198,7 +213,11 @@
                 },
                 ajax: {
                     url: "{{ route('admin.category.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.is_home = $('#is_home').val();
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [
                     {data: 'id', name: 'id'},
@@ -210,6 +229,73 @@
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
                 order: [0, 'desc']
+            });
+            
+            $(document).on('change', '#is_home', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#status', () => {
+                table.draw();
+            });
+
+            $(document).on('submit', '#categoryAddForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#categoryAddFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);                            
+                            $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#categoryAddFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
+
+            $(document).on('submit', '#categoryEditForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                formData.append('_method', 'PUT');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#categoryEditFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);                            
+                            $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#categoryEditFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
             });
         });
     </script>

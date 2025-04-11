@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Admin\Category;
+use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
@@ -43,6 +44,15 @@ class CategoryController extends Controller
                                     }
                                         
                                 })
+                                ->filter(function($query) use ($request){
+                                    $array = [0, 1];
+                                    if(Arr::has($array, $request->is_home)) {
+                                        $query->where('is_home', $request->is_home);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }) 
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -85,7 +95,9 @@ class CategoryController extends Controller
 
         Category::create($formFields);
 
-        return redirect()->back()->with('success', 'Category is created successfully.');
+        session()->flash('success', 'Category is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show($id)
@@ -134,7 +146,9 @@ class CategoryController extends Controller
 
         $category->update($formFields);
 
-        return redirect()->back()->with('success', 'Category is updated successfully.');
+        session()->flash('success', 'Category is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy($id)
