@@ -25,7 +25,12 @@ class ColorController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
-                                })                                
+                                })   
+                                ->filter(function($query) use ($request){
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                })                              
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -56,7 +61,9 @@ class ColorController extends Controller
 
         Color::create($formFields);
 
-        return redirect()->back()->with('success', 'Color is created successfully.');
+        session()->flash('success', 'Color is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show(Color $color)
@@ -84,7 +91,9 @@ class ColorController extends Controller
 
         $color->update($formFields);
 
-        return redirect()->back()->with('success', 'Color is updated successfully.');
+        session()->flash('success', 'Color is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy(Color $color)
