@@ -38,6 +38,14 @@ class SubCategoryController extends Controller
                                         return 'NA';
                                     }
                                 })
+                                ->filter(function($query) use ($request){
+                                    if($request->category_id) {
+                                        $query->where('category_id', $request->category_id);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }) 
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -83,7 +91,9 @@ class SubCategoryController extends Controller
 
         SubCategory::create($formFields);
 
-        return redirect()->back()->with('success', 'Sub Category is created successfully.');
+        session()->flash('success', 'Sub Category is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show(SubCategory $subCategory)
@@ -136,7 +146,9 @@ class SubCategoryController extends Controller
 
         $subcategory->update($formFields);
 
-        return redirect()->back()->with('success', 'Sub Category is updated successfully.');
+        session()->flash('success', 'Sub Category is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy(SubCategory $subCategory)

@@ -18,8 +18,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.subcategory.store') }}" enctype="multipart/form-data" method="post">
-                                @csrf
+                            <form id="subCategoryAddForm" action="{{ route('admin.subcategory.store') }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -76,7 +75,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="subCategoryAddFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -100,15 +99,13 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.subcategory.update', $subcategory->id) }}" enctype="multipart/form-data" method="post">
-                                @csrf
-                                @method('PUT')
+                            <form id="subCategoryEditForm" action="{{ route('admin.subcategory.update', $subcategory->id) }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="category_id" class=" form-control-label">Category Name</label>
                                             <select name="category_id" id="category_id" class="form-control form-control-sm">
-                                                <option selected value="{{ $subcategory->id }}">{{ $subcategory->category->name }}</option>
+                                                <option selected value="{{ $subcategory->category_id }}">{{ $subcategory->category->name }}</option>
                                             </select>
                                             @error('category_id')
                                                 <span class="help-block status--denied">{{ $message }}</span>
@@ -152,7 +149,7 @@
                                         </div>
                                     </div>  
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="subCategoryEditFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -174,9 +171,25 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <select id="category_id" class="form-control form-control-sm"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="status" class="form-control form-control-sm rounded">
+                                    <option value="">--Select Status--</option>
+                                    <option value="A">Active</option>
+                                    <option value="I">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <table class="table table-striped table-earning table-sm" id="example">
+                            <table class="table table-striped table-earning table-sm" id="example" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -206,7 +219,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
@@ -214,7 +227,11 @@
                 },
                 ajax: {
                     url: "{{ route('admin.subcategory.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.category_id = $('#category_id').val();
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [{
                         data: 'id',
@@ -248,6 +265,81 @@
                     },
                 ],
                 order: [0, 'desc']
+            });
+
+            $(document).on('change', '#category_id', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#status', () => {
+                table.draw();
+            });
+
+            $(document).on('submit', '#subCategoryAddForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#subCategoryAddFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            if ($input.hasClass('select2-hidden-accessible')) {
+                                $input.next('.select2-container').after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            } else {
+                                $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            }
+                        });                        
+                        $('#subCategoryAddFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
+
+            $(document).on('submit', '#subCategoryEditForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                formData.append('_method', 'PUT');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#subCategoryEditFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            if ($input.hasClass('select2-hidden-accessible')) {
+                                $input.next('.select2-container').after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            } else {
+                                $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                            }
+                        });                        
+                        $('#subCategoryEditFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
             });
 
             $('#category_id').select2({
