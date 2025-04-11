@@ -25,6 +25,11 @@ class SizeController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
+                                })
+                                ->filter(function($query) use ($request){
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
                                 })                                
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
@@ -56,7 +61,9 @@ class SizeController extends Controller
 
         Size::create($formFields);
 
-        return redirect()->back()->with('success', 'Size is created successfully.');
+        session()->flash('success', 'Size is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show(Size $size)
@@ -84,7 +91,9 @@ class SizeController extends Controller
 
         $size->update($formFields);
 
-        return redirect()->back()->with('success', 'Size is updated successfully.');
+        session()->flash('success', 'Size is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy(Size $size)
