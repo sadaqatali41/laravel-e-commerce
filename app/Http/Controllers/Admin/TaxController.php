@@ -25,7 +25,12 @@ class TaxController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
-                                })                                
+                                })
+                                ->filter(function($query) use ($request) {
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                })
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -57,7 +62,9 @@ class TaxController extends Controller
 
         Taxes::create($formFields);
 
-        return redirect()->back()->with('success', 'Tax is created successfully.');
+        session()->flash('success', 'Tax is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show(Taxes $tax)
@@ -86,7 +93,9 @@ class TaxController extends Controller
 
         $tax->update($formFields);
 
-        return redirect()->back()->with('success', 'Tax is updated successfully.');
+        session()->flash('success', 'Tax is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy(Taxes $tax)
