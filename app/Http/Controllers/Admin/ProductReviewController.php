@@ -36,7 +36,21 @@ class ProductReviewController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
-                                })                                
+                                })
+                                ->filter(function($query) use ($request){
+                                    if($request->user_id) {
+                                        $query->where('user_id', $request->user_id);
+                                    }
+                                    if($request->product_id) {
+                                        $query->where('product_id', $request->product_id);
+                                    }
+                                    if($request->rating) {
+                                        $query->where('rating', $request->rating);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }, true)
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);

@@ -32,6 +32,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/color-list', [Select2Controller::class, 'color'])->name('color-list');
         Route::get('/brand-list', [Select2Controller::class, 'brand'])->name('brand-list');
         Route::get('/tax-list', [Select2Controller::class, 'tax'])->name('tax-list');
+        Route::get('/user-list', [Select2Controller::class, 'user'])->name('user-list');
+        Route::get('/product-list', [Select2Controller::class, 'product'])->name('product-list');
         Route::resources([
             'category' => CategoryController::class,
             'subcategory' => SubCategoryController::class,

@@ -160,4 +160,64 @@ class Select2Controller extends Controller
 
         return $results;
     }
+
+    public function user(Request $request)
+    {
+        $term = trim($request->term);
+        $users = DB::table('users')
+            ->select('id', 'name as text')
+            ->where('name', 'LIKE',  '%' . $term . '%')
+            ->where('status', 'A')
+            ->orderBy('name', 'asc')
+            ->simplePaginate(10);
+
+        $morePages = true;
+        if (empty($users->nextPageUrl())) {
+            $morePages = false;
+        }
+        $results = array(
+            "results" => $users->items(),
+            "pagination" => array(
+                "more" => $morePages
+            )
+        );
+
+        return $results;
+    }
+    public function product(Request $request)
+    {
+        $search = trim($request->input('term'));
+        
+        $results = DB::table('products')
+                    ->join('categories', 'categories.id', '=', 'products.category_id')
+                    ->select(
+                        'categories.name as category_name',
+                        'products.id',
+                        'products.prod_name'
+                    )
+                    ->when($search, function ($query) use ($search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('categories.name', 'like', "%{$search}%")
+                            ->orWhere('products.prod_name', 'like', "%{$search}%");
+                        });
+                    })
+                    ->where('products.status', '=', 'A')
+                    ->paginate(10);
+
+        $formattedResults = [];
+
+        foreach ($results as $result) {
+            $formattedResults[] = [
+                'id' => $result->id,
+                'text' => $result->category_name . ' - ' . $result->prod_name
+            ];
+        }
+
+        return response()->json([
+            'results' => $formattedResults,
+            'pagination' => [
+                'more' => $results->hasMorePages()
+            ]
+        ]);
+    }
 }
