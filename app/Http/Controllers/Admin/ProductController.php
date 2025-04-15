@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Admin\Product;
 use Yajra\DataTables\DataTables;
 use App\Models\Admin\ProductImage;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin\ProductAttribute;
@@ -45,6 +44,17 @@ class ProductController extends Controller
                                         return 'NA';
                                     }
                                 })
+                                ->filter(function($query) use ($request){
+                                    if($request->category_id) {
+                                        $query->where('category_id', $request->category_id);
+                                    }
+                                    if($request->sub_category_id) {
+                                        $query->where('sub_category_id', $request->sub_category_id);
+                                    }
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }, true) 
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -65,46 +75,59 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'category_id' => 'required',
-            'sub_category_id' => 'nullable',
-            'prod_name' => 'required|unique:products,prod_name',
-            'slug' => 'required|unique:products,slug',
-            'brand_id' => 'required|integer',
-            'model_id' => 'required|integer',
-            'keywords' => 'required',
-            'description' => 'required',
-            'short_desc' => 'required',
-            'tech_spec' => 'required',
-            'used_for' => 'required',
-            'warranty' => 'required',
-            'lead_time' => 'required',
-            'tax_id' => 'required|integer',
-            'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'sku_no.*' => 'required',
-            'mrp.*' => 'required',
-            'price.*' => 'required',
-            'qty.*' => 'required',
-            'image_attr' => 'required',
-            'image_attr.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ], [
-            'category_id.required' => 'Category is required.',
-            'prod_name.required' => 'Product Name is required.',
-            'brand_id.required' => 'Brand Name is required.',
-            'brand_id.integer' => 'Brand Name must be an integer.',
-            'model_id.required' => 'Model Name is required.',
-            'model_id.integer' => 'Model Name must be an integer.',
-            'short_desc.required' => 'Short Description is required.',
-            'tech_spec.required' => 'Technical Specification is required.',
-            'used_for.required' => 'Uses is required.',
-            'sku_no.*.required' => 'SKU No is required.',
-            'mrp.*.required' => 'MRP is required.',
-            'price.*.required' => 'Price is required.',
-            'qty.*.required' => 'Quantity is required.',
-            'image_attr.required' => 'Image is required.',
-            'image_attr.*.image' => 'File must be an Image.'
-        ]);
+        $rules = [
+            'category_id'       => 'required',
+            'sub_category_id'   => 'nullable',
+            'prod_name'         => 'required|unique:products,prod_name',
+            'slug'              => 'required|unique:products,slug',
+            'brand_id'          => 'required|integer',
+            'model_id'          => 'required|integer',
+            'keywords'          => 'required',
+            'description'       => 'required',
+            'short_desc'        => 'required',
+            'tech_spec'         => 'required',
+            'used_for'          => 'required',
+            'warranty'          => 'required',
+            'lead_time'         => 'required',
+            'tax_id'            => 'required|integer',
+            'status'            => 'required',
+            'image'             => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'sku_no.*'          => 'required',
+            'mrp.*'             => 'required',
+            'price.*'           => 'required',
+            'qty.*'             => 'required',
+            'image_attr'        => 'required|array',
+        ];
+
+        if ($request->has('sku_no')) {
+            foreach ($request->sku_no as $index => $sku) {
+                $rules["image_attr.$index"] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            }
+        }
+
+        $messages = [
+            'category_id.required'      => 'Category is required.',
+            'prod_name.required'        => 'Product Name is required.',
+            'brand_id.required'         => 'Brand Name is required.',
+            'brand_id.integer'          => 'Brand Name must be an integer.',
+            'model_id.required'         => 'Model Name is required.',
+            'model_id.integer'          => 'Model Name must be an integer.',
+            'short_desc.required'       => 'Short Description is required.',
+            'tech_spec.required'        => 'Technical Specification is required.',
+            'used_for.required'         => 'Uses is required.',
+            'sku_no.*.required'         => 'SKU is required.',
+            'mrp.*.required'            => 'MRP is required.',
+            'price.*.required'          => 'Price is required.',
+            'qty.*.required'            => 'Quantity is required.',
+            'image_attr.required'       => 'Image is required.',
+            'image_attr.array'          => 'Invalid image data submitted.',
+            'image_attr.*.required'     => 'Image is required.',
+            'image_attr.*.image'        => 'File must be an Image.',
+            'image_attr.*.mimes'        => 'Image must be a JPEG or PNG.',
+            'image_attr.*.max'          => 'Image must not be more than 2MB.',
+        ];
+
+        $this->validate($request, $rules, $messages);
 
         $formFields = [
             'category_id' => $request->category_id,
@@ -171,7 +194,9 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Product is created successfully.');
+        session()->flash('success', 'Product is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show($id)
@@ -191,7 +216,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $this->validate($request, [
+        $rules = [
             'category_id' => 'required',
             'sub_category_id' => 'nullable',
             'prod_name' => 'required|unique:products,prod_name,' . $product->id,
@@ -213,22 +238,40 @@ class ProductController extends Controller
             'price.*' => 'required',
             'qty.*' => 'required',
             'image_attr.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-        ], [
-            'category_id.required' => 'Category is required.',
-            'prod_name.required' => 'Product Name is required.',
-            'brand_id.required' => 'Brand Name is required.',
-            'brand_id.integer' => 'Brand Name must be an integer.',
-            'model_id.required' => 'Model Name is required.',
-            'model_id.integer' => 'Model Name must be an integer.',
-            'short_desc.required' => 'Short Description is required.',
-            'tech_spec.required' => 'Technical Specification is required.',
-            'used_for.required' => 'Uses is required.',
-            'sku_no.*.required' => 'SKU No is required.',
-            'mrp.*.required' => 'MRP is required.',
-            'price.*.required' => 'Price is required.',
-            'qty.*.required' => 'Quantity is required.',
-            'image_attr.*.image' => 'File must be an Image.'
-        ]);
+        ];
+
+        if ($request->has('sku_no')) {
+            foreach ($request->sku_no as $index => $sku) {
+                $attr_id = $request->attr_id[$index];
+                if(empty($attr_id)) {
+                    $rules["image_attr.$index"] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+                } else {
+                    $rules["image_attr.$index"] = 'image|mimes:jpeg,png,jpg|max:2048';
+                }
+            }
+        }
+
+        $messages = [
+            'category_id.required'      => 'Category is required.',
+            'prod_name.required'        => 'Product Name is required.',
+            'brand_id.required'         => 'Brand Name is required.',
+            'brand_id.integer'          => 'Brand Name must be an integer.',
+            'model_id.required'         => 'Model Name is required.',
+            'model_id.integer'          => 'Model Name must be an integer.',
+            'short_desc.required'       => 'Short Description is required.',
+            'tech_spec.required'        => 'Technical Specification is required.',
+            'used_for.required'         => 'Uses is required.',
+            'sku_no.*.required'         => 'SKU is required.',
+            'mrp.*.required'            => 'MRP is required.',
+            'price.*.required'          => 'Price is required.',
+            'qty.*.required'            => 'Quantity is required.',            
+            'image_attr.*.required'     => 'Image is required.',
+            'image_attr.*.image'        => 'File must be an Image.',
+            'image_attr.*.mimes'        => 'Image must be a JPEG or PNG.',
+            'image_attr.*.max'          => 'Image must not be more than 2MB.',
+        ];
+
+        $this->validate($request, $rules, $messages);
 
         $formFields = [
             'category_id' => $request->category_id,
@@ -306,7 +349,9 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Product is updated successfully.');
+        session()->flash('success', 'Product is updated successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy($id)

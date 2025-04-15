@@ -18,8 +18,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.product.store') }}" enctype="multipart/form-data" method="post">
-                                @csrf
+                            <form id="productAddForm" action="{{ route('admin.product.store') }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -259,38 +258,21 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (old('sku_no', ['']) as $index => $sku)
                                                     <tr>
                                                         <td>
                                                             <button type="button" class="btn btn-danger btn-sm removeAttribute" data-id="0"><i class="fa fa-minus"></i></button>
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="sku_no[]" placeholder="SKU.." 
-                                                            class="form-control form-control-sm sku_no" value="{{ old('sku_no.' . $index) }}">
-                                                            @error('sku_no.' . $index)
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
+                                                            <input type="text" name="sku_no[]" placeholder="SKU.." class="form-control form-control-sm sku_no">                                                            
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="mrp[]" placeholder="MRP.." 
-                                                            class="form-control form-control-sm mrp" value="{{ old('mrp.' . $index) }}">
-                                                            @error('mrp.' . $index)
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
+                                                            <input type="text" name="mrp[]" placeholder="MRP.." class="form-control form-control-sm mrp">                                                            
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="price[]" placeholder="MRP.." 
-                                                            class="form-control form-control-sm price" value="{{ old('price.' . $index) }}">
-                                                            @error('price.' . $index)
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
+                                                            <input type="text" name="price[]" placeholder="Price.." class="form-control form-control-sm price">                                                            
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="qty[]" placeholder="Quantity.." 
-                                                            class="form-control form-control-sm qty" value="{{ old('qty.' . $index) }}">
-                                                            @error('qty.' . $index)
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
+                                                            <input type="text" name="qty[]" placeholder="Quantity.." class="form-control form-control-sm qty">
                                                         </td>
                                                         <td>
                                                             <select name="size_id[]" class="form-control form-control-sm size_id">
@@ -303,23 +285,15 @@
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <input type="file" name="image_attr[]"
-                                                            class="form-control form-control-sm image_attr">                                                            
-                                                            @error('image_attr.' . $index)
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
-                                                            @error('image_attr')
-                                                                <span class="help-block status--denied">{{ $message }}</span>
-                                                            @enderror
+                                                            <input type="file" name="image_attr[]" class="form-control form-control-sm image_attr">                                                            
                                                         </td>
-                                                    </tr>
-                                                    @endforeach
+                                                    </tr>                                                    
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="productAddFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -342,9 +316,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.product.update', $product->id) }}" enctype="multipart/form-data" method="post">
-                                @csrf
-                                @method('PUT')
+                            <form id="productEditForm" action="{{ route('admin.product.update', $product->id) }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -550,10 +522,8 @@
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
-                                                <option value="A" @if (old('status', $product->status) === 'A') selected @endif>Active
-                                                </option>
-                                                <option value="I" @if (old('status', $product->status) === 'I') selected @endif>Inactive
-                                                </option>
+                                                <option value="A" @if (old('status', $product->status) === 'A') selected @endif>Active</option>
+                                                <option value="I" @if (old('status', $product->status) === 'I') selected @endif>Inactive</option>
                                             </select>
                                             @error('status')
                                                 <span class="help-block status--denied">{{ $message }}</span>
@@ -622,7 +592,7 @@
                                                                 class="form-control form-control-sm mrp" value="{{ $value->mrp }}">                                                            
                                                             </td>
                                                             <td>
-                                                                <input type="text" name="price[]" placeholder="MRP.." 
+                                                                <input type="text" name="price[]" placeholder="Price.." 
                                                                 class="form-control form-control-sm price" value="{{ $value->price }}">                                                            
                                                             </td>
                                                             <td>
@@ -662,7 +632,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="productEditFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -683,6 +653,27 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <select id="category_id" class="form-control form-control-sm"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 pl-0">
+                            <div class="form-group">
+                                <select id="sub_category_id" class="form-control form-control-sm"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="status" class="form-control form-control-sm rounded">
+                                    <option value="">--Select Status--</option>
+                                    <option value="A">Active</option>
+                                    <option value="I">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
                             <table class="table table-striped table-earning table-sm" id="example">
@@ -718,7 +709,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
@@ -726,7 +717,12 @@
                 },
                 ajax: {
                     url: "{{ route('admin.product.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.category_id = $('#category_id').val();
+                        d.sub_category_id = $('#sub_category_id').val();
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [
                     {data: 'id', name: 'id'},
@@ -739,6 +735,18 @@
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
                 order: [0, 'desc']
+            });
+
+            $(document).on('change', '#category_id', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#sub_category_id', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#status', () => {
+                table.draw();
             });
 
             $('#category_id').select2({
@@ -786,7 +794,9 @@
                 }
             }).on('select2:opening', function(){
                 let category_id = $('#category_id').val();
-                if(category_id === null) {
+                let formLen = $('.au-card-inner').find('form').length;
+                console.log(formLen);
+                if(category_id === null && formLen) {
                     alert('Select Category First.');
                     return false;
                 }
@@ -900,6 +910,81 @@
             CKEDITOR.replace('description');
             CKEDITOR.replace('short_desc');
             CKEDITOR.replace('tech_spec');
+
+            // form submission goes here
+
+            $(document).on('submit', '#productAddForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#productAddFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        console.log(formErrors);
+                        $.each(formErrors, function(field, message){
+                            let $input;
+                            let [inputName, inputIndex = null] = field.split('.');
+                            if(inputIndex === null) {
+                                $input = $('#' + inputName);
+                            } else {
+                                $input = $('.' + inputName).eq(inputIndex);
+                            }                            
+                            $input.parent().append(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#productAddFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
+
+            $(document).on('submit', '#productEditForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                formData.append('_method', 'PUT');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#productEditFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        console.log(formErrors);
+                        $.each(formErrors, function(field, message){
+                            let $input;
+                            let [inputName, inputIndex = null] = field.split('.');
+                            if(inputIndex === null) {
+                                $input = $('#' + inputName);
+                            } else {
+                                $input = $('.' + inputName).eq(inputIndex);
+                            }                            
+                            $input.parent().append(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#productEditFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
         });
     </script>
 @endpush
