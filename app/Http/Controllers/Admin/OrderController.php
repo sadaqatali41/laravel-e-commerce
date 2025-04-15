@@ -51,7 +51,18 @@ class OrderController extends Controller
                                     } else {
                                         return 'COD';
                                     }
-                                })                                
+                                })    
+                                ->filter(function($query){
+                                    if(request('order_status')) {
+                                        $query->where('order_status', request('order_status'));
+                                    }
+                                    if(request('payment_status')) {
+                                        $query->where('payment_status', request('payment_status'));
+                                    }
+                                    if(request('payment_type')) {
+                                        $query->where('payment_type', request('payment_type'));
+                                    }
+                                }, true)                            
                                 ->escapeColumns([])
                                 ->make(true);
         }

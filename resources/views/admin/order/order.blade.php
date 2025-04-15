@@ -169,6 +169,38 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <select id="order_status_filter" class="form-control form-control-sm">
+                                    <option value="">--Order Status--</option>
+                                    <option value="1">Placed</option>
+                                    <option value="2">On the way</option>
+                                    <option value="3">Delivered</option>
+                                    <option value="4">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="payment_status_filter" class="form-control form-control-sm rounded">
+                                    <option value="">--Payment Status--</option>
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="SUCCESS">SUCCESS</option>
+                                    <option value="FAILED">FAILED</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pl-0">
+                            <div class="form-group">
+                                <select id="payment_type_filter" class="form-control form-control-sm rounded">
+                                    <option value="">--Payment Type--</option>
+                                    <option value="COD">COD</option>
+                                    <option value="GT">Online</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
                             <table class="table table-striped table-earning table-sm" id="example">
@@ -245,7 +277,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 scrollX: true,
@@ -254,7 +286,12 @@
                 },
                 ajax: {
                     url: "{{ route('admin.order.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.order_status = $('#order_status_filter').val();
+                        d.payment_status = $('#payment_status_filter').val();
+                        d.payment_type = $('#payment_type_filter').val();
+                    }
                 },
                 columns: [
                     {data: 'id'},
@@ -266,6 +303,18 @@
                     {data: 'created_at'}
                 ],
                 order: [0, 'desc']
+            });
+
+            $(document).on('change', '#order_status_filter', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#payment_status_filter', () => {
+                table.draw();
+            });
+
+            $(document).on('change', '#payment_type_filter', () => {
+                table.draw();
             });
 
             $(document).on('change', '#order_status', function(){
@@ -324,6 +373,10 @@
                         $('#orderTrackFromBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
                     }
                 });
+            });
+
+            $('#trackOrderModal').on('hidden.bs.modal', function(){
+                $('.error-message').remove();
             });
         });
     </script>
