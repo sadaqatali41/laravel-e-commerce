@@ -170,7 +170,12 @@
             <div class="row m-t-10">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <select id="user_id" class="form-control form-control-sm"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 pl-0">
                             <div class="form-group">
                                 <select id="order_status_filter" class="form-control form-control-sm">
                                     <option value="">--Order Status--</option>
@@ -207,7 +212,8 @@
                                 <thead>
                                     <tr>
                                         <th>Order ID</th>
-                                        <th>Customer Details</th>
+                                        <th>Order By</th>
+                                        <th>Detail Address</th>
                                         <th>Total Amount</th>
                                         <th>Order Status</th>
                                         <th>Payment Status</th>
@@ -288,6 +294,7 @@
                     url: "{{ route('admin.order.index') }}",
                     type: 'GET',
                     data: function(d) {
+                        d.user_id = $('#user_id').val();
                         d.order_status = $('#order_status_filter').val();
                         d.payment_status = $('#payment_status_filter').val();
                         d.payment_type = $('#payment_type_filter').val();
@@ -295,6 +302,7 @@
                 },
                 columns: [
                     {data: 'id'},
+                    {data: 'user_id'},
                     {data: 'name'},
                     {data: 'total_amt'},
                     {data: 'order_status'},
@@ -303,6 +311,10 @@
                     {data: 'created_at'}
                 ],
                 order: [0, 'desc']
+            });
+
+            $(document).on('change', '#user_id', () => {
+                table.draw();
             });
 
             $(document).on('change', '#order_status_filter', () => {
@@ -315,6 +327,23 @@
 
             $(document).on('change', '#payment_type_filter', () => {
                 table.draw();
+            });
+
+            $('#user_id').select2({
+                placeholder: 'Search Order By...',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.user-list') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        }
+                    },
+                    cache: true
+                }
             });
 
             $(document).on('change', '#order_status', function(){

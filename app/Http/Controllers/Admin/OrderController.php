@@ -12,7 +12,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = Order::select('*');
+            $data = Order::with('user')->select('*');
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->editColumn('id', function($row){
@@ -51,8 +51,14 @@ class OrderController extends Controller
                                     } else {
                                         return 'COD';
                                     }
-                                })    
+                                })  
+                                ->editColumn('user_id', function($row){
+                                    return $row->user->name;
+                                })  
                                 ->filter(function($query){
+                                    if(request('user_id')) {
+                                        $query->where('user_id', request('user_id'));
+                                    }
                                     if(request('order_status')) {
                                         $query->where('order_status', request('order_status'));
                                     }
