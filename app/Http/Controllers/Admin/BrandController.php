@@ -51,7 +51,7 @@ class BrandController extends Controller
                                     if($request->status) {
                                         $query->where('status', $request->status);
                                     }
-                                }) 
+                                }, true) 
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
