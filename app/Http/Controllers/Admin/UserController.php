@@ -25,7 +25,12 @@ class UserController extends Controller
                                     } else {
                                         return '<span class="badge badge-danger">Inactive</span>';
                                     }
-                                })                                
+                                })
+                                ->filter(function($query) use ($request){                                    
+                                    if($request->status) {
+                                        $query->where('status', $request->status);
+                                    }
+                                }, true)                                
                                 ->escapeColumns([])
                                 ->rawColumns(['manage'])
                                 ->make(true);
@@ -75,7 +80,9 @@ class UserController extends Controller
 
         User::create($formFields);
 
-        return redirect()->back()->with('success', 'User is created successfully.');
+        session()->flash('success', 'User is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function show($id)
@@ -125,7 +132,9 @@ class UserController extends Controller
 
         $user->update($formFields);
 
-        return redirect()->back()->with('success', 'User is updated successfully.');
+        session()->flash('success', 'User is created successfully.');
+
+        return response()->json(['success' => true], 200);
     }
 
     public function destroy($id)

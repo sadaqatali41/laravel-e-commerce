@@ -18,8 +18,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.user.store') }}" enctype="multipart/form-data" method="post">
-                                @csrf
+                            <form id="addUserForm" action="{{ route('admin.user.store') }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
@@ -106,7 +105,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="addUserFormBtn">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -129,9 +128,7 @@
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
-                            <form action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" method="post">
-                                @csrf
-                                @method('PUT')
+                            <form id="editUserForm" action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data" method="post">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
@@ -218,7 +215,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm" id="editUserForm">
                                     <i class="fa fa-dot-circle-o"></i> Submit
                                 </button>
                             </form>
@@ -239,6 +236,17 @@
             </div>
             <div class="row m-t-10">
                 <div class="col-lg-12">
+                    <div class="row">                        
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <select id="status" class="form-control form-control-sm rounded">
+                                    <option value="">--Select Status--</option>
+                                    <option value="A">Active</option>
+                                    <option value="I">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="au-card recent-report">
                         <div class="au-card-inner">
                             <table class="table table-striped table-earning table-sm" id="example">
@@ -275,7 +283,7 @@
                 }
             });
 
-            $("#example").DataTable({
+            var table = $("#example").DataTable({
                 processing: true,
                 serverSide: true,
                 scrollX: true,
@@ -284,7 +292,10 @@
                 },
                 ajax: {
                     url: "{{ route('admin.user.index') }}",
-                    type: 'GET'
+                    type: 'GET',
+                    data: function(d) {
+                        d.status = $('#status').val();
+                    }
                 },
                 columns: [
                     {data: 'id', name: 'id'},
@@ -300,6 +311,69 @@
                     {data: 'manage', name: 'manage', orderable: false, searchable: false},
                 ],
                 order: [0, 'desc']
+            });
+
+            $(document).on('change', '#status', () => {
+                table.draw();
+            });
+
+            $(document).on('submit', '#addUserForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#addUserFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#addUserFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
+            });
+
+            $(document).on('submit', '#editUserForm', function(e){
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                formData.append('_method', 'PUT');
+                
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#editUserFormBtn').attr('disabled', true).html('Loading.....');
+                        $('.status--denied').remove();
+                    },
+                    error: function(response) {
+                        let formErrors = response.responseJSON.errors;
+                        $.each(formErrors, function(field, message){
+                            let $input = $('#' + field);
+                            $input.after(`<span class="help-block status--denied">${message[0]}</span>`);
+                        });                        
+                        $('#editUserFormBtn').attr('disabled', false).html('<i class="fa fa-dot-circle-o"></i> Submit');
+                    },
+                    success: function(response) {                        
+                        window.location.reload();
+                    },
+                });
             });
         });
     </script>
