@@ -30,7 +30,9 @@ class AdminController extends Controller
 
     public function index() {
 
-        $metrics = Cache::remember('admin_dashboard_metrics', 300, function(){
+        $seconds = config('constants.CACHE_EXP') + 180;
+
+        $metrics = Cache::remember('admin_dashboard_metrics', $seconds, function(){
 
             return [
                 'totalUsers' => User::count(),
