@@ -13,11 +13,15 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $data = User::select(['id', 'name', 'email', 'mobile', 'address', 'city', 'state', 'zip', 'ip', 'status']);
+            $data = User::withCount('orders')
+                            ->selectRaw('users.id, users.name, users.email, users.mobile, users.address, users.city, users.state, users.zip, users.ip, users.status');
             return DataTables::of($data)
                                 ->addIndexColumn()
                                 ->addColumn('manage', function($row){
                                     return '<a href="'.route('admin.user.edit', $row->id).'"><i class="fa fa-edit"></i></a>';
+                                })
+                                ->editColumn('name', function($row){
+                                    return $row->name . ' <span class="badge badge-info">(' . $row->orders_count . ')</span>';
                                 })
                                 ->editColumn('status', function($row){
                                     if($row->status === 'A') {
@@ -32,7 +36,7 @@ class UserController extends Controller
                                     }
                                 }, true)                                
                                 ->escapeColumns([])
-                                ->rawColumns(['manage'])
+                                ->rawColumns(['manage', 'name', 'status'])
                                 ->make(true);
         }
         return view('admin.user.users', [
