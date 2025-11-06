@@ -43,7 +43,7 @@ class CreateUserCommand extends Command
         $commonData['email'] = $this->ask('Enter your email.');
         $commonData['password'] = $this->secret('Enter your password.');
 
-        // admin specific data
+        // non admin specific data
         if($userType !== 'Admin') {
             $commonData['mobile'] = $this->ask('Enter Mobile Number.');
             $commonData['activation_token'] = Str::random(60);
