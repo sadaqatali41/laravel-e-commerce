@@ -87,12 +87,12 @@ This is a feature-rich e-commerce application built with Laravel 9, featuring Pa
    MAIL_FROM_NAME="Your App Name"
    ```
 
-8. **Seed the database (optional)**
+8. **Create User and Admin with CLI**
 
-   If you want to populate the database with sample data:
+   If you want to create user and admin:
 
    ```bash
-   php artisan db:seed
+   php artisan users:create
    ```
 
 9. **Start the development server**
