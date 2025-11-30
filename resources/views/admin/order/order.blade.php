@@ -12,10 +12,9 @@
                             <div class="form-group">
                                 <label for="order_status" class="form-control-label">Update Order Status</label>
                                 <select name="order_status" id="order_status" class="form-control form-control-sm">
-                                    <option value="1" @if($order->order_status === 1) selected @endif>Placed</option>
-                                    <option value="2" @if($order->order_status === 2) selected @endif>On the way</option>
-                                    <option value="3" @if($order->order_status === 3) selected @endif>Deliverd</option>
-                                    <option value="4" @if($order->order_status === 4) selected @endif>Cancelled</option>
+                                    @foreach (App\Enums\OrderStatus::toArray() as $key => $value)
+                                        <option value="{{ $key }}" @if($order->order_status->value === $key) selected @endif>{{ $value }}</option>
+                                    @endforeach                                    
                                 </select>                                
                             </div>
                         </div>
@@ -23,9 +22,9 @@
                             <div class="form-group">
                                 <label for="payment_status" class="form-control-label">Update Payment Status</label>
                                 <select name="payment_status" id="payment_status" class="form-control form-control-sm">
-                                    <option value="PENDING" @if($order->payment_status === 'PENDING') selected @endif>Pending</option>
-                                    <option value="SUCCESS" @if($order->payment_status === 'SUCCESS') selected @endif>Success</option>
-                                    <option value="FAILED" @if($order->payment_status === 'FAILED') selected @endif>Failed</option>
+                                    @foreach (App\Enums\PaymentStatus::toArray() as $key => $value)
+                                        <option value="{{ $key }}" @if($order->payment_status->value === $key) selected @endif>{{ $value }}</option>
+                                    @endforeach
                                 </select>                                
                             </div>
                         </div>
@@ -59,29 +58,13 @@
                                 <h4>Order Details</h4>
                                 Order ID : #{{ $order->id }}, <small style="font-weight: normal; font-style: italic;">Datetime : {{ $order->created_at }}</small><br/>
                                 Order Status: 
-                                @if($order->order_status == 1)
-                                    <span class="badge badge-warning">Placed</span>
-                                @elseif ($order->order_status == 2)
-                                    <span class="badge badge-info">On the way</span>
-                                @else
-                                    <span class="badge badge-success">Deliverd</span>
-                                @endif
+                                <span class="badge badge-{{ str_replace('label-', '', $order->order_status->color()) }}">{{ $order->order_status->label() }}</span>                                
                                 <br/>
                                 Payment Status: 
-                                @if($order->payment_status == 'PENDING')
-                                    <span class="badge badge-info">Pending</span>
-                                @elseif ($order->payment_status == 'SUCCESS')
-                                    <span class="badge badge-success">Success</span>
-                                @else
-                                    <span class="badge badge-danger">Failed</span>
-                                @endif
+                                <span class="badge badge-{{ str_replace('label-', '', $order->payment_status->color()) }}">{{ $order->payment_status->label() }}</span>                                
                                 <br/>
                                 Payment Type: 
-                                @if($order->payment_type == 'GT')
-                                    Online
-                                @else
-                                    COD
-                                @endif
+                                {{ $order->payment_type->label() }}
                                 <br/>
                                 @if($order->txn_id !== null)
                                     Payment ID: {{$order->txn_id}}
@@ -179,10 +162,9 @@
                             <div class="form-group">
                                 <select id="order_status_filter" class="form-control form-control-sm">
                                     <option value="">--Order Status--</option>
-                                    <option value="1">Placed</option>
-                                    <option value="2">On the way</option>
-                                    <option value="3">Delivered</option>
-                                    <option value="4">Cancelled</option>
+                                    @foreach (App\Enums\OrderStatus::toArray() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>                                        
+                                    @endforeach                                    
                                 </select>
                             </div>
                         </div>
@@ -190,9 +172,9 @@
                             <div class="form-group">
                                 <select id="payment_status_filter" class="form-control form-control-sm rounded">
                                     <option value="">--Payment Status--</option>
-                                    <option value="PENDING">PENDING</option>
-                                    <option value="SUCCESS">SUCCESS</option>
-                                    <option value="FAILED">FAILED</option>
+                                    @foreach (App\Enums\PaymentStatus::toArray() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -200,8 +182,9 @@
                             <div class="form-group">
                                 <select id="payment_type_filter" class="form-control form-control-sm rounded">
                                     <option value="">--Payment Type--</option>
-                                    <option value="COD">COD</option>
-                                    <option value="GT">Online</option>
+                                    @foreach (App\Enums\PaymentType::toArray() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

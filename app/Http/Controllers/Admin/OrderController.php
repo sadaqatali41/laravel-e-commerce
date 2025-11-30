@@ -28,29 +28,13 @@ class OrderController extends Controller
                                     return $address;
                                 })
                                 ->editColumn('order_status', function($row){
-                                    if($row->order_status === 1) {
-                                        return '<span class="badge badge-warning">Placed</span>';
-                                    } else if($row->order_status === 2) {
-                                        return '<span class="badge badge-info">On the way</span>';
-                                    } else {
-                                        return '<span class="badge badge-success">Deliverd</span>';
-                                    }
+                                    return '<span class="badge badge-'. str_replace('label-', '', $row->order_status->color()) .'">'. $row->order_status->label() .'</span>';                                    
                                 })
                                 ->editColumn('payment_status', function($row){
-                                    if($row->payment_status == 'PENDING') {
-                                        return '<span class="badge badge-info">Pending</span>';
-                                    } else if($row->payment_status == 'SUCCESS') {
-                                        return '<span class="badge badge-success">Success</span>';
-                                    } else {
-                                        return '<span class="badge badge-danger">Failed</span>';
-                                    }
+                                    return '<span class="badge badge-'. str_replace('label-', '', $row->payment_status->color()) .'">'. $row->payment_status->label() .'</span>';                                    
                                 })
                                 ->editColumn('payment_type', function($row){
-                                    if($row->payment_type == 'GT') {
-                                        return 'Online';
-                                    } else {
-                                        return 'COD';
-                                    }
+                                    return $row->payment_type->label();                                    
                                 })  
                                 ->editColumn('user_id', function($row){
                                     return $row->user->name;
