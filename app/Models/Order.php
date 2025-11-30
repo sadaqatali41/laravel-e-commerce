@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentType;
+use App\Enums\PaymentStatus;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +17,12 @@ class Order extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'order_status' => OrderStatus::class,
+        'payment_status' => PaymentStatus::class,
+        'payment_type' => PaymentType::class,
+    ];
 
     protected function createdAt() : Attribute
     {
