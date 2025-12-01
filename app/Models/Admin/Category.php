@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Enums\EntityStatus;
 use App\Models\Admin\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,10 @@ class Category extends Model
     use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'status' => EntityStatus::class
+    ];
 
     public function products() {
         return $this->hasMany(Product::class, 'category_id', 'id');
@@ -28,6 +33,6 @@ class Category extends Model
     }
 
     public function scopeActive($query) {
-        return $query->where('status', 'A');
+        return $query->where('status', EntityStatus::ACTIVE->value);
     }
 }
