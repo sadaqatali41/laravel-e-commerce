@@ -26,11 +26,7 @@ class SliderController extends Controller
                                     return $row->category->name ?? '';
                                 })
                                 ->editColumn('status', function($row){
-                                    if($row->status === 'A') {
-                                        return '<span class="badge badge-success">Active</span>';
-                                    } else {
-                                        return '<span class="badge badge-danger">Inactive</span>';
-                                    }
+                                    return '<span class="badge '. $row->status->color() .'">'. $row->status->label() .'</span>';                                    
                                 })
                                 ->editColumn('image', function($row){
                                     if(isset($row->image)) {

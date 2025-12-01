@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Enums\EntityStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,9 +12,13 @@ class Slider extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'status' => EntityStatus::class,
+    ];
+
     public function scopeActive($query)
     {
-        return $query->where('status', 'A');
+        return $query->where('status', EntityStatus::ACTIVE->value);
     }
 
     public function category()
