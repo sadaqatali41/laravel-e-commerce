@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin\Brand;
 use App\Models\Admin\Color;
+use Illuminate\Support\Str;
 use App\Models\Admin\Slider;
 use Illuminate\Http\Request;
 use App\Models\Admin\Product;
@@ -11,7 +12,6 @@ use App\Models\Admin\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Str;
 
 class HomeController extends Controller
 {
@@ -298,7 +298,7 @@ class HomeController extends Controller
                         $query->orWhere('used_for', 'LIKE', '%'. $param .'%');
                     })
                     ->paginate(14);
-        return view('search')->withProducts($products);
+        return view('search')->with('products', $products);
     }
 
     public function storeInSession($productId) 
