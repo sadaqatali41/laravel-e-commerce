@@ -74,8 +74,9 @@
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
-                                                <option value="A" @if(old('status') === 'A') selected @endif>Active</option>
-                                                <option value="I" @if(old('status') === 'I') selected @endif>Inactive</option>
+                                                @foreach (App\Enums\EntityStatus::toArray() as $key => $value)
+                                                    <option value="{{ $key }}" @if(old('status') === $key) selected @endif>{{ $value }}</option>
+                                                @endforeach
                                             </select>
                                             @error('status')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
@@ -160,8 +161,9 @@
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                             <select name="status" id="status" class="form-control form-control-sm">
-                                                <option value="A" @if(old('status', $coupon->status) === 'A') selected @endif>Active</option>
-                                                <option value="I" @if(old('status', $coupon->status) === 'I') selected @endif>Inactive</option>
+                                                @foreach (App\Enums\EntityStatus::toArray() as $key => $value)
+                                                    <option value="{{ $key }}" @if(old('status', $coupon->status->value) === $key) selected @endif>{{ $value }}</option>                                                    
+                                                @endforeach
                                             </select>
                                             @error('status')<span class="help-block status--denied">{{ $message }}</span>@enderror
                                         </div>
@@ -207,8 +209,9 @@
                             <div class="form-group">
                                 <select id="status" class="form-control form-control-sm rounded">
                                     <option value="">--Select Status--</option>
-                                    <option value="A">Active</option>
-                                    <option value="I">Inactive</option>
+                                    @foreach (App\Enums\EntityStatus::toArray() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>                                        
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
