@@ -20,11 +20,7 @@ class SizeController extends Controller
                                     return '<a href="'.route('admin.size.edit', $row->id).'"><i class="fa fa-edit"></i></a>';
                                 })
                                 ->editColumn('status', function($row){
-                                    if($row->status === 'A') {
-                                        return '<span class="badge badge-success">Active</span>';
-                                    } else {
-                                        return '<span class="badge badge-danger">Inactive</span>';
-                                    }
+                                    return '<span class="badge '. $row->status->color() .'">'. $row->status->label() .'</span>';
                                 })
                                 ->filter(function($query) use ($request){
                                     if($request->status) {
